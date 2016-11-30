@@ -1,0 +1,31 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-0.1278, 51.5074]
+        },
+        "properties": {
+            "title": "London"
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [8.4037, 49.0069]
+        },
+        "properties": {
+            "title": "Karlsruhe"
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [20.2253, 67.8558]
+        },
+        "properties": {
+            "title": "Kiruna"
+        }
+    }]
+}

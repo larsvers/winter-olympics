@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>winter canvas</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+ 	<script src="http://d3js.org/d3.v4.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.2/lodash.min.js"></script>
+	<!-- <script src="https://d3js.org/d3-interpolate.v1.min.js"></script> -->
+	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
+	<style type="text/css">
+		
+		body {
+			font-family: 'Open Sans', sans-serif;
+
+		}
+		
+		canvas {
+			border:  1px dotted #ccc;
+		}
+		
+		.explain, #select {
+			display: inline-block;
+			font-size: 0.75em;
+			margin-bottom: 1em;
+		}
+
+		.alert {
+			color: tomato;
+		}
+
+
+	</style>
+</head>
+<body>
+
+	<h3>Coloured grids</h3>
+	<input type="text" id="textinput" value="10000">
+	<div class="explain" id="text-explain">...takes numbers between 1 and 100k &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</div>
+	<div id="container"></div>
+	
+
+	<script>
+
+		var log = console.log.bind(console);
+		var dir = console.dir.bind(console);
+		var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+
+
+		// === Set up canvas === //
+
+		var width = 750,
+				height = 400;
+
+		var data;
+		var value = 5000;
+		var numberScale;
+
+
+		var canvas = d3.select('#container')
+			.append('canvas')
+			.attr('width', width)
+			.attr('height', height);
+
+		var context = canvas.node().getContext('2d');
+
+
+		// === Load and prepare the data === //
+
+
+		data = d3.range(value);		
+	  makeChart(data);
+
+
+		function makeChart(data) {
+
+			// === Bind data to custom elements === //
+
+			var customBase = document.createElement('custom');
+			var custom = d3.select(customBase); // this is our svg replacement
+
+
+			// settings for a grid with 40 cells in a row and 2x5 cells in a group
+			var groupSpacing = 4;
+			var cellSpacing = 2;
+			var offsetTop = height / 5;
+			var cellSize = Math.floor((width - 11 * groupSpacing) / 100) - cellSpacing;
+
+
+			// === First call === //
+
+			databind(d3.range(value)); // ...then update the databind function
+			
+			var t = d3.timer(function(elapsed) {
+				draw();
+				if (elapsed > 500) t.stop();
+			}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
+
+
+			// === Bind and draw functions === //
+
+			function databind(data) {
+
+				numberScale = d3.scaleSequential(d3.interpolateSpectral).domain(d3.extent(data, function(d) { return d; }));
+
+				var join = custom.selectAll('custom.rect')
+					.data(data);
+
+				var enterSel = join.enter()
+					.append('custom')
+					.attr('class', 'rect')
+		      .attr("x", function(i) {
+		        var x0 = Math.floor(i / 100) % 10, x1 = Math.floor(i % 10);
+		        return groupSpacing * x0 + (cellSpacing + cellSize) * (x1 + x0 * 10);
+		      })
+		      .attr("y", function(i) {
+		        var y0 = Math.floor(i / 1000), y1 = Math.floor(i % 100 / 10);
+		        return groupSpacing * y0 + (cellSpacing + cellSize) * (y1 + y0 * 10);
+		      })
+					.attr('width', 0)
+					.attr('height', 0);
+
+				join
+					.merge(enterSel)
+					.transition()
+					.attr('width', cellSize)
+					.attr('height', cellSize)
+					.attr('fillStyle', function(d) { return numberScale(d); });
+
+				var exitSel = join.exit()
+					.transition()
+					.attr('width', 0)
+					.attr('height', 0)
+					.remove();
+
+			} // databind()
+
+
+			// === Draw canvas === //
+
+			function draw() {
+
+				// clear canvas
+				
+				context.fillStyle = '#fff';
+				context.fillRect(0, 0, width, height);
+
+				
+				// draw each individual custom element with their properties
+				
+				var elements = custom.selectAll('custom.rect') // this is the same as the join variable, but used here to draw
+				
+				elements.each(function(d,i) {
+
+					// for each virtual/custom element...
+
+					var node = d3.select(this);
+					context.fillStyle = node.attr('fillStyle');
+					context.fillRect(node.attr('x'), node.attr('y'), node.attr('width'), node.attr('height'))
+
+				});
+
+			} // draw()
+
+
+
+
+
+			// === Listeners/handlers === //
+
+
+			d3.select('#textinput').on('keydown', function() {
+
+				if (d3.event.keyCode === 13) {
+
+					d3.select('#alert').html('');
+
+					if (+this.value < 1 || +this.value > 100000) {
+
+						d3.select('#text-explain').classed('alert', true);
+
+						return;
+
+					} else {
+
+						d3.select('#text-explain').classed('alert', false);
+
+						value = +this.value;
+
+				    databind(d3.range(value), colourId);
+
+						var t = d3.timer(function(elapsed) {
+							draw();
+							if (elapsed > 500) t.stop();
+						}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
+
+					}
+			  
+			  } // keyCode 13 === return
+			  
+			}); // text input listener/handler
+
+
+		} // makeChart()
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>

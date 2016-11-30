@@ -1,0 +1,85 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+	margin: 150px;
+}
+
+canvas {
+	border:  1px dotted #ccc;
+}
+
+
+/* === Arrowed tooltip === */
+
+.tooltipCenter, .tooltipLeft {
+
+  position: absolute;
+	display: inline-block;
+  width: 180px;
+  height: 150px;
+  
+  text-align: center;
+  color: #eee;
+  background: #01233F;
+  pointer-events: none;
+  opacity: 0;
+
+}
+
+.tooltipCenter:after, .tooltipLeft:after {
+
+    content: "";
+    position: absolute;
+    top: 100%; /* this determines the arrow position */
+    left: 80px; /* to center:  half of tooltips width minus this border-width */
+    width: 0;
+    height: 0;
+    border-width: 10px; /* this determines the arrow size  */
+    border-style: solid;
+    border-color: #01233F transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
+
+}
+
+.tooltipLeft:after {
+
+    left: 0; /* to keep the arrow left:  set the left position to 0 */
+
+}
+
+
+
+/*  --- Tooltip sections --- */
+
+#tipHeader {
+	display: flex;
+	flex-direction: row;
+	padding: 5px;
+	margin-bottom: 5px;
+	border-bottom:  2px solid #eee;
+	/* border-bottom-style: ridge; */
+}
+
+#tipHeader > img {
+	height: 1em;
+	opacity: 0.8;
+	/* border: 1px dotted red; */
+}
+
+#tipVisual {
+	/* background: #fff; */
+}
+
+#tipHeader > div {
+	padding-left: 2px;		
+	font-size: 0.8em;
+	/* border: 1px dotted blue; */
+}
+
+#tipBody p {
+	margin: 0;
+	margin-top: 5px;
+	padding: 2px;
+	padding-left: 5px;
+	font-size: 0.7em;
+	text-align: left;
+}
+
