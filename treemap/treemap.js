@@ -244,6 +244,7 @@ function draw(canvas, hidden) {
 
 } // draw()
 
+var block = [], action;
 
 mainCanvas.on('mousemove', function() {
 
@@ -268,52 +269,60 @@ mainCanvas.on('mousemove', function() {
 
 		// necessary values to calculate tooltip position
 		var canvasPos = d3.select('canvas').node().getBoundingClientRect(); // get the canvas left and top position
-		// var tip = d3.select('.tooltip'); // cache the tooltip element
-		// var tipDim = tip.node().getBoundingClientRect(); // get the tooltip width and height
+		var tipDim = d3.select('.tooltip').node().getBoundingClientRect(); // get the tooltip width and height
 
 		tip = d3.select('.tooltip')
-			.style('opacity', 0.98)
-			.style('top', mousePos[1] + canvasPos.top + 'px')
-			.style('left', mousePos[0] + canvasPos.left + 'px')
-			.html(nodeData.value + ' x ' + nodeData.id);
+			.style('top', mousePos[1] + canvasPos.top - tipDim.height - 5 + 'px') // mouse + canvas position - tip height - padding
+			.style('left', mousePos[0] + canvasPos.left - tipDim.width/2 + 'px'); // mouse + canvas position - half the tip width
 
+		block.push(nodeData.id);
+		if (block.length > 2) block.shift()
+		if (block[1] !== block[0]) buildTip(tip, nodeData);
 
-		buildTip(tip, nodeData);
-
-	} else {
-
-	// if (nodeData === undefined) {} {
-
-		d3.select('.tooltip').style('opacity', 0);
-
-	}
-
-	// buildTip(nodeData, tip);
-
+	} 
 
 }); // canvas listener 
 
 
-mainCanvas.on('mouseout', function() { d3.select('.tooltip').style('opacity', 0); }); // making sure tooltip disappears when mouse beyond treemap
+mainCanvas.on('mouseout', function() { 
+	block = [];
+	d3.selectAll('.tooltip *').style('opacity', 0); 
+
+}); // making sure tooltip disappears when mouse beyond treemap
 
 
 function buildTip(selection, data) {
 
-		selection.append('div').attr('id', 'tipHeader');
-		selection.append('div').attr('id', 'tipBody');
+		// var mousePos = [d3.event.offsetX, d3.event.offsetY];
 
-		var margin = { top: 5, right: 10, bottom: 5, left: 90 }
+		// straight cleaning for simplicity
+		d3.selectAll('.tooltip *').remove();
+
+
+		// var canvasPos = d3.select('canvas').node().getBoundingClientRect(); // get the canvas left and top position
+
+		// selection
+		// 	.style('top', mousePos[1] + canvasPos.top + 'px')
+		// 	.style('left', mousePos[0] + canvasPos.left + 'px')
+
+		// add header and body div's
+		selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
+		selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
+
+		d3.select('#tipHeader').html('Number of disciplines')
+
+		// Sizes
+		var margin = { top: 5, right: 20, bottom: 5, left: 90 }
 		var width = 200 - margin.left - margin.right;
 		var height = 200 - margin.top - margin.bottom;
 
-		var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });
-		
+		// Scales and Axis
+		var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });		
 		var x = d3.scaleLinear().domain([0, extent[1]]).range([0, width]);
 		var y = d3.scaleBand().domain(nodesDisciplines.map(function(d) { return d.id; })).rangeRound([0, height]);
+		var yAxis = d3.axisLeft(y).tickSize(0).tickPadding(6);
 
-		var yAxis = d3.axisLeft(y)
-			.tickSize(0).tickPadding(6);
-
+		// Add SVG and g's
 		var g = d3.select('#tipBody')
 			.append('svg')
 			.attr('width', width + margin.left + margin.right)
@@ -324,6 +333,9 @@ function buildTip(selection, data) {
 
 		var gLines = g.append('g').attr('class', 'gLines');
 		var gCircles = g.append('g').attr('class', 'gCircles');
+
+
+		// Build visual
 
 		var joinLines = gLines.selectAll('.lines')
 			.data(nodesDisciplines);
@@ -339,7 +351,6 @@ function buildTip(selection, data) {
 			.style('stroke', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; })
 			.style('stroke-width', 1);
 
-
 		var joinCircles = gCircles.selectAll('.circles')
 			.data(nodesDisciplines);
 
@@ -351,6 +362,22 @@ function buildTip(selection, data) {
 			.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 			.attr('r', 2)
 			.style('fill', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; });
+
+
+		// Add text label to currrent lollipop
+
+		d3.select('text.value').remove();
+
+		var font = parseInt(d3.select('.tick text').style('font-size').replace('px',''),10); // Font size of axis labels
+
+		g.append('text')
+			.attr('class', 'value')
+			.attr('x', x(data.value) + 5) // value plus a bit of padding
+			.attr('y', y(data.id) + y.bandwidth()/2 + font/4) // this is how the labels align central
+			.attr('font-size', font)
+			.attr('fill', '#000')
+			.attr('text-anchor', 'start')
+			.text(data.value);
 
 
 

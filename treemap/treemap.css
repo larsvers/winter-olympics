@@ -32,21 +32,21 @@ canvas.hiddenCanvas {
 div.tooltip {
   position: absolute;        
 	display: inline-block;
-	/* max-width: 20vw; */
-	padding: 10px;
-	font-family: 'Open Sans', sans-serif;
-	color: #000;
-  background-color: #fff;
-	border: 1px solid #999;
-	border-radius: 2px;
   pointer-events: none;
-	opacity: 0;
 	z-index: 1;
 }
 
+div#tipHeader {
+	padding: 5px;
+	margin-bottom: 1px;
+  pointer-events: none;
+	z-index: 1;
+}
 
-svg {
-	border: 1px solid blue;
+div#tipBody {
+	padding: 5px;
+  pointer-events: none;
+	z-index: 1;
 }
 
 path.domain {
