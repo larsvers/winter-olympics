@@ -107,7 +107,9 @@ function treeData(data, event) {
 			.descendants();
 
 	// Get all flat nodes showing disciplines
-	nodesDisciplines = nodes.filter(function(el) { return !el.children; });
+	nodesDisciplines = nodes
+		.filter(function(el) { return !el.children; })
+		.sort(function(a,b){ return b.value - a.value; });
 
 	log('nodes', nodes)
 
@@ -120,7 +122,7 @@ function treeData(data, event) {
 	colourText = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.9),extent[1]]).range(['#000', '#000', '#fff']); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
 
 	
-	log('nodesDisciplines', nodesDisciplines);
+	log('nodesDisciplines descending', nodesDisciplines);
 
 
 	databind(nodes);
@@ -270,13 +272,13 @@ mainCanvas.on('mousemove', function() {
 		// var tipDim = tip.node().getBoundingClientRect(); // get the tooltip width and height
 
 		tip = d3.select('.tooltip')
-			.style('opacity', 0.9)
+			.style('opacity', 0.98)
 			.style('top', mousePos[1] + canvasPos.top + 'px')
 			.style('left', mousePos[0] + canvasPos.left + 'px')
 			.html(nodeData.value + ' x ' + nodeData.id);
 
 
-		test(tip, nodeData);
+		buildTip(tip, nodeData);
 
 	} else {
 
@@ -295,21 +297,22 @@ mainCanvas.on('mousemove', function() {
 mainCanvas.on('mouseout', function() { d3.select('.tooltip').style('opacity', 0); }); // making sure tooltip disappears when mouse beyond treemap
 
 
-function test(selection, data) {
+function buildTip(selection, data) {
 
 		selection.append('div').attr('id', 'tipHeader');
 		selection.append('div').attr('id', 'tipBody');
 
-		var margin = { top: 5, right: 5, bottom: 5, left: 150 }
-		var width = 300 - margin.left - margin.right;
+		var margin = { top: 5, right: 10, bottom: 5, left: 90 }
+		var width = 200 - margin.left - margin.right;
 		var height = 200 - margin.top - margin.bottom;
 
 		var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });
 		
 		var x = d3.scaleLinear().domain([0, extent[1]]).range([0, width]);
-		var y = d3.scaleBand().domain(nodesDisciplines.map(function(d) { return d.id; })).range([0, height]);
+		var y = d3.scaleBand().domain(nodesDisciplines.map(function(d) { return d.id; })).rangeRound([0, height]);
 
-		var yAxis = d3.axisLeft(y).tickSize(0).tickPadding(6);
+		var yAxis = d3.axisLeft(y)
+			.tickSize(0).tickPadding(6);
 
 		var g = d3.select('#tipBody')
 			.append('svg')
@@ -319,10 +322,39 @@ function test(selection, data) {
 			.attr('transform', 'translate('+ margin.left +', '+ margin.top +')')
 			.call(yAxis);
 
+		var gLines = g.append('g').attr('class', 'gLines');
+		var gCircles = g.append('g').attr('class', 'gCircles');
+
+		var joinLines = gLines.selectAll('.lines')
+			.data(nodesDisciplines);
+
+		var enterLines = joinLines
+			.enter()
+			.append('line')
+			.classed('lines', true)
+			.attr('x1', function(d) { return x(0); })
+			.attr('y1', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
+			.attr('x2', function(d) { return x(d.value); })
+			.attr('y2', function(d) { return y(d.id) + y.bandwidth()/2; })
+			.style('stroke', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; })
+			.style('stroke-width', 1);
+
+
+		var joinCircles = gCircles.selectAll('.circles')
+			.data(nodesDisciplines);
+
+		var enterCircles = joinCircles
+			.enter()
+			.append('circle')
+			.classed('circles', true)
+			.attr('cx', function(d) { return x(d.value); })
+			.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
+			.attr('r', 2)
+			.style('fill', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; });
 
 
 
-}
+} // buildTip()
 
 
 
@@ -337,6 +369,7 @@ function test(selection, data) {
 
 
 
+/*
 
 var block = [];
 
@@ -377,3 +410,4 @@ function buildTip(node_data, selection) {
 
 } // buildTip()
 
+*/
