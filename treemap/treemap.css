@@ -24,3 +24,31 @@ canvas {
 	border: 1px dotted #ccc;
 	margin: 50px;
 }
+
+canvas.hiddenCanvas {
+	display: none;
+}
+
+div.tooltip {
+  position: absolute;        
+	display: inline-block;
+	/* max-width: 20vw; */
+	padding: 10px;
+	font-family: 'Open Sans', sans-serif;
+	color: #000;
+  background-color: #fff;
+	border: 1px solid #999;
+	border-radius: 2px;
+  pointer-events: none;
+	opacity: 0;
+	z-index: 1;
+}
+
+
+svg {
+	border: 1px solid blue;
+}
+
+path.domain {
+	display:  none;
+}

@@ -228,7 +228,7 @@ function makeChart(data) {
 					colourToNode[d.hiddenCol] = d;
 
 				} // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNode-dictionary 
-			
+				log(d);
 				return d.hiddenCol;
 
 			});
@@ -423,7 +423,7 @@ function makeChart(data) {
 		// get the data from our map !
 		var nodeData = colourToNode[colKey];
 		log(nodeData)
-		var tip;
+		// var tip;
 
 		// if we found some data under our mouse write a tooltip
 		if (nodeData) {
