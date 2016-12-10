@@ -20,9 +20,14 @@ a:link, a:visited, a:hover, a:active {
 }
 
 
+select {
+	margin-left: 50px;
+}
+
 canvas {
 	border: 1px dotted #ccc;
 	margin: 50px;
+	margin-bottom: 10px;
 }
 
 canvas.hiddenCanvas {

@@ -99,6 +99,7 @@ function treeData(data, event) {
 
 	// Generate the treemap layout
 	var treemap = d3.treemap()
+			.tile(d3.treemapResquarify)
 			.size([width, height])
 			.padding(2);
 
@@ -179,7 +180,6 @@ function databind(data) {
 
 
 } // databind()
-
 
 
 
@@ -293,93 +293,91 @@ mainCanvas.on('mouseout', function() {
 
 function buildTip(selection, data) {
 
-		// var mousePos = [d3.event.offsetX, d3.event.offsetY];
+	// var mousePos = [d3.event.offsetX, d3.event.offsetY];
 
-		// straight cleaning for simplicity
-		d3.selectAll('.tooltip *').remove();
-
-
-		// var canvasPos = d3.select('canvas').node().getBoundingClientRect(); // get the canvas left and top position
-
-		// selection
-		// 	.style('top', mousePos[1] + canvasPos.top + 'px')
-		// 	.style('left', mousePos[0] + canvasPos.left + 'px')
-
-		// add header and body div's
-		selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
-		selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
-
-		d3.select('#tipHeader').html('Number of disciplines')
-
-		// Sizes
-		var margin = { top: 5, right: 20, bottom: 5, left: 90 }
-		var width = 200 - margin.left - margin.right;
-		var height = 200 - margin.top - margin.bottom;
-
-		// Scales and Axis
-		var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });		
-		var x = d3.scaleLinear().domain([0, extent[1]]).range([0, width]);
-		var y = d3.scaleBand().domain(nodesDisciplines.map(function(d) { return d.id; })).rangeRound([0, height]);
-		var yAxis = d3.axisLeft(y).tickSize(0).tickPadding(6);
-
-		// Add SVG and g's
-		var g = d3.select('#tipBody')
-			.append('svg')
-			.attr('width', width + margin.left + margin.right)
-			.attr('height', height + margin.top + margin.bottom)
-			.append('g')
-			.attr('transform', 'translate('+ margin.left +', '+ margin.top +')')
-			.call(yAxis);
-
-		var gLines = g.append('g').attr('class', 'gLines');
-		var gCircles = g.append('g').attr('class', 'gCircles');
+	// straight cleaning for simplicity
+	d3.selectAll('.tooltip *').remove();
 
 
-		// Build visual
+	// var canvasPos = d3.select('canvas').node().getBoundingClientRect(); // get the canvas left and top position
 
-		var joinLines = gLines.selectAll('.lines')
-			.data(nodesDisciplines);
+	// selection
+	// 	.style('top', mousePos[1] + canvasPos.top + 'px')
+	// 	.style('left', mousePos[0] + canvasPos.left + 'px')
 
-		var enterLines = joinLines
-			.enter()
-			.append('line')
-			.classed('lines', true)
-			.attr('x1', function(d) { return x(0); })
-			.attr('y1', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
-			.attr('x2', function(d) { return x(d.value); })
-			.attr('y2', function(d) { return y(d.id) + y.bandwidth()/2; })
-			.style('stroke', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; })
-			.style('stroke-width', 1);
+	// add header and body div's
+	selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
+	selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
 
-		var joinCircles = gCircles.selectAll('.circles')
-			.data(nodesDisciplines);
+	d3.select('#tipHeader').html('Number of disciplines')
 
-		var enterCircles = joinCircles
-			.enter()
-			.append('circle')
-			.classed('circles', true)
-			.attr('cx', function(d) { return x(d.value); })
-			.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
-			.attr('r', 2)
-			.style('fill', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; });
+	// Sizes
+	var margin = { top: 5, right: 20, bottom: 5, left: 90 }
+	var width = 200 - margin.left - margin.right;
+	var height = 200 - margin.top - margin.bottom;
 
+	// Scales and Axis
+	var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });		
+	var x = d3.scaleLinear().domain([0, extent[1]]).range([0, width]);
+	var y = d3.scaleBand().domain(nodesDisciplines.map(function(d) { return d.id; })).rangeRound([0, height]);
+	var yAxis = d3.axisLeft(y).tickSize(0).tickPadding(6);
 
-		// Add text label to currrent lollipop
+	// Add SVG and g's
+	var g = d3.select('#tipBody')
+		.append('svg')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append('g')
+		.attr('transform', 'translate('+ margin.left +', '+ margin.top +')')
+		.call(yAxis);
 
-		d3.select('text.value').remove();
-
-		var font = parseInt(d3.select('.tick text').style('font-size').replace('px',''),10); // Font size of axis labels
-
-		g.append('text')
-			.attr('class', 'value')
-			.attr('x', x(data.value) + 5) // value plus a bit of padding
-			.attr('y', y(data.id) + y.bandwidth()/2 + font/4) // this is how the labels align central
-			.attr('font-size', font)
-			.attr('fill', '#000')
-			.attr('text-anchor', 'start')
-			.text(data.value);
+	var gLines = g.append('g').attr('class', 'gLines');
+	var gCircles = g.append('g').attr('class', 'gCircles');
 
 
+	// Build visual
+
+	var joinLines = gLines.selectAll('.lines')
+		.data(nodesDisciplines);
+
+	var enterLines = joinLines
+		.enter()
+		.append('line')
+		.classed('lines', true)
+		.attr('x1', function(d) { return x(0); })
+		.attr('y1', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
+		.attr('x2', function(d) { return x(d.value); })
+		.attr('y2', function(d) { return y(d.id) + y.bandwidth()/2; })
+		.style('stroke', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; })
+		.style('stroke-width', 1);
+
+	var joinCircles = gCircles.selectAll('.circles')
+		.data(nodesDisciplines);
+
+	var enterCircles = joinCircles
+		.enter()
+		.append('circle')
+		.classed('circles', true)
+		.attr('cx', function(d) { return x(d.value); })
+		.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
+		.attr('r', 2)
+		.style('fill', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; });
+
+
+	// Add text label to currrent lollipop
+
+	d3.select('text.value').remove();
+
+	var font = parseInt(d3.select('.tick text').style('font-size').replace('px',''),10); // Font size of axis labels
+
+	g.append('text')
+		.attr('class', 'value')
+		.attr('x', x(data.value) + 5) // value plus a bit of padding
+		.attr('y', y(data.id) + y.bandwidth()/2 + font/4) // this is how the labels align central
+		.attr('font-size', font)
+		.attr('fill', '#000')
+		.attr('text-anchor', 'start')
+		.text(data.value);
 
 } // buildTip()
 
