@@ -219,6 +219,8 @@ function databind(data) {
 
 
 
+
+
 function draw(canvas, hidden) {
 
 	var context = canvas.node().getContext('2d');
@@ -231,14 +233,14 @@ function draw(canvas, hidden) {
 
 		var node = d3.select(this);
 
-		if (node.attr('children')) {
+		if (node.attr('children')) { // all non-leaf nodes get a fill
 
 			// log('has children', node.attr('id'), parseInt(node.attr('x')).toFixed(0), parseInt(node.attr('y')).toFixed(0), parseInt(node.attr('width')).toFixed(0), parseInt(node.attr('height')).toFixed(0));
 
 			context.fillStyle = colour(node.attr('value'));
 			context.fillRect(+node.attr('x'), +node.attr('y'), +node.attr('width'), +node.attr('height'));
 
-		} else {
+		} else { // all leaf nodes get a stroke
 
 			// log('no children', node.attr('id'), parseInt(node.attr('x')).toFixed(0), parseInt(node.attr('y')).toFixed(0), parseInt(node.attr('width')).toFixed(0), parseInt(node.attr('height')).toFixed(0));
 
@@ -254,7 +256,7 @@ function draw(canvas, hidden) {
 
 		}
 
-		if (node.attr('children') && node.attr('parent')) {
+		if (node.attr('children') && node.attr('parent')) { // all non-leaf nodes and not the root node get some text
 
 			var t = d3.timer(function(elapsed) {
 
@@ -265,16 +267,19 @@ function draw(canvas, hidden) {
 					context.fillText(d.value + ' x ' + d.id.replace('Sport: ', ''), +node.attr('x') + 6, +node.attr('y') + 14);
 					t.stop();					
 
-				}
+				} 
 
-			});
+			}); // timer to allow all text some time to be drawn before all fills and strokes are drawn
 
-		}
+		} // text conditional
 
-	});
+	}); // draw each node
 
 
 } // draw()
+
+
+
 
 var block = [], action;
 
