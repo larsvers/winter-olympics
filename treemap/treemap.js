@@ -35,8 +35,8 @@ function genColor(){
 var mainCanvas = d3.select('#container').append('canvas').attr('class', 'mainCanvas').attr('width', width).attr('height', height);
 var hiddenCanvas = d3.select('#container').append('canvas').attr('class', 'hiddenCanvas').attr('width', width).attr('height', height);
 
-var customBase = document.createElement('custom');
-var custom = d3.select(customBase);
+// var customBase = document.createElement('custom');
+// var custom = d3.select(customBase);
 
 
 // === Load data === //
@@ -70,38 +70,64 @@ d3.tsv('../data/sports.tsv', function(err, data){
 
 	}); // loop through nested
 
-  treeData(data);
+	makeDropdown(data);
+
+  treeData(data['chamonix_1924']);
+
+
+	d3.select('select').on('change', function() {
+
+		treeData(data[this.value]); // ...then update the databind function
+		
+	}); // select listener/handler
+
 
 }); // d3.tsv()
 
 
 
-function treeData(data, event) {
+
+function makeDropdown(data) {
+
+	var selectData = d3.keys(data);
+	
+	var select = d3.select('#select')
+		.append('select');
+
+	var options = select.selectAll('option.options')
+		.data(selectData)
+		.enter()
+		.append('option')
+		.attr('class', 'options')
+		.attr('value', function(d) { return d; })
+		.html(function(d) { return d; });
+
+} // makeDropdown()
 
 
-	// data = data['chamonix_1924'];
-	data = data['sochi_2014'];
+
+function treeData(data) {
 
 	log('data', data);
 
 	// Get hierarchical object from our tsv data
 	var root = d3.stratify()
-			.id(function(d) { return d.discipline; }) // the children
-			.parentId(function(d) { return d.sport; }) // the parent
-			(data);
+		.id(function(d) { return d.discipline; }) // the children
+		.parentId(function(d) { return d.sport; }) // the parent
+		(data);
 
 	// Add a value property with the events data and sort the data according to best treemap practices (https://github.com/d3/d3-hierarchy#node_sort)
 	root
-			.sum(function(d) { return d.events; })
-			.sort(function(a, b) { return b.height - a.height || b.events - a.events; });		
+		.sum(function(d) { return d.events; })
+		.sort(function(a, b) { return b.height - a.height || b.events - a.events; });		
 
 	log('root', root);
 
 	// Generate the treemap layout
 	var treemap = d3.treemap()
-			.tile(d3.treemapResquarify)
-			.size([width, height])
-			.padding(2);
+		// .tile(d3.treemapResquarify)
+		.size([width, height])
+		.padding(2);
 
 	// Get all nodes (from root to the last leaf) into a flat array
 	var nodes = treemap(root)
@@ -112,18 +138,21 @@ function treeData(data, event) {
 		.filter(function(el) { return !el.children; })
 		.sort(function(a,b){ return b.value - a.value; });
 
-	log('nodes', nodes)
+	// log('nodes', nodes)
 
 	// Colour scales
-	var nodesMinusMax = nodes.filter(function(el) { return el.value < d3.max(nodes, function(d) { return d.value; }) }); // base data for the extent - subtracting the value of the root node 
+	var nodesMinusMax = nodes.filter(function(el) { return el.value < d3.max(nodes, function(d) { return d.value; }) }); // base data for the extent - excluding the value of the root node 
 	var extent = d3.extent(nodesMinusMax, function(d) { return d.value; });
 
 	var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue for the quantile scale for the rect colours
 	colour = d3.scaleQuantile().domain(extent).range(colours); // Lch colour scale picked from http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
+
+	colour = d3.scaleLinear().domain(extent).range([colours[0], colours[colours.length-1]])
+	colour = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range([colours[0], colours[2], colours[colours.length-1]]); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
 	colourText = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.9),extent[1]]).range(['#000', '#000', '#fff']); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
 
 	
-	log('nodesDisciplines descending', nodesDisciplines);
+	// log('nodesDisciplines descending', nodesDisciplines);
 
 
 	databind(nodes);
@@ -134,6 +163,12 @@ function treeData(data, event) {
 
 function databind(data) {
 
+
+	var customBase = document.createElement('custom');
+	custom = d3.select(customBase); 
+	// If we want the update pattern, we need to define customBase and custom globally. This way d3 will recycle the elements approriately. 
+	// If we want to redraw, we need to define customBase and custom after the data creation and before the join. 
+	// This way it will overwrite all previously entered custom-elements and create a new enter-selection each time we call it.
 
 	var join = custom.selectAll('custom.rect')
 			.data(data);
@@ -159,23 +194,24 @@ function databind(data) {
 				return d.hiddenCol;
 			});
 
-  /*
-	join
-			.merge(enterSel)
-			.transition()
-			.attr('x', function(d) { return d.x0; })
-			.attr('y', function(d) { return d.y0; })
-			.attr('width', function(d) { return d.x1; })
-			.attr('height', function(d) { return d.y1; });
+  
+	// join
+	// 		.merge(enterSel)
+	// 		.transition()
+	// 		.attr('x', function(d) { return d.x0; })
+	// 		.attr('y', function(d) { return d.y0; })
+	// 		.attr('width', function(d) { return d.x1 - d.x0; })
+	// 		.attr('height', function(d) { return d.y1 - d.y0; });
 
 
-	var exitSel = join.exit()
-			.transition()
-			.attr('width', 0)
-			.attr('height', 0)
-			.remove();
-	*/
+	// var exitSel = join.exit()
+	// 		.transition()
+	// 		.attr('width', 0)
+	// 		.attr('height', 0)
+	// 		.remove();
 	
+
+
 	draw(mainCanvas, false);
 
 
@@ -186,7 +222,6 @@ function databind(data) {
 function draw(canvas, hidden) {
 
 	var context = canvas.node().getContext('2d');
-
 
 	context.clearRect(0, 0, width, height);
 
@@ -234,10 +269,7 @@ function draw(canvas, hidden) {
 
 			});
 
-
 		}
-
-
 
 	});
 
@@ -293,17 +325,9 @@ mainCanvas.on('mouseout', function() {
 
 function buildTip(selection, data) {
 
-	// var mousePos = [d3.event.offsetX, d3.event.offsetY];
-
 	// straight cleaning for simplicity
 	d3.selectAll('.tooltip *').remove();
 
-
-	// var canvasPos = d3.select('canvas').node().getBoundingClientRect(); // get the canvas left and top position
-
-	// selection
-	// 	.style('top', mousePos[1] + canvasPos.top + 'px')
-	// 	.style('left', mousePos[0] + canvasPos.left + 'px')
 
 	// add header and body div's
 	selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
@@ -383,56 +407,3 @@ function buildTip(selection, data) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-var block = [];
-
-function buildTip(node_data, selection) {
-
-	node_data ? block.push(node_data) : block = []; // Create condition to only build a tooltip the first time data gets added
-
-	if (node_data && block.length === 1) {
-
-		// d3.selectAll('.tooltip *').remove();
-
-		dir(selection.node());
-
-		d3.select('.tooltip').append('div').attr('id', 'tipHeader');
-		
-		// selection.append('div').attr('id', 'tipHeader');
-		// selection.append('div').attr('id', 'tipBody');
-
-		dir(selection.append('div').attr('id', 'tipHeader').node());
-
-
-		// var margin = { top: 5, right: 5, bottom: 5, left: 5 }
-		// var width = 200 - margin.left - margin.right;
-		// var height = 200 - margin.top - margin.bottom;
-
-		// var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });
-		
-		// var g = d3.select('#tipBody')
-		// 	.append('svg')
-		// 	.attr('width', width + margin.left + margin.right)
-		// 	.attr('height', height + margin.top + margin.bottom)
-		// 	.append('g')
-		// 	.attr('transform', 'translate('+ margin.left +', '+ margin.top +')');
-
-
-	}
-
-
-} // buildTip()
-
-*/

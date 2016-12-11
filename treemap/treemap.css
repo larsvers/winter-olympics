@@ -31,7 +31,7 @@ canvas {
 }
 
 canvas.hiddenCanvas {
-	display: none;
+	/* display: none; */
 }
 
 div.tooltip {
