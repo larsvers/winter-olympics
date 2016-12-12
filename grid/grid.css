@@ -15,11 +15,12 @@ canvas {
   position: absolute;
 	display: inline-block;
   width: 180px;
-  height: 150px;
+  height: 170px;
   
   text-align: center;
   color: #eee;
-  background: #01233F;
+  background: #000;
+  background: radial-gradient(circle, #434343, #000); /* Standard syntax */
   pointer-events: none;
   opacity: 0;
 
@@ -35,7 +36,7 @@ canvas {
     height: 0;
     border-width: 10px; /* this determines the arrow size  */
     border-style: solid;
-    border-color: #01233F transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
+    border-color: #111 transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
 
 }
 
@@ -60,7 +61,7 @@ canvas {
 
 #tipHeader > img {
 	height: 1em;
-	opacity: 0.8;
+	opacity: 0.9;
 	/* border: 1px dotted red; */
 }
 

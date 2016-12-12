@@ -391,10 +391,7 @@ function makeChart(data) {
 
 
 
-	// --- Tooltip v2 --- //
-
-
-
+	// --- Tooltip --- //
 
 
 	d3.select('.mainCanvas').on('mousemove', function() {
