@@ -449,14 +449,22 @@ mainCanvas.on('mouseout', function() {
 function buildTip(selection, data) {
 
 	// straight cleaning for simplicity
+
 	d3.selectAll('.tooltip *').remove();
 
 
 	// add header and body div's
+	
 	selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(255,255,255,1)');
 	selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(255,255,255,1)');
 
-	d3.select('#tipHeader').html('Number of events')
+	var totalEvents = data.ancestors()[data.ancestors().length-1].value
+	var eventRatio = Math.floor((data.value / totalEvents)*100);
+
+	d3.select('#tipHeader').html('Number of events<br><span class="small">' + eventRatio + '% from a total of ' + totalEvents + ' events</span>')
+
+
+	// log('from buildTip', data.ancestors()[data.ancestors().length-1].value);
 
 	// Sizes
 
@@ -498,7 +506,7 @@ function buildTip(selection, data) {
 		.attr('y1', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 		.attr('x2', function(d) { return x(d.value); })
 		.attr('y2', function(d) { return y(d.id) + y.bandwidth()/2; })
-		.style('stroke', function(d) { return d.id === data.id ? '#0066f5' : '#639afb'; })
+		.style('stroke', function(d) { return d.id === data.id ? '#fbc463' : '#639afb'; })
 		.style('stroke-width', 1);
 
 	var joinCircles = gCircles.selectAll('.circles')
@@ -511,7 +519,7 @@ function buildTip(selection, data) {
 		.attr('cx', function(d) { return x(d.value); })
 		.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 		.attr('r', 2)
-		.style('fill', function(d) { return d.id === data.id ? '#0066f5' : '#639afb'; });
+		.style('fill', function(d) { return d.id === data.id ? '#fbc463' : '#639afb'; });
 
 
 	// Add text label to currrent lollipop
@@ -525,7 +533,7 @@ function buildTip(selection, data) {
 		.attr('x', x(data.value) + 5) // value plus a bit of padding
 		.attr('y', y(data.id) + y.bandwidth()/2 + fontSize/4) // this is how the labels align central
 		.attr('font-size', fontSize)
-		.attr('fill', '#0066f5')
+		.attr('fill', '#fbc463')
 		.attr('text-anchor', 'start')
 		.text(data.value);
 
@@ -536,7 +544,7 @@ function buildTip(selection, data) {
 	
 	d3.selectAll('.tick text').attr('fill', '#639afb');
 	
-	thisLabel.attr('fill', '#0066f5');
+	thisLabel.attr('fill', '#fbc463');
 
 } // buildTip()
 

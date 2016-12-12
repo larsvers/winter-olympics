@@ -48,12 +48,24 @@ div#tipHeader {
 	color: #0066f5;
   pointer-events: none;
 	z-index: 1;
+
+	border-radius: 2px 2px 0 0;
+  box-shadow: 2px 1px 1px #aaa;
+
+}
+
+span.small {
+	font-size: 0.65em;
 }
 
 div#tipBody {
 	padding: 5px;
   pointer-events: none;
 	z-index: 1;
+
+	border-radius: 0 0 2px 2px;
+  box-shadow: 2px 1px 1px #aaa;
+
 }
 
 path.domain {
