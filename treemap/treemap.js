@@ -1,8 +1,8 @@
-// mukheavn
 
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
 var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+
 
 
 // === Globals === //
@@ -12,6 +12,7 @@ var width = 500, height = 250;
 var colour, colourText;
 var colourToNode = {};
 var nodesDisciplines = [];
+var dur = 500;
 
 var nextCol = 1;
 
@@ -30,13 +31,16 @@ function genColor(){
 }
 
 
+
 // === Set up the canvas === //
 
 var mainCanvas = d3.select('#container').append('canvas').attr('class', 'mainCanvas').attr('width', width).attr('height', height);
 var hiddenCanvas = d3.select('#container').append('canvas').attr('class', 'hiddenCanvas').attr('width', width).attr('height', height);
 
-// var customBase = document.createElement('custom');
-// var custom = d3.select(customBase);
+var customBase = document.createElement('custom');
+var custom = d3.select(customBase);
+
+
 
 
 // === Load data === //
@@ -73,16 +77,32 @@ d3.tsv('../data/sports.tsv', function(err, data){
 	makeDropdown(data);
 
   treeData(data['chamonix_1924']);
+	var t = d3.timer(function(elapsed) {
+		draw(mainCanvas, false);
+		if (elapsed > dur + 100) {
+			drawText();
+			t.stop();
+		}
+	}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
 
 
 	d3.select('select').on('change', function() {
 
 		treeData(data[this.value]); // ...then update the databind function
-		
+
+		var t = d3.timer(function(elapsed) {
+			draw(mainCanvas, false);
+			if (elapsed > dur + 100) {
+				drawText();
+				t.stop();
+			}
+		}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
+
 	}); // select listener/handler
 
 
 }); // d3.tsv()
+
 
 
 
@@ -106,6 +126,9 @@ function makeDropdown(data) {
 
 
 
+
+// === Prep data === //
+
 function treeData(data) {
 
 	log('data', data);
@@ -125,9 +148,9 @@ function treeData(data) {
 
 	// Generate the treemap layout
 	var treemap = d3.treemap()
-		// .tile(d3.treemapResquarify)
+		.tile(d3.treemapResquarify)
 		.size([width, height])
-		.padding(2);
+		.padding(0);
 
 	// Get all nodes (from root to the last leaf) into a flat array
 	var nodes = treemap(root)
@@ -161,17 +184,13 @@ function treeData(data) {
 
 
 
+
+// === Bind data === //
+
 function databind(data) {
 
-
-	var customBase = document.createElement('custom');
-	custom = d3.select(customBase); 
-	// If we want the update pattern, we need to define customBase and custom globally. This way d3 will recycle the elements approriately. 
-	// If we want to redraw, we need to define customBase and custom after the data creation and before the join. 
-	// This way it will overwrite all previously entered custom-elements and create a new enter-selection each time we call it.
-
 	var join = custom.selectAll('custom.rect')
-			.data(data);
+			.data(data, function(d) { return d.id});
 
 
 	var enterSel = join.enter()
@@ -179,11 +198,34 @@ function databind(data) {
 			.classed('rect', true)
 			.attr('x', function(d) { return d.x0; })
 			.attr('y', function(d) { return d.y0; })
+			.attr('value', function(d) { return d.value; })
+			.attr('parent', function(d) { return d.parent; })
+			.attr('children', function(d) { return d.children; })
+			.attr('fillStyleHidden', function(d) {
+				if (!d.hidden) {
+					d.hiddenCol = genColor();
+					colourToNode[d.hiddenCol] = d;
+				}
+				return d.hiddenCol;
+			})
+			.attr('width', 0)
+			.attr('height', 0)
+			.attr('fillStyle', '#fff')
+			.transition().duration(dur)
 			.attr('width', function(d) { return d.x1 - d.x0; })
 			.attr('height', function(d) { return d.y1 - d.y0; })
-			.attr('fillStyle', function(d) { return '#ccc'; })
+			.attr('fillStyle', function(d) { return colour(d.value); })
+
+  
+	join
+			.merge(enterSel)
+			.transition().duration(dur)
+			.attr('x', function(d) { return d.x0; })
+			.attr('y', function(d) { return d.y0; })
+			.attr('width', function(d) { return d.x1 - d.x0; })
+			.attr('height', function(d) { return d.y1 - d.y0; })
+			.attr('fillStyle', function(d) { return colour(d.value); })
 			.attr('value', function(d) { return d.value; })
-			.attr('id', function(d) { return d.id; })
 			.attr('parent', function(d) { return d.parent; })
 			.attr('children', function(d) { return d.children; })
 			.attr('fillStyleHidden', function(d) {
@@ -194,25 +236,16 @@ function databind(data) {
 				return d.hiddenCol;
 			});
 
-  
-	// join
-	// 		.merge(enterSel)
-	// 		.transition()
-	// 		.attr('x', function(d) { return d.x0; })
-	// 		.attr('y', function(d) { return d.y0; })
-	// 		.attr('width', function(d) { return d.x1 - d.x0; })
-	// 		.attr('height', function(d) { return d.y1 - d.y0; });
 
-
-	// var exitSel = join.exit()
-	// 		.transition()
-	// 		.attr('width', 0)
-	// 		.attr('height', 0)
-	// 		.remove();
+	var exitSel = join.exit()
+			.transition().duration(dur)
+			.attr('width', 0)
+			.attr('height', 0)
+			.remove();
 	
 
 
-	draw(mainCanvas, false);
+	// draw(mainCanvas, false);
 
 
 } // databind()
@@ -220,6 +253,7 @@ function databind(data) {
 
 
 
+// === Draw the elements === //
 
 function draw(canvas, hidden) {
 
@@ -227,61 +261,71 @@ function draw(canvas, hidden) {
 
 	context.clearRect(0, 0, width, height);
 
-	var elements = custom.selectAll('custom.rect');
+	var elements = custom.selectAll('custom.rect'); // grab all elements
 
 	elements.each(function(d, i) {
 
-		var node = d3.select(this);
+		var node = d3.select(this); // grab element
 
-		if (node.attr('children')) { // all non-leaf nodes get a fill
+		if (d.children && d.depth > 0) { // all non-leaf nodes less the root node get a fill
 
-			// log('has children', node.attr('id'), parseInt(node.attr('x')).toFixed(0), parseInt(node.attr('y')).toFixed(0), parseInt(node.attr('width')).toFixed(0), parseInt(node.attr('height')).toFixed(0));
-
-			context.fillStyle = colour(node.attr('value'));
+			context.fillStyle = node.attr('fillStyle');
 			context.fillRect(+node.attr('x'), +node.attr('y'), +node.attr('width'), +node.attr('height'));
 
-		} else { // all leaf nodes get a stroke
+		} // style condition
 
-			// log('no children', node.attr('id'), parseInt(node.attr('x')).toFixed(0), parseInt(node.attr('y')).toFixed(0), parseInt(node.attr('width')).toFixed(0), parseInt(node.attr('height')).toFixed(0));
+		if (!d.children) { // all leaf nodes get a stroke
 
-			context.strokeStyle = '#eee';
+			context.strokeStyle = '#fff';
 			context.strokeRect(+node.attr('x'), +node.attr('y'), +node.attr('width'), +node.attr('height'));
 
-			if (hidden) {
+		} // style condition
 
-				context.fillStyle = node.attr('fillStyleHidden');
-				context.fillRect(+node.attr('x'), +node.attr('y'), +node.attr('width'), +node.attr('height'));
-			
-			} // fill the leaf nodes only for the hidden canvas
+		if (!d.children && hidden) {
 
-		}
+			context.fillStyle = node.attr('fillStyleHidden');
+			context.fillRect(+node.attr('x'), +node.attr('y'), +node.attr('width'), +node.attr('height'));
 
-		if (node.attr('children') && node.attr('parent')) { // all non-leaf nodes and not the root node get some text
+		} // hidden fillStyle condition
 
-			var t = d3.timer(function(elapsed) {
-
-				if (elapsed > 50) {
-
-					context.fillStyle = colourText(node.attr('value'));
-					context.font = '10px Open Sans';
-					context.fillText(d.value + ' x ' + d.id.replace('Sport: ', ''), +node.attr('x') + 6, +node.attr('y') + 14);
-					t.stop();					
-
-				} 
-
-			}); // timer to allow all text some time to be drawn before all fills and strokes are drawn
-
-		} // text conditional
 
 	}); // draw each node
-
 
 } // draw()
 
 
 
 
-var block = [], action;
+
+function drawText(){
+
+	var context = mainCanvas.node().getContext('2d');
+
+	var elements = custom.selectAll('custom.rect');
+
+	elements.each(function(d, i) {
+
+		var node = d3.select(this);
+
+ 		if (node.attr('children') && node.attr('parent')) { // all non-leaf nodes and not the root node get some text
+
+			context.fillStyle = colourText(node.attr('value'));
+			context.font = '10px Open Sans';
+			context.fillText(d.value + ' x ' + d.id.replace('Sport: ', ''), +node.attr('x') + 6, +node.attr('y') + 14);
+
+		}
+
+	}); // loop through elements
+
+} // drawText()
+
+
+
+
+// === Interactivity === //
+
+
+var block = []; // array to block unnecessary re-loads
 
 mainCanvas.on('mousemove', function() {
 
@@ -312,20 +356,27 @@ mainCanvas.on('mousemove', function() {
 			.style('top', mousePos[1] + canvasPos.top - tipDim.height - 5 + 'px') // mouse + canvas position - tip height - padding
 			.style('left', mousePos[0] + canvasPos.left - tipDim.width/2 + 'px'); // mouse + canvas position - half the tip width
 
-		block.push(nodeData.id);
-		if (block.length > 2) block.shift()
-		if (block[1] !== block[0]) buildTip(tip, nodeData);
+		block.push(nodeData.id); // nodeData.id under the mouse gets pushed to array every mousemove
+		if (block.length > 2) block.shift() // if this array gets longer than 2, remove the first element array (the 'old' one)
+		if (block[1] !== block[0]) buildTip(tip, nodeData); // only if the two elements differ - as in we hovered over a new area - build it.
 
 	} 
 
 }); // canvas listener 
 
 
+
+
+
 mainCanvas.on('mouseout', function() { 
+
 	block = [];
 	d3.selectAll('.tooltip *').style('opacity', 0); 
 
 }); // making sure tooltip disappears when mouse beyond treemap
+
+
+
 
 
 function buildTip(selection, data) {
