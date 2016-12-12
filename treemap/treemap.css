@@ -40,17 +40,21 @@ div.tooltip {
 	display: inline-block;
   pointer-events: none;
 	z-index: 1;
+
+  text-align: center;
+  color: #eee;
+  background: #000;
+  background: radial-gradient(circle, #434343, #000); /* Standard syntax */
 }
 
 div#tipHeader {
 	padding: 5px;
 	margin-bottom: 1px;
-	color: #0066f5;
+	color: #eee;
   pointer-events: none;
 	z-index: 1;
 
-	border-radius: 2px 2px 0 0;
-  box-shadow: 2px 1px 1px #aaa;
+	border-bottom: 1px solid #eee;
 
 }
 
@@ -62,10 +66,6 @@ div#tipBody {
 	padding: 5px;
   pointer-events: none;
 	z-index: 1;
-
-	border-radius: 0 0 2px 2px;
-  box-shadow: 2px 1px 1px #aaa;
-
 }
 
 path.domain {

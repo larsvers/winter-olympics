@@ -20,7 +20,7 @@ canvas {
   text-align: center;
   color: #eee;
   background: #000;
-  background: radial-gradient(circle, #434343, #000); /* Standard syntax */
+  background: radial-gradient(circle, #333, #000); /* Standard syntax */
   pointer-events: none;
   opacity: 0;
 
@@ -55,18 +55,13 @@ canvas {
 	flex-direction: row;
 	padding: 5px;
 	margin-bottom: 5px;
-	border-bottom:  2px solid #eee;
-	/* border-bottom-style: ridge; */
+	border-bottom: 1px solid #eee;
 }
 
 #tipHeader > img {
 	height: 1em;
 	opacity: 0.9;
 	/* border: 1px dotted red; */
-}
-
-#tipVisual {
-	/* background: #fff; */
 }
 
 #tipHeader > div {

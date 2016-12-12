@@ -435,7 +435,7 @@ function makeChart(data) {
 				tip = d3.select('.tooltipCenter')
 					.style('top', nodeData.y + canvasPos.top - tipDim.height - arrowDim + 'px') // nodeData.x = node position within canvas. canvasPos = canvas position relative to viewport (so this changes when we scroll). tipDim.height = height of tooltip. arrowDim = border-width of triangle 
 					.style('left', nodeData.x + canvasPos.left - tipDim.width/2 + cellSize/2 + 'px') // as above but removing (width of tooltip / 2) and adding half of cellSize to hit the center 
-					.style('opacity', 0.8); // show if we hover over a node
+					.style('opacity', 0.99); // show if we hover over a node
 
 			} else {
 
@@ -447,7 +447,7 @@ function makeChart(data) {
 				tip = d3.select('.tooltipLeft')
 					.style('top', nodeData.y + canvasPos.top - tipDim.height - arrowDim + 'px') // same as for the normal tooltip
 					.style('left', nodeData.x + canvasPos.left - arrowDim + cellSize/2 + 'px') // as above but removing half teh arrow-width and adding half the cell size
-					.style('opacity', 0.8); // show if we hover over a node
+					.style('opacity', 0.99); // show if we hover over a node
 
 			} // conditional determining the type of tooltip (left arrow or central arrow)
 

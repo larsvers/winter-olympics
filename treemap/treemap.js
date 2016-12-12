@@ -421,7 +421,8 @@ mainCanvas.on('mousemove', function() {
 
 		tip = d3.select('.tooltip')
 			.style('top', mousePos[1] + canvasPos.top - tipDim.height - 5 + 'px') // mouse + canvas position - tip height - padding
-			.style('left', mousePos[0] + canvasPos.left - tipDim.width/2 + 'px'); // mouse + canvas position - half the tip width
+			.style('left', mousePos[0] + canvasPos.left - tipDim.width/2 + 'px') // mouse + canvas position - half the tip width
+			.style('opacity', 0.99);
 
 		block.push(nodeData.id); // nodeData.id under the mouse gets pushed to array every mousemove
 		if (block.length > 2) block.shift() // if this array gets longer than 2, remove the first element array (the 'old' one)
@@ -438,7 +439,7 @@ mainCanvas.on('mousemove', function() {
 mainCanvas.on('mouseout', function() { 
 
 	block = [];
-	d3.selectAll('.tooltip *').style('opacity', 0); 
+	d3.selectAll('.tooltip').transition().duration(100).style('opacity', 0); 
 
 }); // making sure tooltip disappears when mouse beyond treemap
 
@@ -455,8 +456,8 @@ function buildTip(selection, data) {
 
 	// add header and body div's
 	
-	selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(255,255,255,1)');
-	selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(255,255,255,1)');
+	selection.append('div').attr('id', 'tipHeader');
+	selection.append('div').attr('id', 'tipBody');
 
 	var totalEvents = data.ancestors()[data.ancestors().length-1].value
 	var eventRatio = Math.floor((data.value / totalEvents)*100);
@@ -506,7 +507,7 @@ function buildTip(selection, data) {
 		.attr('y1', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 		.attr('x2', function(d) { return x(d.value); })
 		.attr('y2', function(d) { return y(d.id) + y.bandwidth()/2; })
-		.style('stroke', function(d) { return d.id === data.id ? '#fbc463' : '#639afb'; })
+		.style('stroke', function(d) { return d.id === data.id ? '#fbc463' : '#eee'; })
 		.style('stroke-width', 1);
 
 	var joinCircles = gCircles.selectAll('.circles')
@@ -519,7 +520,7 @@ function buildTip(selection, data) {
 		.attr('cx', function(d) { return x(d.value); })
 		.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 		.attr('r', 2)
-		.style('fill', function(d) { return d.id === data.id ? '#fbc463' : '#639afb'; });
+		.style('fill', function(d) { return d.id === data.id ? '#fbc463' : '#eee'; });
 
 
 	// Add text label to currrent lollipop
@@ -542,7 +543,7 @@ function buildTip(selection, data) {
 
 	var thisLabel = getAxisLabel(data.id);
 	
-	d3.selectAll('.tick text').attr('fill', '#639afb');
+	d3.selectAll('.tick text').attr('fill', '#eee');
 	
 	thisLabel.attr('fill', '#fbc463');
 
