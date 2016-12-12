@@ -1,9 +1,16 @@
+// colours
+// #0066f5 dark
+// #0f6fff mid
+// #adceff light
+
+
+
+
 
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
 var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
-
-
+var getAxisLabel = function(name) { return d3.selectAll('.tick > text').filter(function(d) { return d === name; }); }; // takes a string and returns a selection of the text element of the same string
 
 // === Globals === //
 
@@ -167,11 +174,11 @@ function treeData(data) {
 	var nodesMinusMax = nodes.filter(function(el) { return el.value < d3.max(nodes, function(d) { return d.value; }) }); // base data for the extent - excluding the value of the root node 
 	var extent = d3.extent(nodesMinusMax, function(d) { return d.value; });
 
-	var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue for the quantile scale for the rect colours
-	colour = d3.scaleQuantile().domain(extent).range(colours); // Lch colour scale picked from http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
+	// var colours = ['#adceff', '#0f6fff', '#0066f5'] // colour extent for piecewise linear scale
+	var colours = ['#adceff', '#639afb', '#0066f5'] // colour extent for piecewise linear scale
+	colour = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range(colours); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
 
-	colour = d3.scaleLinear().domain(extent).range([colours[0], colours[colours.length-1]])
-	colour = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range([colours[0], colours[2], colours[colours.length-1]]); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
+
 	colourText = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.9),extent[1]]).range(['#000', '#000', '#fff']); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
 
 	
@@ -214,7 +221,7 @@ function databind(data) {
 			.transition().duration(dur)
 			.attr('width', function(d) { return d.x1 - d.x0; })
 			.attr('height', function(d) { return d.y1 - d.y0; })
-			.attr('fillStyle', function(d) { return colour(d.value); })
+			.attr('fillStyle', function(d) { return colour(d.value); });
 
   
 	join
@@ -295,7 +302,7 @@ function draw(canvas, hidden) {
 
 
 
-
+// --- function to draw the text (happens only once) --- //
 
 function drawText(){
 
@@ -307,17 +314,77 @@ function drawText(){
 
 		var node = d3.select(this);
 
- 		if (node.attr('children') && node.attr('parent')) { // all non-leaf nodes and not the root node get some text
+ 		if (d.children && d.parent) { // all non-leaf nodes and not the root node get some text
 
-			context.fillStyle = colourText(node.attr('value'));
+ 			// Base settings and variables
+ 			
+			context.fillStyle = '#444';
 			context.font = '10px Open Sans';
-			context.fillText(d.value + ' x ' + d.id.replace('Sport: ', ''), +node.attr('x') + 6, +node.attr('y') + 14);
+
+			var rect = {
+				w: d.x1 - d.x0,
+				h: d.y1 - d.y0
+			};
+			
+			var text = d.value + ' x ' + d.id.replace('Sport: ', '');
+			var tWidth = context.measureText(text).width;
+			
+ 			// log(d.id + ' rect width:', rect.w, ' - text width:', tWidth);
+
+ 			if (tWidth < rect.w) { // if it fits horizontally: write it
+
+				context.fillText(text, +node.attr('x') + 6, +node.attr('y') + 14);
+
+ 			} else { // if it doesn't fit horizontally
+
+ 				if (tWidth < rect.h) { // if it fits vertically: rotate
+
+					// rotate
+					context.save()
+					context.translate(+node.attr('x') + 10 + 3, +node.attr('y') + tWidth + 6) // +10 is font-size, +3 and +6 are paddings
+					context.rotate(-Math.PI/2)
+					context.fillText(text, 0, 0);
+					context.restore()
+
+ 				} else {
+
+ 					text = trimTreeText(text, rect.w, context); // overwrite the text with the new trimmed text
+					context.fillText(text, +node.attr('x') + 6, +node.attr('y') + 14);
+
+ 				} // inner rotate conditional
+
+ 			} // outer rotate conditional 
+
+
 
 		}
 
 	}); // loop through elements
 
 } // drawText()
+
+
+// --- Helper function trimming too long text --- //
+
+function trimTreeText(text, rectWidth, ctx) {
+
+	var newText = text;
+	var newTextWidth = ctx.measureText(newText).width;
+	var context = ctx;
+
+	if (newText.length < 2 || newTextWidth < rectWidth - 6) { // 6 is a padding
+
+		return newText;
+
+	} else {
+
+		newText = text.slice(0,-2);
+		return trimTreeText(newText, rectWidth, context);
+
+	} // trim the text by 2 letters until the text is smaller than the rectangle's width or only 2 letters long.
+
+} // trimTreeText()
+
 
 
 
@@ -386,23 +453,26 @@ function buildTip(selection, data) {
 
 
 	// add header and body div's
-	selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
-	selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(220,220,255,0.9)');
+	selection.append('div').attr('id', 'tipHeader').style('opacity', 1).style('background-color', 'rgba(255,255,255,1)');
+	selection.append('div').attr('id', 'tipBody').style('opacity', 1).style('background-color', 'rgba(255,255,255,1)');
 
-	d3.select('#tipHeader').html('Number of disciplines')
+	d3.select('#tipHeader').html('Number of events')
 
 	// Sizes
+
 	var margin = { top: 5, right: 20, bottom: 5, left: 90 }
 	var width = 200 - margin.left - margin.right;
 	var height = 200 - margin.top - margin.bottom;
 
 	// Scales and Axis
+	
 	var extent = d3.extent(nodesDisciplines, function(d) { return d.value; });		
 	var x = d3.scaleLinear().domain([0, extent[1]]).range([0, width]);
 	var y = d3.scaleBand().domain(nodesDisciplines.map(function(d) { return d.id; })).rangeRound([0, height]);
 	var yAxis = d3.axisLeft(y).tickSize(0).tickPadding(6);
 
 	// Add SVG and g's
+
 	var g = d3.select('#tipBody')
 		.append('svg')
 		.attr('width', width + margin.left + margin.right)
@@ -428,7 +498,7 @@ function buildTip(selection, data) {
 		.attr('y1', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 		.attr('x2', function(d) { return x(d.value); })
 		.attr('y2', function(d) { return y(d.id) + y.bandwidth()/2; })
-		.style('stroke', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; })
+		.style('stroke', function(d) { return d.id === data.id ? '#0066f5' : '#639afb'; })
 		.style('stroke-width', 1);
 
 	var joinCircles = gCircles.selectAll('.circles')
@@ -441,23 +511,32 @@ function buildTip(selection, data) {
 		.attr('cx', function(d) { return x(d.value); })
 		.attr('cy', function(d) { return y(d.id) + y.bandwidth()/2; }) // adding half of the bandwidth necessary to position the line in the center
 		.attr('r', 2)
-		.style('fill', function(d) { return d.id === data.id ? '#08253e' : 'steelblue'; });
+		.style('fill', function(d) { return d.id === data.id ? '#0066f5' : '#639afb'; });
 
 
 	// Add text label to currrent lollipop
 
 	d3.select('text.value').remove();
 
-	var font = parseInt(d3.select('.tick text').style('font-size').replace('px',''),10); // Font size of axis labels
+	var fontSize = parseInt(d3.select('.tick text').style('font-size').replace('px',''),10); // Font size of axis labels
 
 	g.append('text')
 		.attr('class', 'value')
 		.attr('x', x(data.value) + 5) // value plus a bit of padding
-		.attr('y', y(data.id) + y.bandwidth()/2 + font/4) // this is how the labels align central
-		.attr('font-size', font)
-		.attr('fill', '#000')
+		.attr('y', y(data.id) + y.bandwidth()/2 + fontSize/4) // this is how the labels align central
+		.attr('font-size', fontSize)
+		.attr('fill', '#0066f5')
 		.attr('text-anchor', 'start')
 		.text(data.value);
+
+
+	// Change axis label colour
+
+	var thisLabel = getAxisLabel(data.id);
+	
+	d3.selectAll('.tick text').attr('fill', '#639afb');
+	
+	thisLabel.attr('fill', '#0066f5');
 
 } // buildTip()
 

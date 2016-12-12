@@ -45,6 +45,7 @@ div.tooltip {
 div#tipHeader {
 	padding: 5px;
 	margin-bottom: 1px;
+	color: #0066f5;
   pointer-events: none;
 	z-index: 1;
 }
