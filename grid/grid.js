@@ -21,10 +21,10 @@ var mainCanvas = d3.select('#container')
 
 var hiddenCanvas = d3.select('#container')
 	.append('canvas')
+	.classed('hiddenCanvas', true)
 	.attr('width', width)
-	.attr('height', height)
-	// .style('display', 'none'); // hidden canvas for interaction/picking
-
+	.attr('height', height);
+	
 var colourToNode = {}; // map to track the colour of nodes
 
 // function to create new colours for the picking
@@ -149,11 +149,15 @@ function makeChart(data) {
 		var extent = d3.extent(data, function(d) { return d.medals; });
 		
 		// var colours = ['#b8cee9', '#8aa0bb', '#5e748f', '#344a65', '#08253e'] // blue to blue
-		var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue
+		var colours = ['#adceff', '#88b5ff', '#639afb', '#3f81fa', '#0066f5'] // blue to blue
 		// var colours = ['#c1e9cd', '#8fb499', '#608367', '#34543a', '#0b2911'] // green to green
+		// var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue
 		
 		var numberScale = d3.scaleQuantile().domain(extent).range(colours); // Lch colour scale picked from http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
 		
+		// var colours = ['#adceff', '#639afb', '#0066f5'] // colour extent for piecewise linear scale
+		// var numberScale = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range(colours); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
+
 
 
 		// --- Data for the legend --- //
@@ -228,7 +232,7 @@ function makeChart(data) {
 					colourToNode[d.hiddenCol] = d;
 
 				} // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNode-dictionary 
-				log(d);
+
 				return d.hiddenCol;
 
 			});
@@ -419,15 +423,13 @@ function makeChart(data) {
 		
 		// get the data from our map !
 		var nodeData = colourToNode[colKey];
-		log(nodeData)
-		// var tip;
 
 		// if we found some data under our mouse write a tooltip
 		if (nodeData) {
 	
 			if (tipDim.width/2 < nodeData.x) {
 
-				log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'central');
+				// log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'central');
 				// if the tooltip fits comfortably next our left canvas border draw the tooltip with a central arrow
 				
 				d3.select('.tooltipLeft').style('opacity', 0); // ..while getting rid of the other one
@@ -439,7 +441,7 @@ function makeChart(data) {
 
 			} else {
 
-				log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'left');
+				// log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'left');
 				// if the tooltip doesn't fit comfortably next our left canvas border draw the tooltip with a left arrow
 
 				d3.select('.tooltipCenter').style('opacity', 0); // ..while getting rid of the other one
