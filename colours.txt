@@ -1,0 +1,21 @@
+Colours
+
+
+light blue -----------------------> blue
+#adceff, #88b5ff, #639afb, #3f81fa, #0066f5 	Grid colour range (for quantile scale)
+
+#adceff 	light blue			Treemap squares colour range (for piecewise scale)
+#639afb 	medium blue 		Treemap squares colour range (for piecewise scale)
+#0066f5 	blue						Treemap squares colour range (for piecewise scale) & Force: male nodes
+#444 			dark grey 			Treemap text 
+#434343 	dark grey				Tootltip (treemap/grid) radial gradient colour stops 
+#000 			black						Tootltip (treemap/grid) radial gradient colour stops 
+#111 			light black			Toolttip arrow colour 
+#eee			off-white				Toolttip font / non-selected event
+#fbc463		light orange		Tooltip selected event 
+
+#f58f00 	orange					Force: female nodes
+
+
+
+

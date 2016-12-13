@@ -101,7 +101,7 @@ function getSimulationData(data, event) {
 		obj.gender = 'men';
 		obj.cluster = 0;
 		obj.radius = 2;
-		obj.colour = '#9CCFE5';
+		obj.colour = '#639afb';
 		obj.x = width/2 + (Math.random() - 10);
 		obj.y = height/2 + (Math.random());
 
@@ -116,16 +116,13 @@ function getSimulationData(data, event) {
 		obj.gender = 'women';
 		obj.cluster = 1;
 		obj.radius = 2;
-    obj.colour = '#9FE789';
+    obj.colour = '#fbc463';
 		obj.x = width/2 + (Math.random() + 10);
 		obj.y = height/2 + (Math.random());
 
 		nodes.push(obj);
 
 	}); // get women nodes
-
-
-
 
 	initSimulation(nodes); // kick off simulation
 	initLabels(data)
