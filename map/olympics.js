@@ -1,52 +1,100 @@
+// === Globals === //
+
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
 
-var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
-
-var createColourStops = function() {
-
-  var outer = [];
-
-  d3.range(100).forEach(function(el, i) {
-
-    if (i % 4 === 0) {
-      var inner = [i, numberScale(i)];
-      outer.push(inner);
-    }
-
-  });
-
-  return outer;
-
-};
-
-var createRadiusStops = function(extent) {
-
-  var delta = capExt[1] - capExt[0];
-
-  var outer = [];
-
-  d3.range(delta + capExt[0]).forEach(function(el, i) {
-
-    if (i % 1000 === 0) {
-      var inner = [i + capExt[0], sizeScale(i + capExt[0])];
-      outer.push(inner);
-    }
-
-  });
-
-  return outer;
-
-};
-
-
-// === Globals === //
-
-var numberScale = d3.scaleSequential(d3.interpolateRdBu).domain([0,100]);
-var capExt;
-var sizeScale;
+var capExt, radiusScale, colExt, colourScale;
 var listen = {};
 var data = {};
+
+
+var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+
+var createColourStops = function(extent, scale) {
+
+  var delta = extent[1] - extent[0];
+  var outer = [];
+
+  d3.range(delta + extent[0]).forEach(function(el, i) {
+
+    if (i % 4 === 0) {
+      var inner = [i, scale(i)];
+      outer.push(inner);
+    }
+
+  });
+
+  return outer;
+
+};
+
+var createRadiusStops = function(extent, scale, setToZero) {
+
+  // Boolean setToZero sets all radii created to 0 for switching them off when moving from place to place
+
+  var delta = extent[1] - extent[0];
+
+  var outer = [];
+
+  d3.range(delta + extent[0]).forEach(function(el, i) {
+
+    if (i % 1000 === 0) {
+      
+      d3.range(3).forEach(function(elt) { // number in d3.range() defines how many zoom levels we include
+
+        var zoom = elt === 0 ? 3 : elt === 1 ? 8 : 12; // define zoom levels
+
+        // build data struture as in [{ zoom: x, value: y }, z] (x = soom level, y = data-value, z = radius at that value)
+        
+        var inner = [];
+        var obj = {};
+        obj.zoom = zoom;
+        obj.value = i + extent[0];
+
+        var radius = scale(i + extent[0]);
+        radius = elt === 0 ? radius / 3 : elt === 1 ? radius : radius * 1.5;
+        radius = setToZero === true ? 0 : radius;
+
+        inner = [obj, radius];
+
+        outer.push(inner);
+
+      }); // loop to guarantee different values for different zoom levels
+
+    } // only trigger every 1000 steps
+
+  }); // loop through all capacity values
+
+  return outer;
+
+}; // createRadiusStops()
+
+
+
+
+// var createRadiusStops = function(extent, scale) { // version without zoom stops
+
+//   var extent = extent || capExt;
+//   var scale = scale || radiusScale;
+
+//   var delta = extent[1] - extent[0];
+
+//   var outer = [];
+
+//   d3.range(delta + extent[0]).forEach(function(el, i) {
+
+//     if (i % 1000 === 0) {
+      
+//       var inner = [i + extent[0], scale(i + extent[0])];
+//       outer.push(inner);
+//     }
+
+//   });
+
+//   return outer;
+
+// };
+
 
 
 
@@ -133,8 +181,6 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
 
     return {
 
-      capacity_orig: parseInt(el.capacity),
-      capacity_fallback: parseInt(el.capacity_fallback),
       capacity: parseInt(el.capacity),
       year: parseInt(el.year),
       event_id: parseInt(el.event_id),
@@ -142,13 +188,12 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
       long: parseFloat(el.long),
       picture_id: parseInt(el.picture_id),
 
-      host_city: el.host_city,
-      host_country: el.host_country,
       place_id: el.place_id,
-      opened: el.opened,
-      top_nation: el.top_nation,
-      text: el.text,
-      comment: el.comment
+      place: el.place,
+      venue: el.venue,
+      sports_short: el.sports_short.split(","),
+      venue: el.venue,
+      link: el.link
 
     };
 
@@ -209,24 +254,30 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
   });
 
 
-
-
   // log('events', data.events);
-  // log('locations', data.locations);
+  log('locations', data.locations);
   // log('nations', data.nations);
   // log('sports', data.sports);
   // log('world', data.world);
 
 
 
-  // --- Scale circle sizes --- //
+  // --- Scales --- //
 
-  // Extent minus the maximum outlier
+  // Circle radius scale to calculate based on capacity (minus the maximum outlier)
   capExt = d3.extent(data.locations.filter(function(d) { return d.capacity < d3.max(data.locations, function(dd) { return dd.capacity; })}), function(d) { return d.capacity; });
-  // capExt = d3.extent(data.locations, function(d) { return d.capacity; });
-  
-  // Scale to calculate the radius
-  sizeScale = d3.scaleSqrt().domain(d3.extent(data.locations, function(d) { return d.capacity; })).range([5,40]);
+  radiusScale = d3.scaleSqrt().domain(d3.extent(data.locations, function(d) { return d.capacity; })).range([3,20]);
+
+  // Colour scale based on 
+  colExt = d3.extent(data.locations, function(d) { return d.event_id; });
+  var colours = ['#639afb', '#1367f9', '#0723e8'];
+  colourScale = d3.scaleLinear().domain([colExt[0], d3.quantile(colExt, 0.5), colExt[1]]).range(colours);
+
+
+
+
+  // log(createRadiusStops(capExt, radiusScale, false));
+  // log(createRadiusStops(capExt, radiusScale, true));
 
   // ---- Build the GeoJson for the points --- //
 
@@ -249,13 +300,9 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
         "place_id": el.place_id,
         "place": el.place,
         "venue": el.venue,
-        "sports_full": el.sports_full,
         "sports_short": el.sports_short,
-        "location": el.location,
         "capacity": el.capacity,
-        "capacity_fallback": el.capacity_fallback,
-        "link": el.link,
-        "attribution": el.attribution
+        "link": el.link
       }
     }
 
@@ -285,7 +332,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
 
   });
 
-  log('data.segments', data.segments);
+  // log('data.segments', data.segments);
 
 } // dataprep()
 
@@ -325,7 +372,7 @@ function mapIt() {
           'type': 'fill',
           'source': 'world',
           'paint': {
-            'fill-color': '#00f',
+            'fill-color': '#adceff',
             'fill-opacity': 0
           },
           'filter': ['==', 'ADMIN', country]
@@ -343,20 +390,63 @@ function mapIt() {
       // If there's no layer set yet, add a layer for each event. 
       // Filter the data so that only event-relevant data gets added to this layer.
 
+
+
       if (!map.getLayer(id)) {
+
+        // circle-radius: capacity
+        // circle-radius zoom-levels: 
+        // zoom level 0: fully zoomed out to world
+        // zoom level 6: full view of a medium-sized country
+        // zoom level 11: metropolitan-region-sized area
+        // zoom level 16: neighborhood scale.
+        // so: keep circles small from top to 8 and then increase by factor of 2
 
         map.addLayer({
           'id': id,
           'type': 'circle',
           'source': 'places',
           'paint': {
-              'circle-radius': 5,
-              'circle-color': '#00f'
-          },
-          'filter': ["==", "place_id", id]
+              'circle-color': {
+                'property': 'event_id',
+                'type': 'exponential',
+                'stops': createColourStops(colExt, colourScale)
+              },
+              'circle-blur': 0.8,
+              'circle-radius': {
+                'property': 'capacity',
+                'type': 'exponential',
+                'stops': createRadiusStops(capExt, radiusScale, false)
+              }
+            },
+            'filter': ["==", "place_id", id]
         });
 
-      }
+
+
+
+        map.addLayer({
+          'id': id + 'glow',
+          'type': 'circle',
+          'source': 'places',
+          'paint': {
+              'circle-color': '#fff',
+              'circle-blur': 1,
+              'circle-opacity': 0.75,
+              'circle-radius': {
+                'property': 'capacity',
+                'type': 'exponential',
+                'stops': [
+                  [{ zoom: 3, value: capExt[1] }, 0 ],
+                  [{ zoom: 8, value: capExt[1] }, 2 ],
+                  [{ zoom: 12, value: capExt[1] }, 3 ],
+                ]
+              }
+            },
+            'filter': ["==", "place_id", id]
+        });
+
+      } // if layer doesn't exist yet, add it
 
     }); // add the event-locations as circle-layers
 
@@ -372,18 +462,15 @@ function mapIt() {
 
 
 
-
-
-
-
-
 // === Buttons === //
 
 d3.selectAll('button.fly').on('mousedown', function() {
     
+
     var l = this.id; // the place_id of the button (as in 'chamonix_1924')
     var c = [this.dataset.country];
 
+    
     // Specific logic
 
     if (l === 'sarajevo_1984') {
@@ -403,6 +490,67 @@ d3.selectAll('button.fly').on('mousedown', function() {
 
 
 // === Listener === //
+
+
+
+listen.changeCircleSize = function(event) {
+
+  // --- Turn the respective circles on and off --- //
+
+  // Set all circle-radii to 0
+
+  data.geo_locations.features.forEach(function(el) {
+
+    // remove all blue circles
+
+    var p = el.properties.place_id; // the place_id of each element equals the layer id for the blue circles
+    
+    map.setPaintProperty(p, 'circle-radius', {
+      'property': 'capacity', 
+      'type': 'exponential', 
+      'stops': createRadiusStops(capExt, radiusScale, true)
+    });
+
+
+    // remove all white circles
+    
+    var g = el.properties.place_id + 'glow'; // the place_id of each element + 'glow' equals the layer id for the white circles
+    
+    map.setPaintProperty(g, 'circle-radius', {
+      'property': 'capacity', 
+      'type': 'exponential', 
+      'stops': [
+        [{ zoom: 3, value: capExt[1] }, 0 ],
+        [{ zoom: 8, value: capExt[1] }, 0 ],
+        [{ zoom: 12, value: capExt[1] }, 0 ],
+      ]
+    });
+
+  });
+
+  // Set the circle-radii of the visited location to the appropriate values (first the blue then the white circles)
+
+  map.setPaintProperty(event, 'circle-radius', {
+    'property': 'capacity', 
+    'type': 'exponential', 
+    'stops': createRadiusStops(capExt, radiusScale, false)
+  });
+
+  map.setPaintProperty(event + 'glow', 'circle-radius', {
+    'property': 'capacity', 
+    'type': 'exponential', 
+    'stops': [
+      [{ zoom: 3, value: capExt[1] }, 0 ],
+      [{ zoom: 8, value: capExt[1] }, 2 ],
+      [{ zoom: 12, value: capExt[1] }, 3 ],
+    ]
+  });
+
+
+} // listener to change circle-size
+
+
+
 
 
 listen.changeCountryBackground = function(country) {
@@ -428,27 +576,5 @@ listen.changeCountryBackground = function(country) {
 
 
 
-
-
-
-listen.changeCircleSize = function(event) {
-
-  // --- Turn the respective circles on and off --- //
-
-  // Set all circle-radii to 0
-
-  data.geo_locations.features.forEach(function(el) {
-
-    var p = el.properties.place_id; // the place_id of each element
-
-    map.setPaintProperty(p, 'circle-radius', 0);
-
-  });
-
-  // Set the circle-radii of the visited location to a value
-
-  map.setPaintProperty(event, 'circle-radius', 40);
-
-} // listener to change circle-size
 
 

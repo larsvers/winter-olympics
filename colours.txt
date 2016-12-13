@@ -4,7 +4,7 @@ Colours
 light blue -----------------------> blue
 #adceff, #88b5ff, #639afb, #3f81fa, #0066f5 	Grid colour range (for quantile scale)
 
-#adceff 	light blue			Treemap squares colour range (for piecewise scale)
+#adceff 	light blue			Treemap squares colour range (for piecewise scale) & Map: host nation (opacity: 0.1)
 #639afb 	medium blue 		Treemap squares colour range (for piecewise scale)
 #0066f5 	blue						Treemap squares colour range (for piecewise scale) & Force: male nodes
 #444 			dark grey 			Treemap text 
