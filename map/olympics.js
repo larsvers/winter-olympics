@@ -1,13 +1,8 @@
-var numberScale = d3.scaleSequential(d3.interpolateRdBu).domain([0,100]);
-var segments;
-var capExt;
-var sizeScale;
-var listen = {};
-var data = {};
-
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
+
 var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+
 var createColourStops = function() {
 
   var outer = [];
@@ -25,24 +20,34 @@ var createColourStops = function() {
 
 };
 
-  var createRadiusStops = function(extent) {
+var createRadiusStops = function(extent) {
 
-    var delta = capExt[1] - capExt[0];
+  var delta = capExt[1] - capExt[0];
 
-    var outer = [];
+  var outer = [];
 
-    d3.range(delta + capExt[0]).forEach(function(el, i) {
+  d3.range(delta + capExt[0]).forEach(function(el, i) {
 
-      if (i % 1000 === 0) {
-        var inner = [i + capExt[0], sizeScale(i + capExt[0])];
-        outer.push(inner);
-      }
+    if (i % 1000 === 0) {
+      var inner = [i + capExt[0], sizeScale(i + capExt[0])];
+      outer.push(inner);
+    }
 
-    });
+  });
 
-    return outer;
+  return outer;
 
-  };
+};
+
+
+// === Globals === //
+
+var numberScale = d3.scaleSequential(d3.interpolateRdBu).domain([0,100]);
+var capExt;
+var sizeScale;
+var listen = {};
+var data = {};
+
 
 
 // === Initialise map === //
@@ -69,11 +74,11 @@ var map = new mapboxgl.Map({
 // xls saved as Unicode .txt files, file ending changeto to .tsv
 
 d3.queue()
-  .defer(d3.tsv, 'data/events.tsv')
-  .defer(d3.tsv, 'data/locations.tsv')
-  .defer(d3.tsv, 'data/nations.tsv')
-  .defer(d3.tsv, 'data/sports.tsv')
-  .defer(d3.json, 'data/ne_10m_admin_0_countries.json')
+  .defer(d3.tsv, '../data/events.tsv')
+  .defer(d3.tsv, '../data/locations.tsv')
+  .defer(d3.tsv, '../data/nations.tsv')
+  .defer(d3.tsv, '../data/sports.tsv')
+  .defer(d3.json, '../data/ne_10m_admin_0_countries.json')
   .await(dataprep);
 
 
@@ -210,7 +215,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
   // log('locations', data.locations);
   // log('nations', data.nations);
   // log('sports', data.sports);
-  log('world', data.world);
+  // log('world', data.world);
 
 
 
@@ -282,7 +287,6 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
 
   log('data.segments', data.segments);
 
-
 } // dataprep()
 
 
@@ -346,7 +350,7 @@ function mapIt() {
           'type': 'circle',
           'source': 'places',
           'paint': {
-              'circle-radius': 10,
+              'circle-radius': 5,
               'circle-color': '#00f'
           },
           'filter': ["==", "place_id", id]
@@ -358,7 +362,7 @@ function mapIt() {
 
   }); // map.on('load') 
 
-}
+} // mapIt()
 
 
 
@@ -427,7 +431,7 @@ listen.changeCountryBackground = function(country) {
 
 
 
-listen.changeCircleSize = function (event) {
+listen.changeCircleSize = function(event) {
 
   // --- Turn the respective circles on and off --- //
 
