@@ -4,7 +4,7 @@ var log = console.log.bind(console);
 var dir = console.dir.bind(console);
 
 var capExt, radiusScale, colExt, colourScale;
-var listen = {};
+var handler = {};
 var data = {};
 
 
@@ -51,7 +51,7 @@ var createRadiusStops = function(extent, scale, setToZero) {
         obj.zoom = zoom;
         obj.value = i + extent[0];
 
-        var radius = scale(i + extent[0]);
+        var radius = scale(i + extent[0]) + 4; // + 4 increases circle radius
         radius = elt === 0 ? radius / 3 : elt === 1 ? radius : radius * 1.5;
         radius = setToZero === true ? 0 : radius;
 
@@ -182,6 +182,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
     return {
 
       capacity: parseInt(el.capacity),
+      capacity_orig: parseInt(el.capacity_orig),
       year: parseInt(el.year),
       event_id: parseInt(el.event_id),
       lat: parseFloat(el.lat),
@@ -270,7 +271,16 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
 
   // Colour scale based on 
   colExt = d3.extent(data.locations, function(d) { return d.event_id; });
-  var colours = ['#639afb', '#1367f9', '#0723e8'];
+  // var colours = ['#639afb', '#1367f9', '#0723e8'];
+  // var colours = ['#5454FF', '#3229b7', '#007'];
+  // var colours = ['#c1e9cd', '#49848c', '#08253e'] // green to blue
+  // var colours = ['#538d95', '#425576', '#07253f']; // green to blue
+  // var colours = ['#5454FF', '#3229b7', '#07253f']; // blue blue
+  // var colours = ['#6f6ffe', '#074e9e', '#07253f']; // blue blue
+  // var colours = ['#3afa5d', '#07dec5', '#053e90']; // neon green to blue
+  // var colours = ['#00C200', '#0EE0BD', '#053e90']; // green to blue
+  // var colours = ['#606060', '#533a8d', '#0000b8']; // grey to blue
+  var colours = ['#32c900', '#008edc', '#0000b8']; // neon green to blue
   colourScale = d3.scaleLinear().domain([colExt[0], d3.quantile(colExt, 0.5), colExt[1]]).range(colours);
 
 
@@ -282,8 +292,10 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
   // ---- Build the GeoJson for the points --- //
 
   data.geo_locations = {
+
     "type": "FeatureCollection",
     "features": []
+  
   };
 
   data.locations.forEach(function(el) {
@@ -299,9 +311,11 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
         "event_id": el.event_id,
         "place_id": el.place_id,
         "place": el.place,
+        "year": el.year,
         "venue": el.venue,
         "sports_short": el.sports_short,
         "capacity": el.capacity,
+        "capacity_orig": el.capacity_orig,
         "link": el.link
       }
     }
@@ -351,12 +365,12 @@ function mapIt() {
     map.addSource('places', {
       'type': 'geojson',
       'data': data.geo_locations
-    });
+    }); // add the location data 
 
     map.addSource('world', {
       'type': 'geojson',
       'data': data.world
-    });
+    }); // add the world data
 
 
     data.world.features.forEach(function(el) {
@@ -382,7 +396,6 @@ function mapIt() {
 
     }); // add countries as fill-layer (as in polygons) in order to individually show them as background
 
-
     data.geo_locations.features.forEach(function(el) {
 
       var id = el.properties.place_id;
@@ -402,6 +415,7 @@ function mapIt() {
         // zoom level 16: neighborhood scale.
         // so: keep circles small from top to 8 and then increase by factor of 2
 
+        // add coloured circles
         map.addLayer({
           'id': id,
           'type': 'circle',
@@ -425,21 +439,22 @@ function mapIt() {
 
 
 
+        // add white center
         map.addLayer({
           'id': id + 'glow',
           'type': 'circle',
           'source': 'places',
           'paint': {
               'circle-color': '#fff',
-              'circle-blur': 1,
+              'circle-blur': 0.75,
               'circle-opacity': 0.75,
               'circle-radius': {
                 'property': 'capacity',
                 'type': 'exponential',
                 'stops': [
-                  [{ zoom: 3, value: capExt[1] }, 0 ],
-                  [{ zoom: 8, value: capExt[1] }, 2 ],
-                  [{ zoom: 12, value: capExt[1] }, 3 ],
+                  [{ zoom: 3, value: capExt[1] }, 1 ],
+                  [{ zoom: 8, value: capExt[1] }, 4 ],
+                  [{ zoom: 12, value: capExt[1] }, 6 ],
                 ]
               }
             },
@@ -462,7 +477,9 @@ function mapIt() {
 
 
 
-// === Buttons === //
+// === Interaction === //
+
+// --- Flying button --- //
 
 d3.selectAll('button.fly').on('mousedown', function() {
     
@@ -479,21 +496,66 @@ d3.selectAll('button.fly').on('mousedown', function() {
     
     }
 
-    listen.changeCircleSize(l); // turns the respective circles on / off
+    handler.changeCircleSize(l); // turns the respective circles on / off
 
     map.flyTo(data.segments[l]); // fly to the right location
 
-    listen.changeCountryBackground(c);
+    handler.changeCountryBackground(c);
   
 }); // button listener / handler
 
 
+// --- Tooltp --- //
 
-// === Listener === //
+map.on('mousemove', function(e) {
+
+  // log(e);
+  var features = map.queryRenderedFeatures(e.point);
+  var feature = features[0];
+  // log(feature);
+  
+  map.getCanvas().style.cursor = feature && feature.layer.source === 'places' ? 'default' : '';
+
+  if (feature && feature.layer.source === 'places') {
+
+    var prop = feature.properties;
+
+    var sports = prop.sports_short.replace(',', ' &middot; ').replace(/[\[\]"]/g, '');
+    
+    var html =            
+      '<div id="tipHeader">' +
+        prop.venue + '<br>' +
+        '<span class="small">' + prop.place + ' ' + prop.year +
+      '</div>' +
+      '<div id="tipBody">' +
+        '<img src="../images/locations/' + prop.picture_id + '.jpg"><br>' +
+        '<span class="small">Events: ' + sports + '</span>' +
+        (isNaN(prop.capacity_orig) ? '' : '<br><span class="small">Capacity: ' + d3.format(',')(prop.capacity) + '</span>') +
+      '</div>';
+
+    d3.select('.tooltip')
+      .style('opacity', 0.99)
+      .style('top', e.point.y + 'px')
+      .style('left', e.point.x + 'px')
+      .html(html);
+
+  } else {
+
+    d3.select('.tooltip')
+      .transition().duration(50)
+      .style('opacity', 0);
+
+  }
 
 
 
-listen.changeCircleSize = function(event) {
+
+}); // mousemove listener
+
+
+// === Handler === //
+
+handler.changeCircleSize = function(event) {
 
   // --- Turn the respective circles on and off --- //
 
@@ -546,14 +608,10 @@ listen.changeCircleSize = function(event) {
     ]
   });
 
-
-} // listener to change circle-size
-
+}; // handler to change circle-size
 
 
-
-
-listen.changeCountryBackground = function(country) {
+handler.changeCountryBackground = function(country) {
 
   // --- Turn the respective country background on and off --- //
 
@@ -572,8 +630,7 @@ listen.changeCountryBackground = function(country) {
 
   }); // loop for sarajevo_1984
 
-};
-
+}; // handler to change host countriy's background colour
 
 
 

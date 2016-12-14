@@ -1,0 +1,105 @@
+/* === Meyer Reset & border box (in moderation) === */
+
+html, body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: Arial;
+	font-size: 100%;
+	vertical-align: baseline;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after{
+	box-sizing: inherit;	
+}
+
+a:link, a:visited, a:hover, a:active {
+	color: #000;
+}
+
+
+
+#map {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+
+div.tooltip {
+	font-family: 'IM Fell DW Pica', serif;
+	font-family: 'IM Fell English', serif;
+	
+  position: absolute;        
+	display: inline-block;
+  pointer-events: none;
+	z-index: 1;
+
+  text-align: center;
+  color: #eee;
+  /* background: #000; */
+  /* background: radial-gradient(circle, #434343, #000); /* Standard syntax */ 
+	background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
+
+  max-width: 250px;
+}
+
+div#tipHeader {
+	padding: 5px;
+	margin-bottom: 1px;
+	color: #eee;
+  pointer-events: none;
+	z-index: 1;
+
+	border-bottom: 1px solid #eee;
+
+}
+
+span.small {
+	font-size: 0.65em;
+}
+
+div#tipBody {
+	padding: 5px;
+  pointer-events: none;
+	z-index: 1;
+}
+
+#tipBody img {
+	max-width: 200px;
+}
+
+
+
+
+
+
+#controls {
+	position: absolute;
+	display: flex;
+
+}
+
+
+button {
+	display: inline-block;
+	height: 80%;
+	margin: 0;
+	padding: .5em;
+	outline: none;
+	font-family: 'Open Sans';
+	font-size: .6em;
+	color: #555;
+	background-color: rgba(255, 255, 255, .7);
+	border: none;
+	transition: all 0.3s ease;
+}
+
+
+
+
+
+
+
