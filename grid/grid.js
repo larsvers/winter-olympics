@@ -1,6 +1,6 @@
-var log = console.log.bind(console);
-var dir = console.dir.bind(console);
-var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+// var log = console.log.bind(console);
+// var dir = console.dir.bind(console);
+// var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
 
 
 // === Set up canvas === //
@@ -32,6 +32,7 @@ var colourToNode = {}; // map to track the colour of nodes
 var nextCol = 1;
 
 function genColor(){
+
   var ret = [];
   // via http://stackoverflow.com/a/15804183
   if(nextCol < 16777215){
@@ -43,7 +44,8 @@ function genColor(){
   }
   var col = "rgb(" + ret.join(',') + ")";
   return col;
-}
+
+} // genColor()
 
 
 

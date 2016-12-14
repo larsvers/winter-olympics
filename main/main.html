@@ -5,13 +5,16 @@
 	<title>wiring up</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<!-- Libraries -->
  	<script src="http://d3js.org/d3.v4.js"></script>
 	<script src="https://d3js.org/topojson.v2.min.js"></script>
-
 	<script src='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
 
+	<!-- Stylesheets -->
 	<link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
 	<link rel="stylesheet" href="main.css"> 
+	<link rel="stylesheet" href="grid.css"> 
+	<link rel="stylesheet" href="../map/map.css"> 
 
 </head>
 <body>
@@ -40,8 +43,13 @@
 
 	<div class="tooltip"></div>
 
+	<!-- Scripts -->
 	<script src="main.js"></script>
-<!-- 	<script src="../map/map.js"></script> -->
+	<script src="../scripts/globals.js"></script>
+	<script src="../scripts/dataprep.js"></script>
+
+	<script src="../scripts/dataprepMap.js"></script>
+	<script src="../map/map.js"></script>
 
 </body>
 </html>

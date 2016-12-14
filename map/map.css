@@ -1,32 +1,5 @@
-/* === Meyer Reset & border box (in moderation) === */
 
-html, body {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-family: Arial;
-	font-size: 100%;
-	vertical-align: baseline;
-	height: 100%;
-	box-sizing: border-box;
-}
-
-*, *:before, *:after{
-	box-sizing: inherit;	
-}
-
-a:link, a:visited, a:hover, a:active {
-	color: #000;
-}
-
-
-
-#map {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
+/* === Tooltip map === */
 
 div.tooltip {
 	font-family: 'IM Fell DW Pica', serif;
@@ -39,9 +12,8 @@ div.tooltip {
 
   text-align: center;
   color: #eee;
-  /* background: #000; */
-  /* background: radial-gradient(circle, #434343, #000); /* Standard syntax */ 
-	background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
+  background: #000428;
+	background: radial-gradient(circle, #004e92, #000428);
 
   max-width: 250px;
 }
@@ -57,10 +29,6 @@ div#tipHeader {
 
 }
 
-span.small {
-	font-size: 0.65em;
-}
-
 div#tipBody {
 	padding: 5px;
   pointer-events: none;
@@ -71,33 +39,9 @@ div#tipBody {
 	max-width: 200px;
 }
 
-
-
-
-
-
-#controls {
-	position: absolute;
-	display: flex;
-
+span.small {
+	font-size: 0.65em;
 }
-
-
-button {
-	display: inline-block;
-	height: 80%;
-	margin: 0;
-	padding: .5em;
-	outline: none;
-	font-family: 'Open Sans';
-	font-size: .6em;
-	color: #555;
-	background-color: rgba(255, 255, 255, .7);
-	border: none;
-	transition: all 0.3s ease;
-}
-
-
 
 
 

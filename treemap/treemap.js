@@ -1,15 +1,8 @@
-// colours
-// #0066f5 dark
-// #0f6fff mid
-// #adceff light
 
 
-
-
-
-var log = console.log.bind(console);
-var dir = console.dir.bind(console);
-var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+// var log = console.log.bind(console);
+// var dir = console.dir.bind(console);
+// var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
 var getAxisLabel = function(name) { return d3.selectAll('.tick > text').filter(function(d) { return d === name; }); }; // takes a string and returns a selection of the text element of the same string
 
 // === Globals === //
@@ -24,6 +17,7 @@ var dur = 500;
 var nextCol = 1;
 
 function genColor(){
+
   var ret = [];
   // via http://stackoverflow.com/a/15804183
   if(nextCol < 16777215){
@@ -35,7 +29,8 @@ function genColor(){
   }
   var col = "rgb(" + ret.join(',') + ")";
   return col;
-}
+
+} // genColor()
 
 
 
