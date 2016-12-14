@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>wiring up</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+ 	<script src="http://d3js.org/d3.v4.js"></script>
+	<script src="https://d3js.org/topojson.v2.min.js"></script>
+
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
+
+	<link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
+	<link rel="stylesheet" href="main.css"> 
+
+</head>
+<body>
+
+	<!-- map -->
+	<div id="map"></div>
+	
+	<!-- main -->
+	<div id="main">
+
+		<!-- top row -->
+		<div class="flex-grid" id="top">
+			<div class="col" id="text-help">hello from up here</div>
+			<div class="col" id="text">hullo from the upper right</div>
+		</div>
+
+		<!-- bottom row -->
+		<div class="flex-grid" id="bottom">
+			<div class="col" id="grid">hallo von unten links</div>
+			<div class="col" id="force">bonjour de la centre</div>
+			<div class="col" id="treemap">good day from the bottom left</div>
+		</div>
+
+	</div>
+
+
+	<div class="tooltip"></div>
+
+	<script src="main.js"></script>
+<!-- 	<script src="../map/map.js"></script> -->
+
+</body>
+</html>
+

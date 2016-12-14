@@ -26,7 +26,7 @@ var createColourStops = function(extent, scale) {
 
   return outer;
 
-};
+}; // createColourStops()
 
 var createRadiusStops = function(extent, scale, setToZero) {
 
@@ -110,12 +110,14 @@ var ski = 'mapbox://styles/larsvers/civfpazh700302kl8diskf9vr';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw';
 var map = new mapboxgl.Map({
+   
     container: 'map',
     style: ski,
    	center: [6.874011, 45.926747],
     zoom: 6,
     pitch: 0
-});
+
+}); // add map
 
 
 // === Load data === //

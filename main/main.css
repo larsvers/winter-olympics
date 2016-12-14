@@ -1,0 +1,89 @@
+/* === Meyer Reset & border box (in moderation) === */
+
+html, body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: Arial;
+	font-size: 100%;
+	vertical-align: baseline;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after{
+	box-sizing: inherit;	
+}
+
+a:link, a:visited, a:hover, a:active {
+	color: #000;
+}
+
+
+/* === For desktops and labtops === */
+
+div {
+	margin: 0.1em;
+}
+
+div#map {
+	position: absolute;
+	height: 70%;
+	width: 100%;
+	border: 3px solid green;
+} /* map behind everything, equals height of top row */
+
+div#main {
+	width: 100vw;
+	height: 100vh;
+	border: 1px dotted blue;
+} /* main wrapper fills full page */
+
+div.flex-grid {
+	display: flex;
+	border: 1px solid black;
+} /* the rows */
+
+div.flex-grid#top {
+	height: 70%;
+} /* top row gets 70% height */
+
+div.flex-grid#bottom {
+	height: 30%;
+	justify-content: space-between;
+} /* bottom row gets the rest of the height and is aligned along the main axis */
+
+div.col {
+	border: 1px solid grey;
+	flex: 1;
+} /* all columns get same space */
+
+div.col#text-help {
+	flex: 2;
+} /* special column space distribution of 2/3 */
+
+div.col#text {
+	z-index: 1;
+} /* special column space distribution of 2/3 */
+
+
+
+
+
+
+/* div#main > .col {
+	height: 70%;
+	border: 1px solid green;
+}
+
+div.col#map{
+	position: relative;
+}
+
+div.col#text {
+	width: 33%;
+	position: absolute;
+	top: 0;
+	left: 66.7%;
+} */
+
