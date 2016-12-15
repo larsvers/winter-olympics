@@ -8,12 +8,14 @@
 	<!-- Libraries -->
  	<script src="http://d3js.org/d3.v4.js"></script>
 	<script src="https://d3js.org/topojson.v2.min.js"></script>
+	<!-- <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
 	<script src='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
 
 	<!-- Stylesheets -->
 	<link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
 	<link rel="stylesheet" href="main.css"> 
-	<link rel="stylesheet" href="grid.css"> 
+	<link rel="stylesheet" href="layout.css"> 
+	<link rel="stylesheet" href="../grid/grid.css"> 
 	<link rel="stylesheet" href="../map/map.css"> 
 
 </head>
@@ -33,7 +35,7 @@
 
 		<!-- bottom row -->
 		<div class="flex-grid" id="bottom">
-			<div class="col" id="grid">hallo von unten links</div>
+			<div class="col" id="grid"></div>
 			<div class="col" id="force">bonjour de la centre</div>
 			<div class="col" id="treemap">good day from the bottom left</div>
 		</div>
@@ -43,13 +45,19 @@
 
 	<div class="tooltip"></div>
 
+	<div class="tooltip-center"></div>
+	<div class="tooltip-left"></div>
+
+
 	<!-- Scripts -->
 	<script src="main.js"></script>
-	<script src="../scripts/globals.js"></script>
 	<script src="../scripts/dataprep.js"></script>
 
 	<script src="../scripts/dataprepMap.js"></script>
 	<script src="../map/map.js"></script>
+
+	<script src="../scripts/dataprepGrid.js"></script>
+	<script src="../grid/grid.js"></script>
 
 </body>
 </html>

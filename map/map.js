@@ -1,13 +1,8 @@
 
 
-function mapVis() {
-
-
+function makeMap() {
 
   var capExt, radiusScale, colExt, colourScale;
-  // var handler = {};
-  // var data = {};
-
 
   // var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
 
@@ -395,4 +390,4 @@ function mapVis() {
   }; // handler to change host countriy's background colour
 
 
-} // mapVis()
+} // makeMap()

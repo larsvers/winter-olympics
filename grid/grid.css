@@ -1,59 +1,45 @@
-body {
-	font-family: 'Open Sans', sans-serif;
-	margin: 150px;
-}
 
-canvas {
-	border:  1px dotted #ccc;
-}
-
-.hiddenCanvas {
-	/* display: none; */
-}
 
 /* === Arrowed tooltip === */
 
-.tooltipCenter, .tooltipLeft {
+.tooltip-center, .tooltip-left {
 
   position: absolute;
 	display: inline-block;
+	top: -500px;
   width: 180px;
   height: 170px;
   
   text-align: center;
   color: #eee;
-  background: #000;
-  background: radial-gradient(circle, #333, #000); /* Standard syntax */
+  background: #000428;
+  background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
   pointer-events: none;
   opacity: 0;
 
 }
 
-.tooltipCenter:after, .tooltipLeft:after {
-
-    content: "";
-    position: absolute;
-    top: 100%; /* this determines the arrow position */
-    left: 80px; /* to center:  half of tooltips width minus this border-width */
-    width: 0;
-    height: 0;
-    border-width: 10px; /* this determines the arrow size  */
-    border-style: solid;
-    border-color: #111 transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
-
+.tooltip-center:after, .tooltip-left:after {
+  content: "";
+  position: absolute;
+  top: 100%; /* this determines the arrow position */
+  left: 80px; /* to center:  half of tooltips width minus this border-width */
+  width: 0;
+  height: 0;
+  border-width: 10px; /* this determines the arrow size  */
+  border-style: solid;
+  border-color: #031E4C transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
 }
 
-.tooltipLeft:after {
-
-    left: 0; /* to keep the arrow left:  set the left position to 0 */
-
+.tooltip-left:after {
+  left: 0; /* to keep the arrow left:  set the left position to 0 */
+  border-color: #000428 transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
 }
-
 
 
 /*  --- Tooltip sections --- */
 
-#tipHeader {
+#tip-header-grid {
 	display: flex;
 	flex-direction: row;
 	padding: 5px;
@@ -61,19 +47,19 @@ canvas {
 	border-bottom: 1px solid #eee;
 }
 
-#tipHeader > img {
+#tip-header-grid > img {
 	height: 1em;
 	opacity: 0.9;
 	/* border: 1px dotted red; */
 }
 
-#tipHeader > div {
+#tip-header-grid > div {
 	padding-left: 2px;		
 	font-size: 0.8em;
 	/* border: 1px dotted blue; */
 }
 
-#tipBody p {
+#tip-body-grid p {
 	margin: 0;
 	margin-top: 5px;
 	padding: 2px;

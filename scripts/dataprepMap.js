@@ -63,6 +63,6 @@ function dataprepMap() {
 
   // log('data.segments', data.segments);
 
-  mapVis();
+  makeMap();
 
 } // dataprepMap()

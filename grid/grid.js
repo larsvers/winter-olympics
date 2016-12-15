@@ -1,119 +1,60 @@
-// var log = console.log.bind(console);
-// var dir = console.dir.bind(console);
-// var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
 
+var colourToNodeGrid = {}; // define outside make chart as d3 element update will only fill this once as joing lives on even beyond redraw.
 
-// === Set up canvas === //
+function makeGrid() {
 
-var width = 500,
-		height = 250;
-
-var data;
-
-var mainCanvas = d3.select('#container')
-	.append('canvas')
-	.classed('mainCanvas', true)
-	.attr('width', width)
-	.attr('height', height);
-
-
-// --- Set up picking tools --- //
-
-var hiddenCanvas = d3.select('#container')
-	.append('canvas')
-	.classed('hiddenCanvas', true)
-	.attr('width', width)
-	.attr('height', height);
+	// === Remove and reset width for redraw === //
 	
-var colourToNode = {}; // map to track the colour of nodes
-
-// function to create new colours for the picking
-
-var nextCol = 1;
-
-function genColor(){
-
-  var ret = [];
-  // via http://stackoverflow.com/a/15804183
-  if(nextCol < 16777215){
-    ret.push(nextCol & 0xff); // R
-    ret.push((nextCol & 0xff00) >> 8); // G 
-    ret.push((nextCol & 0xff0000) >> 16); // B
-
-    nextCol += 1; 
-  }
-  var col = "rgb(" + ret.join(',') + ")";
-  return col;
-
-} // genColor()
-
-
-
-// === Load and prepare the data === //
-
-
-d3.tsv('../data/nations.tsv', function(err, data) {
-
-  var nested = d3.nest()
-  	.key(function(d) { return d.place_id; })
-  	.entries(data);
-
-  data = {};
-
-  nested.forEach(function(el) {
-
-  	data[el.key] = el.values.map(function(el) {
-
-  		return {
-
-	      event_id: parseInt(el.event_id),
-	      gold: parseInt(el.gold),
-	      silver: parseInt(el.silver),
-	      bronze: parseInt(el.bronze),
-	      medals: parseInt(el.medals),
-	      team_size: parseInt(el.team_size),
-	      place: el.place,
-	      nation: el.nation,
-	      place_id: el.place_id,
-	      image_name: el.image_name
-
-  		}
-
-  	});
-
-  });
-
-  log(data);
-
-  makeDropdown(data);
-  makeChart(data);
-
-});
-
-
-
-
-
-function makeDropdown(data) {
-
-	var selectData = d3.keys(data);
+	d3.selectAll('#grid *').remove();
 	
-	var select = d3.select('#select')
-		.append('select');
+	
+	// === Set up canvas === //
 
-	var options = select.selectAll('option.options')
-		.data(selectData)
-		.enter()
-		.append('option')
-		.attr('class', 'options')
-		.attr('value', function(d) { return d; })
-		.html(function(d) { return d; });
+	// var width = 500, height = 250;
+	var width = wWidth * 0.31, height = wHeight * 0.29;
 
-} // makeDropdown()
+	// var data;
+
+	var mainCanvas = d3.select('#grid')
+		.append('canvas')
+		.classed('main-canvas', true)
+		.attr('width', width)
+		.attr('height', height);
+
+
+	// --- Set up picking tools --- //
+
+	var hiddenCanvas = d3.select('#grid')
+		.append('canvas')
+		.classed('hidden-canvas', true)
+		.attr('width', width)
+		.attr('height', height);
 
 
 
-function makeChart(data) {
+	// function to create new colours for the picking
+
+	var nextCol = 1;
+
+	function genColor(){
+
+	  var ret = [];
+	  // via http://stackoverflow.com/a/15804183
+	  if(nextCol < 16777215){
+	    ret.push(nextCol & 0xff); // R
+	    ret.push((nextCol & 0xff00) >> 8); // G 
+	    ret.push((nextCol & 0xff0000) >> 16); // B
+
+	    nextCol += 1; 
+	  }
+	  var col = "rgb(" + ret.join(',') + ")";
+	  return col;
+
+	} // genColor()
+
+
+
+
 
 	// === Bind data to custom elements === //
 
@@ -131,14 +72,12 @@ function makeChart(data) {
 
 	// load an example set
 
-  databind(data['chamonix_1924']); // ...then update the databind function
+  databind(data.nations_grid['sochi_2014']); // ...then update the databind function
 
 	var t = d3.timer(function(elapsed) {
 		draw(mainCanvas);
 		if (elapsed > 500) t.stop();
 	}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
-
-
 
 
 
@@ -149,14 +88,14 @@ function makeChart(data) {
 		// --- Scales --- //
 
 		var extent = d3.extent(data, function(d) { return d.medals; });
-		
+
 		// var colours = ['#b8cee9', '#8aa0bb', '#5e748f', '#344a65', '#08253e'] // blue to blue
 		var colours = ['#adceff', '#88b5ff', '#639afb', '#3f81fa', '#0066f5'] // blue to blue
 		// var colours = ['#c1e9cd', '#8fb499', '#608367', '#34543a', '#0b2911'] // green to green
 		// var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue
-		
+
 		var numberScale = d3.scaleQuantile().domain(extent).range(colours); // Lch colour scale picked from http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
-		
+
 		// var colours = ['#adceff', '#639afb', '#0066f5'] // colour extent for piecewise linear scale
 		// var numberScale = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range(colours); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
 
@@ -167,7 +106,7 @@ function makeChart(data) {
 		var colourRange = numberScale.range(),
 				colRangeLgth = colourRange.length,
 				legendData = [];
-		
+
 		colourRange.forEach(function(el) {
 
 			var obj = {};
@@ -203,8 +142,9 @@ function makeChart(data) {
   			var y0 = Math.floor(i/20) % 20; // increases by 1 every 20
 				var y1 = Math.floor(i/40) % 40; // increases by 1 every 40
 				d.y = offsetTop + y0 * cellSize + y0 * cellSpacing + y1 * groupSpacing;  // save the position for the tooltip later
+				// log('d.x', Math.round(d.x), 'd.y', Math.round(d.y));
   	  	return d.y;
-	  	}) 
+	  	})
 			.attr('width', 0)
 			.attr('height', 0);
 
@@ -231,9 +171,9 @@ function makeChart(data) {
 				if (!d.hiddenCol) {
 
 					d.hiddenCol = genColor();
-					colourToNode[d.hiddenCol] = d;
+					colourToNodeGrid[d.hiddenCol] = d;
 
-				} // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNode-dictionary 
+				} // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNodeGrid-dictionary 
 
 				return d.hiddenCol;
 
@@ -306,10 +246,8 @@ function makeChart(data) {
 				}
 			});
 
-		// draw();
 
 	} // databind()
-
 
 
 	// === Draw canvas === //
@@ -320,15 +258,15 @@ function makeChart(data) {
 
 
 		// clear canvas
-		
+
 		context.fillStyle = '#fff';
 		context.fillRect(0, 0, width, height);
 
-		
+
 		// draw each individual custom element with their properties
-		
+
 		var elements = custom.selectAll('custom.rect'); // this is the same as the join variable, but used here to draw
-		
+
 		elements.each(function(d,i) {
 
 			var node = d3.select(this);
@@ -343,7 +281,7 @@ function makeChart(data) {
 			drawLegend();
 
 		}
-		
+
 		function drawLegend() {
 
 
@@ -374,7 +312,6 @@ function makeChart(data) {
 
 		} // drawLegend()
 
-
 	} // draw()
 
 
@@ -399,44 +336,48 @@ function makeChart(data) {
 
 	// --- Tooltip --- //
 
-
-	d3.select('.mainCanvas').on('mousemove', function() {
+	d3.select('.main-canvas').on('mousemove', function() {
 
 		draw(hiddenCanvas, true); // we only need to draw the hidden canvas when mousing
 
 		// necessary values to calculate tooltip position
-		var canvasPos = d3.select('canvas').node().getBoundingClientRect(); // get the canvas left and top position
-		var tip = d3.select('.tooltipCenter').node(); // cache the tooltip element
+		var canvasPos = getWindowOffset(this); // get the canvas left and top position
+		var tip = d3.select('.tooltip-center').node(); // cache the tooltip element
 		var tipDim = tip.getBoundingClientRect(); // get the tooltip width and height
 		var arrowDim = parseInt(window.getComputedStyle(tip, ':after').getPropertyValue('border-width'),10); // get the border-width of the arrow
-
 
 
 		// get the mouse-positions on the main canvas
 		var mouseX = d3.event.layerX;
 		var mouseY = d3.event.layerY;
 
-
+		// log('canvasPos', canvasPos, 'tip', tip, 'tipDim', tipDim, 'arrowDim', arrowDim)
+		
 
 		// get the toolbox for the hidden canvas to pick the colours from where our mouse is, then stringify it in a way our map-object can read it
 		var hiddenCtx = hiddenCanvas.node().getContext('2d');
 		var col = hiddenCtx.getImageData(mouseX, mouseY, 1, 1).data;
 		var colKey = 'rgb(' + col[0] + ',' + col[1] + ',' + col[2] + ')';
 		
+
 		// get the data from our map !
-		var nodeData = colourToNode[colKey];
+		var nodeData = colourToNodeGrid[colKey];
 
 		// if we found some data under our mouse write a tooltip
 		if (nodeData) {
-	
+
+			// log(nodeData);
+
 			if (tipDim.width/2 < nodeData.x) {
 
 				// log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'central');
-				// if the tooltip fits comfortably next our left canvas border draw the tooltip with a central arrow
-				
-				d3.select('.tooltipLeft').style('opacity', 0); // ..while getting rid of the other one
+				// log('node position within canvas', nodeData.y,'\n + canvas position relative to window', Math.round(canvasPos.top),'\n - height of tooltip', tipDim.height,'\n - border-width of triangle', arrowDim);
 
-				tip = d3.select('.tooltipCenter')
+				// if the tooltip fits comfortably next our left canvas border draw the tooltip with a central arrow				
+
+				d3.select('.tooltip-left').style('opacity', 0); // ..while getting rid of the other one
+
+				tip = d3.select('.tooltip-center')
 					.style('top', nodeData.y + canvasPos.top - tipDim.height - arrowDim + 'px') // nodeData.x = node position within canvas. canvasPos = canvas position relative to viewport (so this changes when we scroll). tipDim.height = height of tooltip. arrowDim = border-width of triangle 
 					.style('left', nodeData.x + canvasPos.left - tipDim.width/2 + cellSize/2 + 'px') // as above but removing (width of tooltip / 2) and adding half of cellSize to hit the center 
 					.style('opacity', 0.99); // show if we hover over a node
@@ -444,11 +385,13 @@ function makeChart(data) {
 			} else {
 
 				// log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'left');
+				// log('node position within canvas', nodeData.y,'\n + canvas position relative to window', Math.round(canvasPos.top),'\n - height of tooltip', tipDim.height,'\n - border-width of triangle', arrowDim);
+
 				// if the tooltip doesn't fit comfortably next our left canvas border draw the tooltip with a left arrow
 
-				d3.select('.tooltipCenter').style('opacity', 0); // ..while getting rid of the other one
+				d3.select('.tooltip-center').style('opacity', 0); // ..while getting rid of the other one
 
-				tip = d3.select('.tooltipLeft')
+				tip = d3.select('.tooltip-left')
 					.style('top', nodeData.y + canvasPos.top - tipDim.height - arrowDim + 'px') // same as for the normal tooltip
 					.style('left', nodeData.x + canvasPos.left - arrowDim + cellSize/2 + 'px') // as above but removing half teh arrow-width and adding half the cell size
 					.style('opacity', 0.99); // show if we hover over a node
@@ -457,20 +400,19 @@ function makeChart(data) {
 
 		} // tooltip conditioned on a node being under our mouse
 
-		
+
 		// Set tooltips to opaque if we're not on a node 
 
 		if (nodeData === undefined) {
 
-			d3.select('.tooltipCenter').style('opacity', 0);
-			d3.select('.tooltipLeft').style('opacity', 0);
-		
+			d3.select('.tooltip-center').style('opacity', 0);
+			d3.select('.tooltip-left').style('opacity', 0);
+
 		}
 
 		buildTip(nodeData, tip); // build the html
 
 	}); // canvas hover listener/handler
-
 
 
 
@@ -486,12 +428,12 @@ function makeChart(data) {
 
 		if (node_data && block.length === 1) {
 
-			d3.selectAll('.tooltipCenter *').remove();
-			d3.selectAll('.tooltipLeft *').remove();''
+			d3.selectAll('.tooltip-center *').remove();
+			d3.selectAll('.tooltip-left *').remove();''
 
-		  selection.append('div').attr('id', 'tipHeader');
-		  selection.append('div').attr('id', 'tipVisual');
-		  selection.append('div').attr('id', 'tipBody');
+		  selection.append('div').attr('id', 'tip-header-grid');
+		  selection.append('div').attr('id', 'tip-visual-grid');
+		  selection.append('div').attr('id', 'tip-body-grid');
 
 			var image = '../images/flags/4x3/' + node_data.image_name;
 
@@ -499,12 +441,12 @@ function makeChart(data) {
 
 		  // --- Draw header with image and country name --- //
 
-		  d3.select('#tipHeader')
+		  d3.select('#tip-header-grid')
 		  	.append('img')
 		  	.attr('src', image)
 		  	.attr('alt', node_data.nation);
 
-		  d3.select('#tipHeader')
+		  d3.select('#tip-header-grid')
 		  	.append('div')
 		  	.html(node_data.nation);
 
@@ -516,7 +458,7 @@ function makeChart(data) {
 		  var width = 180 - margin.left - margin.right;
 		  var height = 20 - margin.top - margin.bottom;
 
-		  var g = d3.select('#tipVisual')
+		  var g = d3.select('#tip-visual-grid')
 		  	.append('svg')
 		  	.attr('id', 'medalTable')
 		  	.attr('width', width + margin.left + margin.right)
@@ -525,9 +467,9 @@ function makeChart(data) {
 		  	.attr('transform', 'translate('+ margin.left +', '+ margin.top +')');
 
 		  // Prep data
-		  var eventData = data[node_data.place_id]; // 'data' is global - accessing the current event through the place_id variable - just needed for the medal extent
+		  var eventData = data.nations_grid[node_data.place_id]; // 'data' is global - accessing the current event through the place_id variable - just needed for the medal extent
 		  var extentMedals = d3.extent(eventData, function(d) { return d.medals; });
-		  
+
 		  var medalData = [];
 		  d3.range(node_data.bronze).forEach(function(el) { return medalData.push('bronze'); });
 		  d3.range(node_data.silver).forEach(function(el) { return medalData.push('silver'); });
@@ -557,7 +499,7 @@ function makeChart(data) {
 		    (isNaN(node_data.team_size) ? '' : '<p>Team Size: ' + node_data.team_size + '</p>') +
 		    (isNaN(node_data.team_size) ? '' : '<p>Medals per athlete: ' + Math.round(node_data.medals/node_data.team_size * 100) / 100 + '</p>');
 
-		  d3.select('#tipBody')
+		  d3.select('#tip-body-grid')
 		  	.html(tipBodyHtml);
 
 
@@ -566,10 +508,7 @@ function makeChart(data) {
 	} // buildTip()
 
 
-} // makeChart()
 
 
-
-
-
+} // makeGrid()
 

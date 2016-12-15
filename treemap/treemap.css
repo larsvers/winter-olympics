@@ -43,8 +43,8 @@ div.tooltip {
 
   text-align: center;
   color: #eee;
-  background: #000;
-  background: radial-gradient(circle, #434343, #000); /* Standard syntax */
+  background: #000428;
+  background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
 }
 
 div#tipHeader {

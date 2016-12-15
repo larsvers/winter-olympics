@@ -21,6 +21,13 @@ a:link, a:visited, a:hover, a:active {
 }
 
 
+canvas {
+	border:  1px dotted #ccc;
+}
+
+.hidden-canvas {
+	display: none;
+}
 
 button {
 	display: inline-block;
