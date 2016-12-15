@@ -1,5 +1,5 @@
 
-// === Prepare grid data === //
+// === Prepare Grid Data === //
 
 function dataprepGrid() {
 
@@ -32,7 +32,7 @@ function dataprepGrid() {
 
   });
 
-  log(data);
+  log('grid', data.nations_grid);
 
   makeGrid();
 

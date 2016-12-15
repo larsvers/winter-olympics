@@ -10,10 +10,7 @@ function makeGrid() {
 	
 	// === Set up canvas === //
 
-	// var width = 500, height = 250;
 	var width = wWidth * 0.31, height = wHeight * 0.29;
-
-	// var data;
 
 	var mainCanvas = d3.select('#grid')
 		.append('canvas')

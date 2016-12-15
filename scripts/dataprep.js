@@ -145,6 +145,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
 
   dataprepMap();
   dataprepGrid();
+  dataprepForce();
 
 } // dataprep()
 

@@ -1,40 +1,7 @@
-/* === Meyer Reset & border box (in moderation) === */
 
-html, body {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 100%;
-	vertical-align: baseline;
-	height: 100%;
-	box-sizing: border-box;
-}
+/* === Force CSS === */
 
-*, *:before, *:after{
-	box-sizing: inherit;	
-}
-
-a:link, a:visited, a:hover, a:active {
-	color: #000;
-}
-
-
-/* === Canvas === */
-
-canvas {
-	border: 1px solid #ccc;
-	margin: 50px;
-	margin-bottom: 10px;
-}
-
-/* === Other === */
-
-#select, #split {
-	margin-left:  50px;
-}
-
-#left, #right {
+.force-text {
 
 	position: absolute;
 	font-size: 0.7em;

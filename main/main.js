@@ -43,7 +43,7 @@ window.onresize = function(e) {
 	wWidth = window.innerWidth;
 	wHeight = window.innerHeight;
 
-	// log(wWidth);
 	makeGrid();
-
+	makeForce();
+	
 }
