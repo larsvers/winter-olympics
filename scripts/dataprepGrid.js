@@ -32,7 +32,7 @@ function dataprepGrid() {
 
   });
 
-  log('grid', data.nations_grid);
+  // log('grid', data.nations_grid);
 
   makeGrid();
 

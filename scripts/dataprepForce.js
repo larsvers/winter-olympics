@@ -30,8 +30,10 @@ function dataprepForce() {
 
 	}); // loop through nested
 
+  // log('force', data.events_force);
+
   makeForce();
-  
+
 } // dataprepForce()
 
 

@@ -14,7 +14,7 @@ function makeForce() {
 	var width = wWidth * 0.31, height = wHeight * 0.29;
 	var simulation;
 	var formatPerc = d3.format('.0%');
-
+	var padding, canvasPos, canvasDim;
 
 	// === Set up canvas === //
 
@@ -63,7 +63,7 @@ function makeForce() {
 		}); // get women nodes
 
 		initSimulation(nodes);
-		// initLabels(data.events_force) // draw labels
+		initLabels(simulationData) // draw labels
 
 	} // getSimulationData()
 
@@ -73,7 +73,7 @@ function makeForce() {
 
 	function initSimulation(nodes) {
 
-		log(nodes);
+		// log(nodes);
 
 		simulation = d3.forceSimulation(nodes)
 			.alpha(0.3)
@@ -122,71 +122,125 @@ function makeForce() {
 
 	function initLabels(data){
 
-		log(data);
+		// log(data);
 
 		// --- Add text --- //
 
 		var leftText = data.comp_men + ' men competing &middot; ' + formatPerc(1 - data.women_ratio) +' of total';
 		var rightText = data.comp_women + ' women competing &middot; ' + formatPerc(data.women_ratio) +' of total';
 		
-		d3.select('#left').html(leftText);
-		d3.select('#right').html(rightText);
+		d3.select('.force-text#left').html(leftText);
+		d3.select('.force-text#right').html(rightText);
 
-		// --- Position elements --- //
+		// --- Position text --- //
 
-		var canvasDim = canvas.node().getBoundingClientRect();
-		var canvasPos = getWindowOffset(canvas.node());
-		var leftPos = d3.select('#left').node().getBoundingClientRect();
-		var rightPos = d3.select('#right').node().getBoundingClientRect();
-		var padding = 4;
+		padding = 4;
+		canvasPos = getWindowOffset(canvas.node());
+		canvasDim = canvas.node().getBoundingClientRect();
+		var leftDim = d3.select('#left').node().getBoundingClientRect();
+		var rightDim = d3.select('#right').node().getBoundingClientRect();
+		
 
-		d3.select('#left')
-			.style('top', canvasPos.top + canvasDim.height - leftPos.height - padding + 'px')
-			.style('left', canvasPos.left + padding + 'px');
+		var positions = {
+			leftText: {
+				top: {
+					wide: canvasPos.top + canvasDim.height - leftDim.height - padding + 'px',
+					tight: canvasPos.top + padding + 'px'
+				},
+				left: {
+					wide: canvasPos.left + padding + 'px',
+					tight: canvasPos.left + padding + 'px'
+				}
+			},
+			rightText: {
+				top: {
+					wide: canvasPos.top + canvasDim.height - rightDim.height - padding + 'px',
+					tight: canvasPos.top + canvasDim.height - rightDim.height - padding + 'px'
+				},
+				left: {
+					wide: canvasPos.left + canvasDim.width - rightDim.width - padding + 'px',
+					tight: canvasPos.left + canvasDim.width - rightDim.width - padding + 'px'
+				}
+			}
+		};
 
-		d3.select('#right')
-			.style('top', canvasPos.top + canvasDim.height - rightPos.height - padding + 'px')
-			.style('left', canvasPos.left + canvasDim.width - rightPos.width - padding + 'px');
+		var wide = leftDim.width + rightDim.width + 2 * padding < canvasDim.width ? true : false;
+
+		d3.select('.force-text#left')
+			.style('top', wide ? positions.leftText.top.wide : positions.leftText.top.tight)
+			.style('left', wide ? positions.leftText.left.wide : positions.leftText.left.tight);
+
+		d3.select('.force-text#right')
+			.style('top', wide ? positions.rightText.top.wide : positions.rightText.top.tight)
+			.style('left', wide ? positions.rightText.left.wide : positions.rightText.left.tight);
+
 
 	} // initLabels()
 
 
+	// === Animation === //
+
+	var t = d3.timer(function(elapsed) {
+		
+		if (elapsed > 2000) split();
+		if (elapsed > 4000) unite();
+		if (elapsed > 4500) t.stop();
+
+	}); // timer
 
 
+	// --- Listeners --- //
+
+	var buttonDim = {};
+	buttonDim.split = d3.select('button#split').node().getBoundingClientRect();
+
+	d3.select('button#split')
+		.style('top', canvasPos.top + padding + 'px')
+		.style('left', canvasPos.left + canvasDim.width - buttonDim.split.width - padding + 'px');
 
 
-	// === Listeners / Handlers === //
+	var toggle = true;
 
-	d3.select('button#split').on('mousedown', function(d) {
+	d3.select('button#split').on('mousedown', function() {
 
-			simulation.stop();
+		toggle ? split() : unite();
+		toggle ? d3.select(this).html('unite') : d3.select(this).html('split');
+		toggle = !toggle;
+		
 
-			simulation
-				.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.3 : width * 0.7; }).strength(0.7) )
-				.force('yPos', d3.forceY(height/2).strength(0.7));
-				
-			simulation.alpha(0.2);
-
-			simulation.restart();
+	}); // split button listener
 
 
-	}); // split button listener/handler
+	// --- Handlers --- //
+
+	function split() {
+
+		simulation.stop();
+
+		simulation
+			.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.3 : width * 0.7; }).strength(0.7) )
+			.force('yPos', d3.forceY(height/2).strength(0.7));
+			
+		simulation.alpha(0.2);
+
+		simulation.restart();
+
+	} // split()
 
 
-	d3.select('button#unite').on('mousedown', function(d) {
+	function unite() {
 
-			simulation.stop();
+		simulation.stop();
 
-			simulation
-				.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.5 : width * 0.5; }).strength(0.5))
-				.force('yPos', d3.forceY(height/2).strength(0.5));
-				
-			simulation.alpha(0.2);
+		simulation
+			.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.5 : width * 0.5; }).strength(0.5))
+			.force('yPos', d3.forceY(height/2).strength(0.5));
+			
+		simulation.alpha(0.2);
 
-			simulation.restart();
+		simulation.restart();
 
-
-	}); // unite button listener/handler
+	} // unite()
 
 
 } // makeForce()
