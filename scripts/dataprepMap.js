@@ -1,8 +1,7 @@
 
-function dataprepMap() {
+// === Prepare Map Data === //
 
-  // log(createRadiusStops(capExt, radiusScale, false));
-  // log(createRadiusStops(capExt, radiusScale, true));
+function dataprepMap() {
 
   // ---- Build the GeoJson for the points --- //
 
@@ -10,7 +9,7 @@ function dataprepMap() {
 
     "type": "FeatureCollection",
     "features": []
-  
+
   };
 
   data.locations.forEach(function(el) {
@@ -36,32 +35,10 @@ function dataprepMap() {
     }
 
     data.geo_locations.features.push(obj);
-      
+
   });
 
   // log('geo_locations', data.geo_locations);
-
-
-  // --- Build the JSON for the flyTo destinations --- //
-
-  data.segments = {};
-
-  data.events.forEach(function(el) {
-
-    data.segments[el.place_id] = {
-
-      center: el.flight_center,
-      zoom: el.flight_zoom,
-      pitch: el.flight_pitch,
-      bearing: el.flight_bearing,
-      duration: el.flight_duration,
-      speed: el.flight_speed
-
-    };
-
-  });
-
-  // log('data.segments', data.segments);
 
   makeMap();
 

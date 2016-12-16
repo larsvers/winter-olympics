@@ -1,5 +1,13 @@
 
+// === The Grid === //
+
+
+// --- Globals --- //
+
 var colourToNodeGrid = {}; // define outside make chart as d3 element update will only fill this once as joing lives on even beyond redraw.
+
+
+// --- Main function --- //
 
 function makeGrid() {
 
@@ -8,24 +16,12 @@ function makeGrid() {
 	d3.selectAll('#grid *').remove();
 	
 	
-	// === Set up canvas === //
+	// === Set up canvas and picking === //
 
-	var width = wWidth * 0.31, height = wHeight * 0.29;
+	var width = wWidth * 0.325, height = wHeight * 0.29;
 
-	var mainCanvas = d3.select('#grid')
-		.append('canvas')
-		.classed('main-canvas', true)
-		.attr('width', width)
-		.attr('height', height);
-
-
-	// --- Set up picking tools --- //
-
-	var hiddenCanvas = d3.select('#grid')
-		.append('canvas')
-		.classed('hidden-canvas', true)
-		.attr('width', width)
-		.attr('height', height);
+	var mainCanvas = d3.select('#grid').append('canvas').attr('class', 'main-canvas grid').attr('width', width).attr('height', height);
+	var hiddenCanvas = d3.select('#grid').append('canvas').attr('class', 'hidden-canvas grid').attr('width', width).attr('height', height);
 
 
 
@@ -51,8 +47,6 @@ function makeGrid() {
 
 
 
-
-
 	// === Bind data to custom elements === //
 
 	var customBase = document.createElement('custom');
@@ -69,7 +63,7 @@ function makeGrid() {
 
 	// load an example set
 
-  databind(data.nations_grid['sochi_2014']); // ...then update the databind function
+  databind(data.nations_grid[startChapter]); // ...then update the databind function
 
 	var t = d3.timer(function(elapsed) {
 		draw(mainCanvas);
@@ -316,18 +310,19 @@ function makeGrid() {
 	// === Listeners / Handlers === //
 
 
-	// --- Select event --- ///
+	// --- Updating the grid when chapter changes (as in 'chamonix_1924' to 'stmoritz_1928' --- //
 
-	d3.select('select').on('change', function() {
+	updateGrid = function(chapter) {
 
-		databind(data[this.value]); // ...then update the databind function
+		databind(data.nations_grid[chapter]); // ...then update the databind function
 		
 		var t = d3.timer(function(elapsed) {
 			draw(mainCanvas);
 			if (elapsed > 500) t.stop();
 		}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
 
-	}); // select listener/handler
+	}; // updateGrid() 
+
 
 
 

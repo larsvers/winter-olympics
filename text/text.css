@@ -1,0 +1,13 @@
+
+/* === Text CSS === */
+
+div.col#text {
+	overflow: auto;	
+	background: rgba(255,255,255,0.7);
+}
+
+section {
+	padding: 4em 1em 4em 1em;
+	border-bottom: 1px dotted #adceff;
+}
+

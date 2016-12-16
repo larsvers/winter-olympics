@@ -1,53 +1,7 @@
-/* === Meyer Reset & border box (in moderation) === */
 
-html, body {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 100%;
-	vertical-align: baseline;
-	height: 100%;
-	box-sizing: border-box;
-}
+/* === Treemap CSS === */
 
-*, *:before, *:after{
-	box-sizing: inherit;	
-}
-
-a:link, a:visited, a:hover, a:active {
-	color: #000;
-}
-
-
-select {
-	margin-top: 100px;
-	margin-left: 50px;
-}
-
-canvas {
-	border: 1px dotted #ccc;
-	margin: 50px;
-	margin-top: 10px;
-}
-
-canvas.hiddenCanvas {
-	/* display: none; */
-}
-
-div.tooltip {
-  position: absolute;        
-	display: inline-block;
-  pointer-events: none;
-	z-index: 1;
-
-  text-align: center;
-  color: #eee;
-  background: #000428;
-  background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
-}
-
-div#tipHeader {
+div#tip-header-treemap {
 	padding: 5px;
 	margin-bottom: 1px;
 	color: #eee;
@@ -58,17 +12,14 @@ div#tipHeader {
 
 }
 
-span.small {
-	font-size: 0.65em;
-}
-
-div#tipBody {
+div#tip-body-treemap {
 	padding: 5px;
   pointer-events: none;
 	z-index: 1;
 }
 
+
 path.domain {
-	display:  none;
+	display: none;
 }
 

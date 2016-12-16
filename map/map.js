@@ -1,69 +1,76 @@
 
+// === The Map === //
+
+
+// --- Globals --- //
+
+var map;
+
+var capExt, radiusScale, colExt, colourScale;
+
+var createColourStops = function(extent, scale) {
+
+  var delta = extent[1] - extent[0];
+  var outer = [];
+
+  d3.range(delta + extent[0]).forEach(function(el, i) {
+
+    if (i % 4 === 0) {
+      var inner = [i, scale(i)];
+      outer.push(inner);
+    }
+
+  });
+
+  return outer;
+
+}; // createColourStops()
+
+var createRadiusStops = function(extent, scale, setToZero) {
+
+  // Boolean setToZero sets all radii created to 0 for switching them off when moving from place to place
+
+  var delta = extent[1] - extent[0];
+
+  var outer = [];
+
+  d3.range(delta + extent[0]).forEach(function(el, i) {
+
+    if (i % 1000 === 0) {
+
+      d3.range(3).forEach(function(elt) { // number in d3.range() defines how many zoom levels we include
+
+        var zoom = elt === 0 ? 3 : elt === 1 ? 8 : 12; // define zoom levels
+
+        // build data struture as in [{ zoom: x, value: y }, z] (x = soom level, y = data-value, z = radius at that value)
+
+        var inner = [];
+        var obj = {};
+        obj.zoom = zoom;
+        obj.value = i + extent[0];
+
+        var radius = scale(i + extent[0]) + 4; // + 4 increases circle radius
+        radius = elt === 0 ? radius / 3 : elt === 1 ? radius : radius * 1.5;
+        radius = setToZero === true ? 0 : radius;
+
+        inner = [obj, radius];
+
+        outer.push(inner);
+
+      }); // loop to guarantee different values for different zoom levels
+
+    } // only trigger every 1000 steps
+
+  }); // loop through all capacity values
+
+  return outer;
+
+}; // createRadiusStops()
+
+
+// --- Main function --- //
 
 function makeMap() {
-
-  var capExt, radiusScale, colExt, colourScale;
-
-  // var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
-
-  var createColourStops = function(extent, scale) {
-
-    var delta = extent[1] - extent[0];
-    var outer = [];
-
-    d3.range(delta + extent[0]).forEach(function(el, i) {
-
-      if (i % 4 === 0) {
-        var inner = [i, scale(i)];
-        outer.push(inner);
-      }
-
-    });
-
-    return outer;
-
-  }; // createColourStops()
-
-  var createRadiusStops = function(extent, scale, setToZero) {
-
-    // Boolean setToZero sets all radii created to 0 for switching them off when moving from place to place
-
-    var delta = extent[1] - extent[0];
-
-    var outer = [];
-
-    d3.range(delta + extent[0]).forEach(function(el, i) {
-
-      if (i % 1000 === 0) {
-        
-        d3.range(3).forEach(function(elt) { // number in d3.range() defines how many zoom levels we include
-
-          var zoom = elt === 0 ? 3 : elt === 1 ? 8 : 12; // define zoom levels
-
-          // build data struture as in [{ zoom: x, value: y }, z] (x = soom level, y = data-value, z = radius at that value)
-          
-          var inner = [];
-          var obj = {};
-          obj.zoom = zoom;
-          obj.value = i + extent[0];
-
-          var radius = scale(i + extent[0]) + 4; // + 4 increases circle radius
-          radius = elt === 0 ? radius / 3 : elt === 1 ? radius : radius * 1.5;
-          radius = setToZero === true ? 0 : radius;
-
-          inner = [obj, radius];
-
-          outer.push(inner);
-
-        }); // loop to guarantee different values for different zoom levels
-
-      } // only trigger every 1000 steps
-
-    }); // loop through all capacity values
-
-    return outer;
-
-  }; // createRadiusStops()
 
 
   // === Initialise map === //
@@ -73,8 +80,8 @@ function makeMap() {
   var ski = 'mapbox://styles/larsvers/civfpazh700302kl8diskf9vr';
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw';
-  var map = new mapboxgl.Map({
-     
+  map = new mapboxgl.Map({
+
       container: 'map',
       style: ski,
      	center: [6.874011, 45.926747],
@@ -231,47 +238,13 @@ function makeMap() {
 
 
 
-
-
-
-
-  // === Interaction === //
-
-  // --- Flying button --- //
-
-  d3.selectAll('button.fly').on('mousedown', function() {
-      
-
-      var l = this.id; // the place_id of the button (as in 'chamonix_1924')
-      var c = [this.dataset.country];
-
-      
-      // Specific logic
-
-      if (l === 'sarajevo_1984') {
-      
-        c = ['bosniaandherzegovina', 'republicofserbia', 'croatia', 'slovenia', 'kosovo', 'montenegro', 'macedonia']
-      
-      }
-
-      handler.changeCircleSize(l); // turns the respective circles on / off
-
-      map.flyTo(data.segments[l]); // fly to the right location
-
-      handler.changeCountryBackground(c);
-    
-  }); // button listener / handler
-
-
-  // --- Tooltip --- //
+  // === Tooltip === //
 
   map.on('mousemove', function(e) {
 
-    // log(e);
     var features = map.queryRenderedFeatures(e.point);
     var feature = features[0];
-    // log(feature);
-    
+
     map.getCanvas().style.cursor = feature && feature.layer.source === 'places' ? 'default' : '';
 
     if (feature && feature.layer.source === 'places') {
@@ -279,13 +252,13 @@ function makeMap() {
       var prop = feature.properties;
 
       var sports = prop.sports_short.replace(',', ' &middot; ').replace(/[\[\]"]/g, '');
-      
+
       var html =            
-        '<div id="tipHeader">' +
+        '<div id="tip-header-map">' +
           prop.venue + '<br>' +
           '<span class="small">' + prop.place + ' ' + prop.year +
         '</div>' +
-        '<div id="tipBody">' +
+        '<div id="tip-body-map">' +
           '<img src="../images/locations/' + prop.picture_id + '.jpg"><br>' +
           '<span class="small">Events: ' + sports + '</span>' +
           (isNaN(prop.capacity_orig) ? '' : '<br><span class="small">Capacity: ' + d3.format(',')(prop.capacity) + '</span>') +
@@ -306,88 +279,3 @@ function makeMap() {
     }
 
   }); // mousemove listener
-
-
-  // === Handler === //
-  
-  var handler = {};
-
-  handler.changeCircleSize = function(event) {
-
-    // --- Turn the respective circles on and off --- //
-
-    // Set all circle-radii to 0
-
-    data.geo_locations.features.forEach(function(el) {
-
-      // remove all blue circles
-
-      var p = el.properties.place_id; // the place_id of each element equals the layer id for the blue circles
-      
-      map.setPaintProperty(p, 'circle-radius', {
-        'property': 'capacity', 
-        'type': 'exponential', 
-        'stops': createRadiusStops(capExt, radiusScale, true)
-      });
-
-
-      // remove all white circles
-      
-      var g = el.properties.place_id + 'glow'; // the place_id of each element + 'glow' equals the layer id for the white circles
-      
-      map.setPaintProperty(g, 'circle-radius', {
-        'property': 'capacity', 
-        'type': 'exponential', 
-        'stops': [
-          [{ zoom: 3, value: capExt[1] }, 0 ],
-          [{ zoom: 8, value: capExt[1] }, 0 ],
-          [{ zoom: 12, value: capExt[1] }, 0 ],
-        ]
-      });
-
-    });
-
-    // Set the circle-radii of the visited location to the appropriate values (first the blue then the white circles)
-
-    map.setPaintProperty(event, 'circle-radius', {
-      'property': 'capacity', 
-      'type': 'exponential', 
-      'stops': createRadiusStops(capExt, radiusScale, false)
-    });
-
-    map.setPaintProperty(event + 'glow', 'circle-radius', {
-      'property': 'capacity', 
-      'type': 'exponential', 
-      'stops': [
-        [{ zoom: 3, value: capExt[1] }, 0 ],
-        [{ zoom: 8, value: capExt[1] }, 2 ],
-        [{ zoom: 12, value: capExt[1] }, 3 ],
-      ]
-    });
-
-  }; // handler to change circle-size
-
-
-  handler.changeCountryBackground = function(country) {
-
-    // --- Turn the respective country background on and off --- //
-
-    data.world.features.forEach(function(el) {
-    
-      map.setPaintProperty(el.properties.ADMIN, 'fill-opacity', 0);
-      
-    });  // set all backgrounds to see-through
-
-
-    // turn background of selected country on
-    
-    country.forEach(function(el) {
-
-      map.setPaintProperty(el, 'fill-opacity', 0.1);
-
-    }); // loop for sarajevo_1984
-
-  }; // handler to change host countriy's background colour
-
-
-} // makeMap()

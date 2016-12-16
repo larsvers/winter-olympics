@@ -16,8 +16,10 @@
 	<link rel="stylesheet" href="main.css"> 
 	<link rel="stylesheet" href="layout.css"> 
 	<link rel="stylesheet" href="../map/map.css"> 
+	<link rel="stylesheet" href="../text/text.css"> 
 	<link rel="stylesheet" href="../grid/grid.css"> 
 	<link rel="stylesheet" href="../force/force.css"> 
+	<link rel="stylesheet" href="../treemap/treemap.css"> 
 
 </head>
 <body>
@@ -30,19 +32,21 @@
 
 		<!-- top row -->
 		<div class="flex-grid" id="top">
-			<div class="col" id="text-help">hello from up here</div>
-			<div class="col" id="text">hullo from the upper right</div>
+			<div class="col" id="text-help"></div>
+			<div class="col" id="text"></div>
 		</div>
 
 		<!-- bottom row -->
 		<div class="flex-grid" id="bottom">
 			<div class="col" id="grid"></div>
 			<div class="col" id="force"></div>
-			<div class="col" id="treemap">good day from the bottom left</div>
+			<div class="col" id="treemap"></div>
 		</div>
 
 	</div>
 
+
+	<!-- other -->
 
 	<div class="tooltip"></div>
 
@@ -56,17 +60,24 @@
 
 
 	<!-- Scripts -->
+	
 	<script src="main.js"></script>
 	<script src="../scripts/dataprep.js"></script>
 
 	<script src="../scripts/dataprepMap.js"></script>
 	<script src="../map/map.js"></script>
 
+	<script src="../scripts/dataprepText.js"></script>
+	<script src="../text/text.js"></script>
+
 	<script src="../scripts/dataprepGrid.js"></script>
 	<script src="../grid/grid.js"></script>
 
 	<script src="../scripts/dataprepForce.js"></script>
 	<script src="../force/force.js"></script>
+
+	<script src="../scripts/dataprepTreemap.js"></script>
+	<script src="../treemap/treemap.js"></script>
 
 </body>
 </html>

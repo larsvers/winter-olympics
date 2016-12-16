@@ -1,5 +1,8 @@
 
-/* === Meyer Reset & border box (in moderation) === */
+/* === Main CSS === */
+
+
+/* --- Meyer Reset & border box (in moderation) --- */
 
 html, body {
 	margin: 0;
@@ -20,6 +23,7 @@ a:link, a:visited, a:hover, a:active {
 	color: #000;
 }
 
+/* --- Canvas --- */
 
 canvas {
 	border:  1px dotted #ccc;
@@ -28,6 +32,34 @@ canvas {
 .hidden-canvas {
 	display: none;
 }
+
+
+/* --- Tooltip --- */
+
+div.tooltip {
+
+  position: absolute;
+	display: inline-block;
+  max-width: 250px;
+
+  text-align: center;
+  color: #eee;
+  background: #000428;
+	background: radial-gradient(circle, #004e92, #000428);
+
+  pointer-events: none;
+	z-index: 1;
+
+}
+
+span.small {
+	font-size: 0.65em;
+}
+
+/* tooltip children (header, body, ...) styled in individual style sheets */
+
+
+/* --- Buttons --- */
 
 button {
 	display: inline-block;

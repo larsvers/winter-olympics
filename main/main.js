@@ -1,11 +1,15 @@
+
+// === The Main script === //
+
+
+// --- Utilities --- //
+
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
 
-var wWidth = window.innerWidth;
-var wHeight = window.innerHeight;
+var replace = function(string) { return string.replace(/[^a-z0-9]/gi,"").toLowerCase(); };
 
-
-var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); };
+var getAxisLabel = function(name) { return d3.selectAll('.tick > text').filter(function(d) { return d === name; }); }; // takes a string and returns a selection of the text element of the same string
 
 var getWindowOffset = function(elem) {
 
@@ -38,12 +42,26 @@ var getWindowOffset = function(elem) {
 } // getWindowOffset()
 
 
-window.onresize = function(e) {
+// --- Globals --- //
+
+var wWidth = window.innerWidth;
+var wHeight = window.innerHeight;
+
+var startChapter = 'chamonix_1924'; // this is the global holding the current place_id
+
+var updateGrid, updateForce, updateTreemap; // functions to update visuals
+
+
+
+// --- Responisve redraw --- //
+
+window.onresize = function() {
 
 	wWidth = window.innerWidth;
 	wHeight = window.innerHeight;
 
 	makeGrid();
 	makeForce();
-	
+	makeTreemap();
+
 }

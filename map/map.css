@@ -1,25 +1,7 @@
 
-/* === Tooltip map === */
+/* === Map CSS === */
 
-.tooltip {
-
-  position: absolute;        
-	display: inline-block;
-  max-width: 250px;
-
-	font-family: 'IM Fell DW Pica', serif;
-	font-family: 'IM Fell English', serif;	
-  text-align: center;
-  color: #eee;
-  background: #000428;
-	background: radial-gradient(circle, #004e92, #000428);
-
-  pointer-events: none;
-	z-index: 1;
-
-}
-
-#tipHeader {
+#tip-header-map {
 	padding: 5px;
 	margin-bottom: 1px;
 	color: #eee;
@@ -28,21 +10,14 @@
 	z-index: 1;
 }
 
-#tipBody {
+#tip-body-map {
 	padding: 5px;
   pointer-events: none;
 	z-index: 1;
 }
 
-#tipBody img {
+#tip-body-map img {
 	max-width: 200px;
 }
-
-span.small {
-	font-size: 0.65em;
-}
-
-
-
 
 

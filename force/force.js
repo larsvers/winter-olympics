@@ -1,17 +1,21 @@
 
+// === The Force === //
+
+
+// --- Main function --- //
 
 function makeForce() {
 
 	// log(node_data);
 	
 	// === Remove and reset width for redraw === //
-	
+
 	d3.selectAll('#force *').remove();
-	
-	
+
+
 	// === Set up canvas === //
 
-	var width = wWidth * 0.31, height = wHeight * 0.29;
+	var width = wWidth * 0.325, height = wHeight * 0.29;
 	var simulation;
 	var formatPerc = d3.format('.0%');
 	var padding, canvasPos, canvasDim;
@@ -24,13 +28,13 @@ function makeForce() {
 
 	// === Get simulation data === //
 
-	getSimulationData('chamonix_1924'); // this will move to the select handler later
+	getSimulationData(startChapter); // this will move to the select handler later
 
 	function getSimulationData(event) {
 
-		
+
 		var simulationData = data.events_force[event][0]; // get data
-		
+
 		var nodes = [];
 
 		d3.range(simulationData.comp_men).forEach(function(el, i) {
@@ -46,7 +50,7 @@ function makeForce() {
 			nodes.push(obj);
 
 		}); // get men nodes
-		
+
 
 		d3.range(simulationData.comp_women).forEach(function(el, i) {
 
@@ -139,7 +143,7 @@ function makeForce() {
 		canvasDim = canvas.node().getBoundingClientRect();
 		var leftDim = d3.select('#left').node().getBoundingClientRect();
 		var rightDim = d3.select('#right').node().getBoundingClientRect();
-		
+
 
 		var positions = {
 			leftText: {
@@ -178,7 +182,11 @@ function makeForce() {
 	} // initLabels()
 
 
-	// === Animation === //
+
+	// === Updates === //
+
+
+	// --- Initial animation --- //
 
 	var t = d3.timer(function(elapsed) {
 		
@@ -189,7 +197,16 @@ function makeForce() {
 	}); // timer
 
 
-	// --- Listeners --- //
+	// --- Updating the force when chapter changes (as in 'chamonix_1924' to 'stmoritz_1928' --- //
+
+	updateForce = function(chapter) {
+
+		getSimulationData(chapter);
+
+	} // updateForce()
+
+
+	// --- Button listener --- //
 
 	var buttonDim = {};
 	buttonDim.split = d3.select('button#split').node().getBoundingClientRect();
@@ -206,7 +223,7 @@ function makeForce() {
 		toggle ? split() : unite();
 		toggle ? d3.select(this).html('unite') : d3.select(this).html('split');
 		toggle = !toggle;
-		
+
 
 	}); // split button listener
 
@@ -220,7 +237,7 @@ function makeForce() {
 		simulation
 			.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.3 : width * 0.7; }).strength(0.7) )
 			.force('yPos', d3.forceY(height/2).strength(0.7));
-			
+
 		simulation.alpha(0.2);
 
 		simulation.restart();
@@ -235,7 +252,7 @@ function makeForce() {
 		simulation
 			.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.5 : width * 0.5; }).strength(0.5))
 			.force('yPos', d3.forceY(height/2).strength(0.5));
-			
+
 		simulation.alpha(0.2);
 
 		simulation.restart();

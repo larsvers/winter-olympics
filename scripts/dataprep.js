@@ -1,5 +1,5 @@
 
-window.data = window.data || {};
+window.data = window.data || {}; // make the data global
 
 
 d3.queue()
@@ -48,6 +48,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
       games: el.games,
       host_city: el.host_city,
       host_country: el.host_country,
+      country_lookup: el.country_lookup,
       place_id: el.place_id,
       opened: el.opened,
       top_nation: el.top_nation,
@@ -111,6 +112,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
       event_id: parseInt(el.event_id),
       events: parseInt(el.events),
 
+      place_id: el.place_id,
       place: el.place,
       sport: el.sport,
       discipline: el.discipline
@@ -144,8 +146,10 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
 
 
   dataprepMap();
+  dataprepText();
   dataprepGrid();
   dataprepForce();
+  dataprepTreemap();
 
 } // dataprep()
 
