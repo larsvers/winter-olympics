@@ -48,15 +48,28 @@
 
 	<!-- other -->
 
-	<div class="tooltip"></div>
+	<div id="other">
+		
+		<div class="tooltip"></div>
 
-	<div class="tooltip-center"></div>
-	<div class="tooltip-left"></div>
+		<div class="tooltip-center"></div>
+		<div class="tooltip-left"></div>
 
-	<div class="force-text" id="left"></div>
-	<div class="force-text" id="right"></div>
+		<div class="force-text" id="left"></div>
+		<div class="force-text" id="right"></div>
 
-	<button class="force" id="split">split</button>
+		<button class="force" id="split">split</button>
+
+	</div>
+
+	<div class="hide" id="modal-container">
+		<div id="modal-header">
+			<h3></h3>
+			<button>&times;</button>
+		</div>
+		<div id="modal">
+		</div>
+	</div>
 
 
 	<!-- Scripts -->
@@ -75,6 +88,7 @@
 
 	<script src="../scripts/dataprepForce.js"></script>
 	<script src="../force/force.js"></script>
+	<script src="../force/force-multiple.js"></script>
 
 	<script src="../scripts/dataprepTreemap.js"></script>
 	<script src="../treemap/treemap.js"></script>

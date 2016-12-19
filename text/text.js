@@ -20,6 +20,15 @@ function makeText() {
 
 
 
+  var t = d3.timer(function(elapsed){
+    if (elapsed > 3500) {
+      map.flyTo(data.segments[startChapter]); // initial flight path
+      t.stop();
+    }
+  });
+  
+
+
 	// emit data upon scroll
 
 	var containerPos = getWindowOffset(d3.select('div.col#text').node());
@@ -167,6 +176,12 @@ function makeText() {
   } // changeCountryBackground()
 
 
+  map.on('moveend', function() {
+
+    log('center', map.getCenter());
+    log('zoom', map.getZoom());
+
+  });
 
 
 

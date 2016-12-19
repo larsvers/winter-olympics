@@ -15,14 +15,19 @@ function dataprepForce() {
 
 		  return {
 
-		    comp_total: parseInt(el.comp_total),
-		    comp_men: parseInt(el.comp_men),
-		    comp_women: parseInt(el.comp_women),
-		    women_ratio: parseFloat(el.women_ratio),
+		    place_id: el.place_id,
+		    host_country: el.host_country,
+		    host_city: el.host_city,
+		    year: parseInt(el.year, 10),
 
-		    sports: parseInt(el.sports),
-		    disciplines: parseInt(el.disciplines),
-		    events: parseInt(el.events),
+		    comp_total: parseInt(el.comp_total, 10),
+		    comp_men: parseInt(el.comp_men, 10),
+		    comp_women: parseInt(el.comp_women, 10),
+		    women_ratio: parseFloat(el.women_ratio, 10),
+
+		    sports: parseInt(el.sports, 10),
+		    disciplines: parseInt(el.disciplines, 10),
+		    events: parseInt(el.events, 10)
 
 		  }; // returned mapped object
 
@@ -33,6 +38,7 @@ function dataprepForce() {
   // log('force', data.events_force);
 
   makeForce();
+
 
 } // dataprepForce()
 

@@ -13,31 +13,31 @@ var getAxisLabel = function(name) { return d3.selectAll('.tick > text').filter(f
 
 var getWindowOffset = function(elem) {
 
-    // from http://javascript.info/tutorial/coordinates
-    // Note that there are 2 coordinate systems: The document (the page) and the window (the screen).
-    // The document origin can be beyond the top of  the screen - the screens origin will always be the upper left corner.
-    // getBoundingClientRect gets us the position relative to the document. 
-    // To get from the document coords to the window coords, we need to add the scroll offset...
+  // from http://javascript.info/tutorial/coordinates
+  // Note that there are 2 coordinate systems: The document (the page) and the window (the screen).
+  // The document origin can be beyond the top of  the screen - the screens origin will always be the upper left corner.
+  // getBoundingClientRect gets us the position relative to the document. 
+  // To get from the document coords to the window coords, we need to add the scroll offset...
 
-    // (1) get key elements
-    var box = elem.getBoundingClientRect()
-    
-    var body = document.body
-    var docElem = document.documentElement
-    
-    // (2) get the scroll offset
-    var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
-    var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
-    
-    // (3) get the document offset (which should be 0 apart from some Firefox peculiarity) 
-    var clientTop = docElem.clientTop || body.clientTop || 0
-    var clientLeft = docElem.clientLeft || body.clientLeft || 0
-    
-    // (4) get the position of the element from the document top, add the scroll position to get to the window coordinate system (and subtract the FF peculiarity)
-    var top  = box.top + scrollTop - clientTop
-    var left = box.left + scrollLeft - clientLeft
-    
-    return { top: Math.round(top), left: Math.round(left) }
+  // (1) get key elements
+  var box = elem.getBoundingClientRect()
+  
+  var body = document.body
+  var docElem = document.documentElement
+  
+  // (2) get the scroll offset
+  var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
+  var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
+  
+  // (3) get the document offset (which should be 0 apart from some Firefox peculiarity) 
+  var clientTop = docElem.clientTop || body.clientTop || 0
+  var clientLeft = docElem.clientLeft || body.clientLeft || 0
+  
+  // (4) get the position of the element from the document top, add the scroll position to get to the window coordinate system (and subtract the FF peculiarity)
+  var top  = box.top + scrollTop - clientTop
+  var left = box.left + scrollLeft - clientLeft
+  
+  return { top: Math.round(top), left: Math.round(left) }
 
 } // getWindowOffset()
 
@@ -65,3 +65,41 @@ window.onresize = function() {
 	makeTreemap();
 
 }
+
+
+// --- Show multiple button --- //
+
+d3.selectAll('.flex-grid#bottom .col').on('mousedown', function() {
+
+
+    var vis = d3.select(this).attr('id');
+
+    d3.selectAll('#main').classed('blurred', true);
+    d3.selectAll('#map').classed('blurred', true);
+    d3.selectAll('#other').classed('blurred', true);
+
+    d3.select('#modal-container').classed('show', true);
+    d3.select('#modal-container').classed('hide', false);
+
+
+    d3.select('#modal-container h3').html('Athletes and their gender');
+    d3.select('#modal')
+      .call(makeForceMultiple);
+
+
+});
+    
+d3.select('#modal-header button').on('mousedown', function() {
+
+    d3.selectAll('#modal *').remove();
+
+    d3.selectAll('#main').classed('blurred', false);
+    d3.selectAll('#map').classed('blurred', false);
+    d3.selectAll('#other').classed('blurred', false);
+
+    d3.select('#modal-container').classed('show', false);
+    d3.select('#modal-container').classed('hide', true);
+
+
+
+});

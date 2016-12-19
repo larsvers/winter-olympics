@@ -2,15 +2,34 @@
 /* === Force CSS === */
 
 .force-text {
-
 	position: absolute;
 	font-size: 0.7em;
-
 }
 
 button.force {
-
 	position: absolute;
-
 }
 
+
+/* --- Multiple --- */
+
+.multiple {
+	position: absolute;
+	font-family: 'Open Sans';
+	font-size:  0.65em;
+	background-color: rgba(240,240,255,0.8);
+	padding: 0.1em;
+} /* text */
+
+
+.blue {
+	color: #0066f5;
+} /* text */
+
+button.force-multiple {
+	position: absolute;
+	padding: .15em;
+	font-size: .6em;
+	color: #777;
+	background-color: rgba(240,240,255,1);
+} /* button */

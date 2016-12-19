@@ -85,10 +85,11 @@ function makeMap() {
       container: 'map',
       style: ski,
      	center: [6.874011, 45.926747],
-      zoom: 6,
+      zoom: 2,
       pitch: 0
 
   }); // add map
+
 
 
   mapIt();
@@ -279,3 +280,5 @@ function makeMap() {
     }
 
   }); // mousemove listener
+
+ } // makeMap()
