@@ -84,7 +84,8 @@ d3.selectAll('.flex-grid#bottom .col').on('mousedown', function() {
 
     d3.select('#modal-container h3').html('Nations and medals');
     // d3.select('#modal').call(makeForceMultiple);
-    d3.select('#modal').call(makeGridMultiple);
+    // d3.select('#modal').call(makeGridMultiple);
+    d3.select('#modal').call(makeTreemapMultiple);
 
     // add script to html
 
@@ -100,7 +101,6 @@ d3.select('#modal-header button').on('mousedown', function() {
 
     d3.select('#modal-container').classed('show', false);
     d3.select('#modal-container').classed('hide', true);
-
 
 
 });

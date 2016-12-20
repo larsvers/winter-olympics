@@ -30,7 +30,7 @@ function dataprepTreemap() {
 
 	}); // loop through nested
 
-  // log(data.sports_treemap);
+  log(data.sports_treemap);
   
   makeTreemap();
 

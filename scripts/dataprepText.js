@@ -26,7 +26,7 @@ function dataprepText() {
 
   }); // loop
 
-  log('data.segments', data.segments);
+  // log('data.segments', data.segments);
 
   // makeText();
 

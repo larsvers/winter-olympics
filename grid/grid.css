@@ -86,12 +86,12 @@
 }
 
 
-.multiple.header {
+.grid .multiple.header {
   background-color: transparent;
   color: #5992f7;
 }
 
-.multiple.subline {
+.grid  .multiple.subline {
   background-color: transparent;
   color: #639afb;
 }
