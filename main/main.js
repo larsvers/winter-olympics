@@ -76,16 +76,17 @@ d3.selectAll('.flex-grid#bottom .col').on('mousedown', function() {
 
     d3.selectAll('#main').classed('blurred', true);
     d3.selectAll('#map').classed('blurred', true);
-    d3.selectAll('#other').classed('blurred', true);
+    d3.selectAll('#force-info').classed('blurred', true);
+    // d3.selectAll('.tooltip.tooltip-center.tooltip-left').classed('blurred', false);
 
     d3.select('#modal-container').classed('show', true);
     d3.select('#modal-container').classed('hide', false);
 
+    d3.select('#modal-container h3').html('Nations and medals');
+    // d3.select('#modal').call(makeForceMultiple);
+    d3.select('#modal').call(makeGridMultiple);
 
-    d3.select('#modal-container h3').html('Athletes and their gender');
-    d3.select('#modal')
-      .call(makeForceMultiple);
-
+    // add script to html
 
 });
     
@@ -95,7 +96,7 @@ d3.select('#modal-header button').on('mousedown', function() {
 
     d3.selectAll('#main').classed('blurred', false);
     d3.selectAll('#map').classed('blurred', false);
-    d3.selectAll('#other').classed('blurred', false);
+    d3.selectAll('#force-info').classed('blurred', false);
 
     d3.select('#modal-container').classed('show', false);
     d3.select('#modal-container').classed('hide', true);

@@ -57,7 +57,8 @@ function makeGrid() {
 	var groupSpacing = 4;
 	var cellSpacing = 2;
 	var offsetTop = height / 5;
-	var cellSize = (width - 20 * cellSpacing - 3 * groupSpacing) / 20;
+	var offsetSide = width * 0.075;
+	var cellSize = (width - 20*cellSpacing - 3*groupSpacing - 2*offsetSide) / 20;
 
 
 
@@ -126,7 +127,7 @@ function makeGrid() {
 			.attr('x', function(d,i) {
 				var x0 = Math.floor(i % 20); // 0-19 back to 0
 				var x1 = Math.floor(i/5) % 4; // increases by 1 every 5 and gets back to 0 after 20
-				d.x = x0 * cellSize + x0 * cellSpacing + x1 * groupSpacing; // save the position for the tooltip later
+				d.x = offsetSide + x0 * cellSize + x0 * cellSpacing + x1 * groupSpacing; // save the position for the tooltip later
 				return d.x;
 			})
 	  	.attr('y', function(d,i) {
@@ -147,7 +148,7 @@ function makeGrid() {
 			.attr('x', function(d,i) {
 				var x0 = Math.floor(i % 20); // 0-19 back to 0
 				var x1 = Math.floor(i/5) % 4; // increases by 1 every 5 and gets back to 0 after 20
-				d.x = x0 * cellSize + x0 * cellSpacing + x1 * groupSpacing; // save the position for the tooltip later
+				d.x = offsetSide + x0 * cellSize + x0 * cellSpacing + x1 * groupSpacing; // save the position for the tooltip later
 				return d.x;
 			})
 	  	.attr('y', function(d,i) {
@@ -397,8 +398,8 @@ function makeGrid() {
 
 		if (nodeData === undefined) {
 
-			d3.select('.tooltip-center').style('opacity', 0);
-			d3.select('.tooltip-left').style('opacity', 0);
+			d3.select('.tooltip-center').transition().duration(50).style('opacity', 0);
+			d3.select('.tooltip-left').transition().duration(50).style('opacity', 0);
 
 		}
 
@@ -407,6 +408,12 @@ function makeGrid() {
 	}); // canvas hover listener/handler
 
 
+	d3.select('.main-canvas').on('mouseout', function() {
+
+		d3.select('.tooltip-center').transition().duration(50).style('opacity', 0);
+		d3.select('.tooltip-left').transition().duration(50).style('opacity', 0);
+
+	}); // mouseout listener
 
 
 	// === Build the tooltip HTML === //

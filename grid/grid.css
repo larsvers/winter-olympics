@@ -5,7 +5,7 @@
 
 /* --- Arrowed tooltip --- */
 
-.tooltip-center, .tooltip-left {
+.tooltip-center, .tooltip-left, .tooltip-low {
 
   position: absolute;
 	display: inline-block;
@@ -19,10 +19,11 @@
   background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
   pointer-events: none;
   opacity: 0;
+  z-index: 3;
 
 }
 
-.tooltip-center:after, .tooltip-left:after {
+.tooltip-center:after, .tooltip-left:after, .tooltip-low:after {
   content: "";
   position: absolute;
   top: 100%; /* this determines the arrow position */
@@ -39,6 +40,10 @@
   border-color: #000428 transparent transparent transparent; /* this needs to be adjusted for different arrow positions */
 }
 
+.tooltip-low:after {
+  top: -20px; /* this determines the arrow position  - here: double the border width */
+  border-color: transparent transparent #031E4C transparent; /* this needs to be adjusted for different arrow positions */
+}
 
 /*  --- Tooltip sections --- */
 
@@ -71,3 +76,22 @@
 	text-align: left;
 }
 
+
+/* --- Multiples --- */
+
+#modal div.grid {
+  padding: 0.5em;
+  margin: 0.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075), 0 2px 5px rgba(0, 0, 0, 0.075);
+}
+
+
+.multiple.header {
+  background-color: transparent;
+  color: #5992f7;
+}
+
+.multiple.subline {
+  background-color: transparent;
+  color: #639afb;
+}

@@ -9,7 +9,7 @@ function makeForceMultiple(container) {
 
 	data.events.forEach(function(d, i) {
 
-		container.append('div').attr('class', 'container' + i).attr('id', d.place_id);
+		container.append('div').attr('class', 'force container' + i).attr('id', d.place_id);
 
 		chartIndex[i] = chart().event(d.place_id);
 
@@ -28,7 +28,7 @@ function makeForceMultiple(container) {
 		// log(node_data);
 
 		var width = wWidth * 0.15;
-		var height = width
+		var height = width;
 
 		var event = 'chamonix_1924';
 

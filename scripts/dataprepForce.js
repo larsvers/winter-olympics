@@ -18,6 +18,7 @@ function dataprepForce() {
 		    place_id: el.place_id,
 		    host_country: el.host_country,
 		    host_city: el.host_city,
+		    top_nation: el.top_nation,
 		    year: parseInt(el.year, 10),
 
 		    comp_total: parseInt(el.comp_total, 10),

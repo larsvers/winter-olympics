@@ -40,6 +40,6 @@ function dataprepMap() {
 
   // log('geo_locations', data.geo_locations);
 
-  makeMap();
+  // makeMap();
 
 } // dataprepMap()
