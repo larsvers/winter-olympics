@@ -48,7 +48,6 @@
 
 	<!-- other -->
 
-
 	<div class="tooltip"></div>
 
 	<div class="tooltip-center"></div>
@@ -59,10 +58,17 @@
 		
 		<div class="force-text" id="left"></div>
 		<div class="force-text" id="right"></div>
+		<div class="force-text non-visible" id="center"></div>
 
 		<button class="force" id="split">split</button>
 
 	</div>
+
+	<button class="multiple-button" id="grid-multiple">&#10495;</button>
+	<button class="multiple-button" id="force-multiple">&#10495;</button>
+	<button class="multiple-button" id="treemap-multiple">&#10495;</button>
+
+	<!-- Modal -->
 
 	<div class="hide" id="modal-container">
 		<div id="modal-header">
@@ -77,6 +83,7 @@
 	<!-- Scripts -->
 	
 	<script src="main.js"></script>
+	<script src="../force/force-calc.js"></script>
 	<script src="../scripts/dataprep.js"></script>
 
 	<script src="../scripts/dataprepMap.js"></script>
@@ -91,7 +98,7 @@
 
 	<script src="../scripts/dataprepForce.js"></script>
 	<script src="../force/force.js"></script>
-	<script src="../force/force-multiple.js"></script>
+	<script src="../force/force-multiple-precalc.js"></script>
 
 	<script src="../scripts/dataprepTreemap.js"></script>
 	<script src="../treemap/treemap.js"></script>

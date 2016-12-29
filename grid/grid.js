@@ -14,6 +14,7 @@ function makeGrid() {
 	// === Remove and reset width for redraw === //
 	
 	d3.selectAll('#grid *').remove();
+
 	
 	
 	// === Set up canvas and picking === //
@@ -29,7 +30,7 @@ function makeGrid() {
 
 	var nextCol = 1;
 
-	function genColor(){
+	function genColorGrid(){
 
 	  var ret = [];
 	  // via http://stackoverflow.com/a/15804183
@@ -38,12 +39,12 @@ function makeGrid() {
 	    ret.push((nextCol & 0xff00) >> 8); // G 
 	    ret.push((nextCol & 0xff0000) >> 16); // B
 
-	    nextCol += 1; 
+	    nextCol += 10; 
 	  }
 	  var col = "rgb(" + ret.join(',') + ")";
 	  return col;
 
-	} // genColor()
+	} // genColorGrid()
 
 
 
@@ -80,17 +81,8 @@ function makeGrid() {
 		// --- Scales --- //
 
 		var extent = d3.extent(data, function(d) { return d.medals; });
-
-		// var colours = ['#b8cee9', '#8aa0bb', '#5e748f', '#344a65', '#08253e'] // blue to blue
 		var colours = ['#adceff', '#88b5ff', '#639afb', '#3f81fa', '#0066f5'] // blue to blue
-		// var colours = ['#c1e9cd', '#8fb499', '#608367', '#34543a', '#0b2911'] // green to green
-		// var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue
-
 		var numberScale = d3.scaleQuantile().domain(extent).range(colours); // Lch colour scale picked from http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
-
-		// var colours = ['#adceff', '#639afb', '#0066f5'] // colour extent for piecewise linear scale
-		// var numberScale = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range(colours); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
-
 
 
 		// --- Data for the legend --- //
@@ -160,12 +152,14 @@ function makeGrid() {
 			.attr('fillStyle', function(d) { return numberScale(d.medals); })
 			.attr('fillStyleHidden', function(d) { 
 
-				if (!d.hiddenCol) {
+				// if (!d.hiddenCol) {
 
-					d.hiddenCol = genColor();
+					d.hiddenCol = genColorGrid();
 					colourToNodeGrid[d.hiddenCol] = d;
 
-				} // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNodeGrid-dictionary 
+
+
+				// } // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNodeGrid-dictionary 
 
 				return d.hiddenCol;
 
@@ -329,6 +323,7 @@ function makeGrid() {
 
 	// --- Tooltip --- //
 
+	
 	d3.select('.main-canvas').on('mousemove', function() {
 
 		draw(hiddenCanvas, true); // we only need to draw the hidden canvas when mousing
@@ -344,8 +339,8 @@ function makeGrid() {
 		var mouseX = d3.event.layerX;
 		var mouseY = d3.event.layerY;
 
+		// log('Mouse x', Math.round(mouseX), 'Mouse y', Math.round(mouseY));
 		// log('canvasPos', canvasPos, 'tip', tip, 'tipDim', tipDim, 'arrowDim', arrowDim)
-		
 
 		// get the toolbox for the hidden canvas to pick the colours from where our mouse is, then stringify it in a way our map-object can read it
 		var hiddenCtx = hiddenCanvas.node().getContext('2d');
@@ -356,18 +351,20 @@ function makeGrid() {
 		// get the data from our map !
 		var nodeData = colourToNodeGrid[colKey];
 
-		// if we found some data under our mouse write a tooltip
-		if (nodeData) {
+		if (nodeData) { // if we found some data under our mouse write a tooltip
 
-			// log(nodeData);
+ 			
+ 			// log(nodeData.nation, 'x', Math.round(nodeData.x));
+			
 
-			if (tipDim.width/2 < nodeData.x) {
+			if (tipDim.width/2 < nodeData.x) { // if the tip fits in the center
 
 				// log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'central');
 				// log('node position within canvas', nodeData.y,'\n + canvas position relative to window', Math.round(canvasPos.top),'\n - height of tooltip', tipDim.height,'\n - border-width of triangle', arrowDim);
 
 				// if the tooltip fits comfortably next our left canvas border draw the tooltip with a central arrow				
-
+				
+				
 				d3.select('.tooltip-left').style('opacity', 0); // ..while getting rid of the other one
 
 				tip = d3.select('.tooltip-center')
@@ -375,7 +372,7 @@ function makeGrid() {
 					.style('left', nodeData.x + canvasPos.left - tipDim.width/2 + cellSize/2 + 'px') // as above but removing (width of tooltip / 2) and adding half of cellSize to hit the center 
 					.style('opacity', 0.99); // show if we hover over a node
 
-			} else {
+			} else { // if the tip doesn't fit in the center
 
 				// log('tipDim.width/2', tipDim.width/2, 'nodeData.x', nodeData.x, 'left');
 				// log('node position within canvas', nodeData.y,'\n + canvas position relative to window', Math.round(canvasPos.top),'\n - height of tooltip', tipDim.height,'\n - border-width of triangle', arrowDim);
@@ -501,11 +498,14 @@ function makeGrid() {
 		  d3.select('#tip-body-grid')
 		  	.html(tipBodyHtml);
 
-
 		} // conditional in order to build the tip
 
 	} // buildTip()
 
+
+	// --- Multiple button --- //
+
+	d3.select('#grid-multiple').call(makeMultipleButton, mainCanvas);
 
 
 

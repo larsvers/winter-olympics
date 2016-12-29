@@ -38,6 +38,10 @@ function dataprepForce() {
 
   // log('force', data.events_force);
 
+
+  calculateForceNodes();
+
+
   makeForce();
 
 

@@ -6,6 +6,11 @@
 	font-size: 0.7em;
 }
 
+.force-text#center {
+	background-color: rgba(255,255,255,0.5);
+	color: #666;
+}
+
 button.force {
 	position: absolute;
 }
@@ -14,13 +19,8 @@ button.force {
 /* --- Multiple --- */
 
 .multiple {
-	position: absolute;
-	font-family: 'Open Sans';
-	font-size:  0.65em;
-	background-color: rgba(240,240,255,0.8);
-	padding: 0.1em;
+	background-color: rgba(255, 253, 250, 0.7);
 } /* text */
-
 
 .blue {
 	color: #0066f5;
@@ -31,5 +31,9 @@ button.force-multiple {
 	padding: .15em;
 	font-size: .6em;
 	color: #777;
-	background-color: rgba(240,240,255,1);
+	background-color: rgba(255, 253, 250, 0.7);
 } /* button */
+
+button.force-multiple:hover {
+	background-color: rgba(255, 200, 130, 0.7);
+}

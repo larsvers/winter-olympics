@@ -7,11 +7,11 @@ function makeGridMultiple(container) {
 
 
 	var chartIndex = {}; 
-	var colourToNodeGrid = {}; // define outside make chart as d3 element update will only fill this once as joing lives on even beyond redraw.
+	var colourToNodeGridMulti = {}; // define outside make chart as d3 element update will only fill this once as joing lives on even beyond redraw.
 
 	data.events.forEach(function(d, i) {
 
-		colourToNodeGrid[d.place_id] = {}; // a colour lookup for each event
+		colourToNodeGridMulti[d.place_id] = {}; // a colour lookup for each event
 
 		container.append('div').attr('class', 'grid container' + i).attr('id', d.place_id); // create i container
 
@@ -61,7 +61,7 @@ function makeGridMultiple(container) {
 				    ret.push((nextCol & 0xff00) >> 8); // G 
 				    ret.push((nextCol & 0xff0000) >> 16); // B
 
-				    nextCol += 100; 
+				    nextCol += 10;
 				  }
 				  var col = "rgb(" + ret.join(',') + ")";
 				  return col;
@@ -104,14 +104,14 @@ function makeGridMultiple(container) {
 
 				var t = d3.timer(function(elapsed) {
 
-				  if (elapsed > 2000) {
+				  if (elapsed > 500) {
 				  	databind(data.nations_grid[event]); // ...then update the databind function
 				  	draw(mainCanvas);
 				  	initLabels();
 				  	t.stop();
 				  }
 
-				}); // start a timer that runs the draw function for 500 ms (this needs to be higher than the transition in the databind function)
+				}); // start a timer until elements have been created to calculate positions
 
 
 
@@ -122,30 +122,20 @@ function makeGridMultiple(container) {
 					// --- Scales --- //
 
 					var extent = d3.extent(data, function(d) { return d.medals; });
-
-					// var colours = ['#b8cee9', '#8aa0bb', '#5e748f', '#344a65', '#08253e'] // blue to blue
 					var colours = ['#adceff', '#88b5ff', '#639afb', '#3f81fa', '#0066f5'] // blue to blue
-					// var colours = ['#c1e9cd', '#8fb499', '#608367', '#34543a', '#0b2911'] // green to green
-					// var colours = ['#c1e9cd', '#7fb6ac', '#49848c', '#205267', '#08253e'] // green to blue
-
 					var numberScale = d3.scaleQuantile().domain(extent).range(colours); // Lch colour scale picked from http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker
-
-					// var colours = ['#adceff', '#639afb', '#0066f5'] // colour extent for piecewise linear scale
-					// var numberScale = d3.scaleLinear().domain([extent[0], d3.quantile(extent,0.5),extent[1]]).range(colours); // piecewise scale for the text showing all text in black apart from the biggest (= darkest) rectangles
-
 
 
 					// --- Bind --- //
 
-					var join = custom.selectAll('custom.rect')
+					var joinGridMultiple = custom.selectAll('custom.rect-multiple')
 						.data(data.sort(function(a, b) {
 			  			return d3.ascending(a.medals, b.medals);
 							}, function(d) { return d.nation; 
-						}));
-
-					var enterSel = join.enter()
+						}))
+						.enter()
 						.append('custom')
-						.attr('class', 'rect')
+						.attr('class', 'rect-multiple')
 						.attr('width', cellSize)
 						.attr('height', cellSize)
 						.attr('x', function(d,i) {
@@ -167,19 +157,15 @@ function makeGridMultiple(container) {
 									
 							d.hiddenCol = genColor();
 
-							colourToNodeGrid[event][d.hiddenCol] = d;
+							colourToNodeGridMulti[event][d.hiddenCol] = d;
+
+
 
 							// } // here we (1) add a unique colour as property to each element and (2) map the colour to the node in the colourToNodeGrid-dictionary 
 
 							return d.hiddenCol;
 
 						});
-
-					var exitSel = join.exit()
-						.transition()
-						.attr('width', 0)
-						.attr('height', 0)
-						.remove();
 
 
 				} // databind()
@@ -201,7 +187,7 @@ function makeGridMultiple(container) {
 
 					// draw each individual custom element with their properties
 
-					var elements = custom.selectAll('custom.rect'); // this is the same as the join variable, but used here to draw
+					var elements = custom.selectAll('custom.rect-multiple'); // this is the same as the join variable, but used here to draw
 
 					elements.each(function(d,i) {
 
@@ -314,12 +300,12 @@ function makeGridMultiple(container) {
 					// log(hiddenCanvas.attr('id'), colKey);
 
 					// get the data from our map !
-					var nodeData = colourToNodeGrid[event][colKey];
+					var nodeData = colourToNodeGridMulti[event][colKey];
 					
 					// if we found some data under our mouse write a tooltip
 					if (nodeData) {
 
-						// log('country', nodeData.nation, 'x', nodeData.x);
+						// log('grid-multiple', nodeData.nation, Math.round(nodeData.x), colourToNodeGrid);
 
 						// log(nodeData);
 

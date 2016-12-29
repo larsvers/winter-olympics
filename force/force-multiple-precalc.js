@@ -1,12 +1,9 @@
 
-
 function makeForceMultiple(container) {
 
-log(data);
-
 	var formatPerc = d3.format('.0%');
-
 	var chartIndex = {}; 
+	var bounded = true;
 
 	data.events.forEach(function(d, i) {
 
@@ -28,131 +25,70 @@ log(data);
 
 		// log(node_data);
 
-		var width = wWidth * 0.15;
-		var height = width;
+		var width = wWidth * 0.15, height = width; // this needs to be the same as in force-calc.js (the script setting off the worker)
 
 		var event = 'chamonix_1924';
 
 		function my(selection){
 
 
-			selection.each(function(data,i) {
+			selection.each(function(data, i) {
 
-				// === Set up canvas === //
+				// === Set up === //
+
+				// --- Data and locals --- //
+
+				var nodes = data.force_positions[event];
 
 				var simulation;
 				var padding, canvasPos = {}, canvasDim;
 
-				// === Set up canvas === //
+				// --- Canvas --- //
 
 				var canvas = d3.select(this).append('canvas').attr('id', event).attr('width', width).attr('height', height);
 				var context = canvas.node().getContext('2d');
 
 
+				// === Draw graph === //
+
+				drawGraph();
+				initLabels();
+
+				// --- Drawing functions --- //
 
 
-				// === Get simulation data === //
+				function drawGraph() {
 
-				getSimulationData(event); // this will move to the select handler later
+					// if called with an argument (when the worker returns) it updates 'nodes' 
+					// otherwise (called from the split listener) it doesn't as the nodes get passed in there
+					// if (arguments.length) var nodes = nodes;
 
-				function getSimulationData(event) {
+					context.clearRect(0, 0, width, height);
+					context.save();
 
-					var simulationData = data.events_force[event][0]; // get data, taken from the global data object
+					nodes.forEach(drawNode);
 
-					var nodes = [];
+					context.restore()
 
-					d3.range(simulationData.comp_men).forEach(function(el, i) {
-
-						var obj = {};
-						obj.gender = 'men';
-						obj.cluster = 0;
-						obj.radius = 1.5;
-						obj.colour = '#639afb';
-						obj.x = width/2 + (Math.random() - 10);
-						obj.y = height/2 + (Math.random());
-
-						nodes.push(obj);
-
-					}); // get men nodes
+				} // drawGraph()
 
 
-					d3.range(simulationData.comp_women).forEach(function(el, i) {
+				function drawNode(d) {
 
-						var obj = {};
-						obj.gender = 'women';
-						obj.cluster = 1;
-						obj.radius = 1.5;
-				    obj.colour = '#fbc463';
-						obj.x = width/2 + (Math.random() + 10);
-						obj.y = height/2 + (Math.random());
-
-						nodes.push(obj);
-
-					}); // get women nodes
-
-
-					initSimulation(nodes);
-					// initLabels() // draw labels
-
-				} // getSimulationData()
-
-
-
-
-				// === Set up simulation params === //
-
-				function initSimulation(nodes) {
-
-					// log(nodes);
-
-					simulation = d3.forceSimulation(nodes)
-						.alpha(0.3)
-						.force('charge', d3.forceManyBody().strength(-1.5))
-						.force('xPos', d3.forceX(width/2).strength(1))
-						.force('yPos', d3.forceY(height/2).strength(1))
-						.force('collide', d3.forceCollide(1.5));
-
-					simulation.on('tick', ticked);
-
-					function ticked() {
-
-
-						context.clearRect(0, 0, width, height);
-						context.save();
-
-						nodes.forEach(drawNode);
-
-						context.restore()
-
-						// stop the simulation at alpha 0.1
-						if (simulation.alpha() < 0.1) {
-							simulation.stop()		
-						}
-
-					} // ticked()
-
-
-					function drawNode(d) {
-
-						// keep the nodes with the canvas bounds. Remove to let them free...
+					if (bounded) {
+						// keep the nodes within the canvas bounds. Remove to let them free...
 						d.x = Math.max(d.radius, Math.min(width - d.radius, d.x));
 						d.y = Math.max(d.radius, Math.min(height - d.radius, d.y));
+					}
 
-						context.beginPath();
-						context.moveTo(d.x + d.radius, d.y);
-						context.arc(d.x, d.y, d.radius, 0, 2 * Math.PI);
-						context.fillStyle = d.colour;
-						context.fill();
+					context.beginPath();
+					context.moveTo(d.x + d.radius, d.y);
+					context.arc(d.x, d.y, d.radius, 0, 2 * Math.PI);
+					context.fillStyle = d.colour;
+					context.fill();
 
-					} // drawNode()
+				} // drawNode()
 
-
-				} // initSimulation()
-
-
-
-
-				// === Add labels === //
 
 				function initLabels(){
 
@@ -169,11 +105,11 @@ log(data);
 
 					// --- Add button --- //
 
-					var button = d3.select('div#' + event).append('button').attr('class', 'force-multiple').attr('id', event).html('&#9903;');
+					var button = d3.select('div#' + event).append('button').attr('class', 'force-multiple').attr('id', event).html('&#9901;');
 
 
 					// --- Position text and buttons (after waiting for canvases to be built) --- //
-					
+
 					var t = d3.timer(function(elapsed){
 
 						if (elapsed > 150) {
@@ -201,8 +137,6 @@ log(data);
 								.style('left', canvasPos.left + canvasDim.width/2 - footerDim.width/2 + 'px');
 
 
-
-
 							// --- Position button --- //
 
 							button
@@ -212,7 +146,7 @@ log(data);
 
 							// --- Register button listener --- //
 
-							var toggle = true;
+							var toggle = false;
 
 							button.on('mousedown', function() {
 
@@ -222,71 +156,72 @@ log(data);
 
 							}); // split button listener
 
+							t.stop(); // SWITCH SPLIT() AND UNITE()
 
-							t.stop();
-
-						}
-
+						} // elapsed conditional
 
 					}); // d3.timer()
-
-
 
 				} // initLabels()
 
 
 
-
-				// === Updates === //
-
-
-				// --- Initial animation --- //
-
-				var t = d3.timer(function(elapsed) {
-
-					if (elapsed > 100) split();
-					if (elapsed > 2000) unite();
-					if (elapsed > 2000) t.stop();
-
-				}); // timer
-
-
-
-
-
-
-
-				// --- Handlers --- //
+				// === Interactivity === //
 
 				function split() {
 
-					simulation.stop();
+					if(!simulation) {
 
-					simulation
-						.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.3 : width * 0.7; }).strength(0.7) )
-						.force('yPos', d3.forceY(height/2).strength(0.7));
+						// if the simulation has NOT been set up yet, set it up
 
-					simulation.alpha(0.2);
+						simulation = d3.forceSimulation(nodes)
+							.alpha(0.2)
+							.force('charge', d3.forceManyBody().strength(-2))
+							.force('collide', d3.forceCollide(1.5))
+							.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.3 : width * 0.7; }).strength(0.7))
+							.force('yPos', d3.forceY(height/2).strength(0.7));
 
-					simulation.restart();
+						simulation.on('tick', drawGraph);
+
+					} else {
+
+						// if the simulation HAS been set up already, just update it
+
+						simulation.stop();
+						simulation.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.3 : width * 0.7; }).strength(0.7))
+						simulation.alpha(0.2).restart();
+
+					} // if else conditional
 
 				} // split()
 
 
 				function unite() {
 
-					simulation.stop();
+					if(!simulation) {
 
-					simulation
-						.force('xPos', d3.forceX(function(d) { return d.cluster === 0 ? width * 0.5 : width * 0.5; }).strength(0.5))
-						.force('yPos', d3.forceY(height/2).strength(0.5));
+						// if the simulation has NOT been set up yet, set it up
+	
+						simulation = d3.forceSimulation(nodes)
+							.alpha(0.2)
+							.force('charge', d3.forceManyBody().strength(-2))
+							.force('collide', d3.forceCollide(1.5))
+							.force('xPos', d3.forceX(width/2).strength(0.7))
+							.force('yPos', d3.forceY(height/2).strength(0.7));
 
-					simulation.alpha(0.2);
+						simulation.on('tick', drawGraph);
 
-					simulation.restart();
+					} else {
+
+						// if the simulation HAS been set up already, just update it
+
+						simulation.stop();
+						simulation.force('xPos', d3.forceX(width/2).strength(0.7))
+						simulation.alpha(0.2).restart();
+
+					} // if else conditional
 
 				} // unite()
-
 
 
 			}); // selection.each()

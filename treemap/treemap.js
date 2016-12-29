@@ -503,4 +503,10 @@ function makeTreemap() {
 	} // buildTip()
 
 
+
+	// --- Make multiple button --- //
+
+	d3.select('#treemap-multiple').call(makeMultipleButton, mainCanvas)
+
+
 } // makeTreemap()

@@ -17,7 +17,6 @@ function makeForce() {
 
 	var width = wWidth * 0.325, height = wHeight * 0.29;
 	var simulation;
-	var formatPerc = d3.format('.0%');
 	var padding, canvasPos, canvasDim;
 
 	// === Set up canvas === //
@@ -135,6 +134,7 @@ function makeForce() {
 		
 		d3.select('.force-text#left').html(leftText);
 		d3.select('.force-text#right').html(rightText);
+		d3.select('.force-text#center').html('Nodes are being calculated - at 0%');
 
 		// --- Position text --- //
 
@@ -143,6 +143,7 @@ function makeForce() {
 		canvasDim = canvas.node().getBoundingClientRect();
 		var leftDim = d3.select('#left').node().getBoundingClientRect();
 		var rightDim = d3.select('#right').node().getBoundingClientRect();
+		var centerDim = d3.select('#center').node().getBoundingClientRect();
 
 
 		var positions = {
@@ -165,6 +166,10 @@ function makeForce() {
 					wide: canvasPos.left + canvasDim.width - rightDim.width - padding + 'px',
 					tight: canvasPos.left + canvasDim.width - rightDim.width - padding + 'px'
 				}
+			},
+			centerText: {
+				top: canvasPos.top + canvasDim.height/2 - centerDim.height/2 + 'px',
+				left: canvasPos.left + canvasDim.width/2 - centerDim.width/2 + 'px'
 			}
 		};
 
@@ -178,9 +183,17 @@ function makeForce() {
 			.style('top', wide ? positions.rightText.top.wide : positions.rightText.top.tight)
 			.style('left', wide ? positions.rightText.left.wide : positions.rightText.left.tight);
 
+		d3.select('.force-text#center')
+			.style('top', positions.centerText.top)
+			.style('left', positions.centerText.left);
+
 
 	} // initLabels()
 
+
+	// --- Make multiple button --- //
+
+	d3.select('#force-multiple').call(makeMultipleButton, canvas, 2)
 
 
 	// === Updates === //

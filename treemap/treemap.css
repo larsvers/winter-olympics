@@ -28,10 +28,5 @@ path.domain {
 #modal div.treemap {
   padding: 0;
   margin: 2em 1em 0 1em;
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075), 0 2px 5px rgba(0, 0, 0, 0.075); */
 }
 
-.treemap .multiple.header {
-  background-color: transparent;
-  color: #999;
-}
