@@ -129,12 +129,12 @@ function makeForce() {
 
 		// --- Add text --- //
 
-		var leftText = data.comp_men + ' men competing &middot; ' + formatPerc(1 - data.women_ratio) +' of total';
-		var rightText = data.comp_women + ' women competing &middot; ' + formatPerc(data.women_ratio) +' of total';
+		var leftText = data.comp_men + ' <span class="blue">men</span> competing &middot; ' + formatPerc(1 - data.women_ratio) +' of total';
+		var rightText = data.comp_women + ' <span class="orange">women</span> competing &middot; ' + formatPerc(data.women_ratio) +' of total';
 		
 		d3.select('.force-text#left').html(leftText);
 		d3.select('.force-text#right').html(rightText);
-		d3.select('.force-text#center').html('Nodes are being calculated - at 0%');
+		d3.select('.force-text#center').html('Just some calculations away - at 0%');
 
 		// --- Position text --- //
 
@@ -150,11 +150,11 @@ function makeForce() {
 			leftText: {
 				top: {
 					wide: canvasPos.top + canvasDim.height - leftDim.height - padding + 'px',
-					tight: canvasPos.top + padding + 'px'
+					tight: canvasPos.top + canvasDim.height - 2 * leftDim.height - 2 * padding + 'px'
 				},
 				left: {
 					wide: canvasPos.left + padding + 'px',
-					tight: canvasPos.left + padding + 'px'
+					tight: canvasPos.left + canvasDim.width/2 - leftDim.width/2 + 'px'
 				}
 			},
 			rightText: {
@@ -164,7 +164,7 @@ function makeForce() {
 				},
 				left: {
 					wide: canvasPos.left + canvasDim.width - rightDim.width - padding + 'px',
-					tight: canvasPos.left + canvasDim.width - rightDim.width - padding + 'px'
+					tight: canvasPos.left + canvasDim.width/2 - rightDim.width/2 + 'px'
 				}
 			},
 			centerText: {
@@ -172,6 +172,7 @@ function makeForce() {
 				left: canvasPos.left + canvasDim.width/2 - centerDim.width/2 + 'px'
 			}
 		};
+
 
 		var wide = leftDim.width + rightDim.width + 2 * padding < canvasDim.width ? true : false;
 
@@ -191,9 +192,18 @@ function makeForce() {
 	} // initLabels()
 
 
+	// --- Make header --- //
+
+	var forceHeader = makeVisLabel().canvas(canvas).text('Athletes and Gender').position('top');
+
+	d3.select('.vis-header#force').call(forceHeader);
+
+
 	// --- Make multiple button --- //
 
-	d3.select('#force-multiple').call(makeMultipleButton, canvas, 2)
+	var forceMultiButton = makeMultipleButton().canvas(canvas).paddingFactor(3);
+	
+	d3.select('#force-multiple').call(forceMultiButton);
 
 
 	// === Updates === //

@@ -4,7 +4,10 @@
 .force-text {
 	position: absolute;
 	font-size: 0.7em;
+	color: #444;
 }
+
+
 
 .force-text#center {
 	background-color: rgba(255,255,255,0.5);
@@ -25,6 +28,10 @@ button.force {
 .blue {
 	color: #0066f5;
 } /* text */
+
+.orange {
+	color: #FBC463;
+}
 
 button.force-multiple {
 	position: absolute;

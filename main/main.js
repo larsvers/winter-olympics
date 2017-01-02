@@ -58,6 +58,8 @@ var forceNodes = false; // are the force node positions calculated already?
 
 var forceNodesProgress = 0;
 
+
+
 // --- Responisve redraw --- //
 
 window.onresize = function() {
@@ -71,26 +73,75 @@ window.onresize = function() {
 
 } // onresize()
 
+
+
+// --- Make visual labels --- //
+
+// Composition variant
+
+function makeVisLabel() {
+
+  var canvas, text = 'headline', position = 'top';
+
+  function my(selection) {
+
+    selection.html(text);
+
+    var labelDim = selection.node().getBoundingClientRect();
+    var canvasDim = canvas.node().getBoundingClientRect();
+    var canvasPos = getWindowOffset(canvas.node());
+    var padding = 5;
+
+    // log('selection', selection.node(), 'canvas', canvas.node(), 'labelDim', labelDim, 'canvasDim', canvasDim, 'canvasPos', canvasPos, 'padding', padding)
+
+    selection
+      .style('top', position === 'top' 
+        ? canvasPos.top + padding + 'px' 
+        : canvasPos.top + canvasDim.height - labelDim.height - padding + 'px')
+      .style('left', position === 'top' 
+        ? canvasPos.left + canvasDim.width/2 - labelDim.width/2 + 'px'
+        : canvasPos.left + canvasDim.width - labelDim.width - padding + 'px');
+
+  } // my()
+
+  my.canvas = function(_) { if (!arguments.length) return canvas; canvas = _; return my; }
+  my.text = function(_) { if (!arguments.length) return text; text = _; return my; }
+  my.position = function(_) { if (!arguments.length) return position; position = _; return my; }
+
+  return my;
+
+} // makeVisLabel()
+
+
+
 // --- Build multiple button --- //
 
-function makeMultipleButton(selection, canvas, paddingFactor) {
+function makeMultipleButton() {
 
-  paddingFactor = paddingFactor || 1; // === 1 if 3rd argument empty
+  var canvas, paddingFactor = 1;
 
-  var buttonDim = selection.node().getBoundingClientRect();
-  var canvasDim = canvas.node().getBoundingClientRect();
-  var canvasPos = getWindowOffset(canvas.node());
-  var padding = { top: 10 * paddingFactor, left: 10 }
+  function my(selection) {
 
-  // log('selection', selection.node(), 'canvas', canvas.node(), 'buttonDim', buttonDim, 'canvasDim', canvasDim, 'canvasPos', canvasPos, 'padding', padding)
-  // log('top', canvasPos.top + canvasDim.height - buttonDim.height - padding);
-  // log('left', canvasPos.left + canvasDim.width - buttonDim.width - padding);
+    var buttonDim = selection.node().getBoundingClientRect();
+    var canvasDim = canvas.node().getBoundingClientRect();
+    var canvasPos = getWindowOffset(canvas.node());
+    var padding = { top: 10 * paddingFactor, left: 10 }
 
-  selection
-    .style('top', canvasPos.top + canvasDim.height - buttonDim.height - padding.top + 'px')
-    .style('left', canvasPos.left + canvasDim.width - buttonDim.width - padding.left + 'px');
+    // log('selection', selection.node(), 'canvas', canvas.node(), 'buttonDim', buttonDim, 'canvasDim', canvasDim, 'canvasPos', canvasPos, 'padding', padding)
 
-} // makeMultipleButton() - used in each of the 3 vises
+    selection
+      .style('top', canvasPos.top + padding.top + 'px')
+      .style('left', canvasPos.left + canvasDim.width - buttonDim.width - padding.left + 'px');
+
+  } // my()
+
+  my.canvas = function(_) { if (!arguments.length) return canvas; canvas = _; return my; }
+  my.paddingFactor = function(_) { if (!arguments.length) return paddingFactor; paddingFactor = _; return my; }
+
+  return my;
+
+} // makeMultipleButton()
+
 
 
 // --- Show multiple button --- //

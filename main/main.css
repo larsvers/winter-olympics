@@ -30,6 +30,21 @@ a:link, a:visited, a:hover, a:active {
 }
 
 
+
+/* --- Headlines --- */
+
+.vis-header {
+
+	position: absolute;
+	max-width: 25vw;
+	color: #555;
+	font-size: 0.8em;
+	/* background-color: rgba(250, 250, 255, .7); */
+
+}
+
+
+
 /* --- Tooltip --- */
 
 div.tooltip {
@@ -78,6 +93,8 @@ button:hover {
 /* --- Multiple buttons --- */
 
 button.multiple-button  {
+	font-size: 1em;
+	padding: 0.2em;
 	position: absolute;
 }
 

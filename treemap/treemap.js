@@ -504,9 +504,22 @@ function makeTreemap() {
 
 
 
+
+
+	// --- Make header --- //
+
+	var treemapHeader = makeVisLabel().canvas(mainCanvas).text('Events').position('bottom');
+
+	d3.select('.vis-header#treemap').call(treemapHeader);
+
+
+
 	// --- Make multiple button --- //
 
-	d3.select('#treemap-multiple').call(makeMultipleButton, mainCanvas)
+	var treemapMultiButton = makeMultipleButton().canvas(mainCanvas);
+	
+	d3.select('#treemap-multiple').call(treemapMultiButton);
+
 
 
 } // makeTreemap()

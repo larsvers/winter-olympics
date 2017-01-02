@@ -503,9 +503,20 @@ function makeGrid() {
 	} // buildTip()
 
 
+
+	// --- Make header --- //
+
+	var gridHeader = makeVisLabel().canvas(mainCanvas).text('Nations and Medals').position('top');
+
+	d3.select('.vis-header#grid').call(gridHeader);
+
+
+
 	// --- Multiple button --- //
 
-	d3.select('#grid-multiple').call(makeMultipleButton, mainCanvas);
+	var gridMultiButton = makeMultipleButton().canvas(mainCanvas);
+	
+	d3.select('#grid-multiple').call(gridMultiButton);
 
 
 
