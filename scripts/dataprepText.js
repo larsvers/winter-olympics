@@ -28,6 +28,6 @@ function dataprepText() {
 
   // log('data.segments', data.segments);
 
-  // makeText();
+  makeText();
 
 }

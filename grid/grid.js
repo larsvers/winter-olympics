@@ -105,11 +105,60 @@ function makeGrid() {
 
 
 
+
+var shmoemp = [
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'Germany' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'Austria' },
+	{ medals: 40, gold: 4, silver: 2, bronze: 1, name: 'Suisse' },
+	{ medals: 40, gold: 3, silver: 2, bronze: 1, name: 'UK' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 15, name: 'US' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'Libya' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'P' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'A' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'B' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'C' },
+	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'D' }
+]
+
+
+
+		var test = data.sort(function(a, b) {
+
+			if (a.medals < b.medals) return -1;
+			if (a.medals > b.medals) return 1;
+			if (a.gold < b.gold) return -1;
+			if (a.gold > b.gold) return 1;
+			if (a.silver < b.silver) return -1;
+			if (a.silver > b.silver) return 1;
+			if (a.bronze < b.bronze) return -1;
+			if (a.bronze > b.bronze) return 1;
+
+		});
+
+		log('test', test);
+
+
+
+
+
+
+
+
+
+
 		// --- Bind --- //
 
 		var join = custom.selectAll('custom.rect')
 			.data(data.sort(function(a, b) {
-  			return d3.ascending(a.medals, b.medals);
+					// 4 levels of sorting (if medals are equal, sort by gold, if gold is equal sort by silver...)
+					if (a.medals < b.medals) return -1;
+					if (a.medals > b.medals) return 1;
+					if (a.gold < b.gold) return -1;
+					if (a.gold > b.gold) return 1;
+					if (a.silver < b.silver) return -1;
+					if (a.silver > b.silver) return 1;
+					if (a.bronze < b.bronze) return -1;
+					if (a.bronze > b.bronze) return 1;
 				}, function(d) { return d.nation; 
 			}));
 

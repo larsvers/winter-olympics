@@ -130,7 +130,15 @@ function makeGridMultiple(container) {
 
 					var joinGridMultiple = custom.selectAll('custom.rect-multiple')
 						.data(data.sort(function(a, b) {
-			  			return d3.ascending(a.medals, b.medals);
+								// 4 levels of sorting (if medals are equal, sort by gold, if gold is equal sort by silver...)
+								if (a.medals < b.medals) return -1;
+								if (a.medals > b.medals) return 1;
+								if (a.gold < b.gold) return -1;
+								if (a.gold > b.gold) return 1;
+								if (a.silver < b.silver) return -1;
+								if (a.silver > b.silver) return 1;
+								if (a.bronze < b.bronze) return -1;
+								if (a.bronze > b.bronze) return 1;
 							}, function(d) { return d.nation; 
 						}))
 						.enter()

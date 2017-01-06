@@ -147,8 +147,8 @@ function calculateForceNodes() {
 
 			forceNodes = true;  // Set forceNodes to true indicating that the node positions for the force have been calculated. They can now be initiated from main.js
 
-
 		} // conditional
+
 
 		console.timeEnd(event); // debug
 
