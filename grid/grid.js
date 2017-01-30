@@ -4,7 +4,7 @@
 
 // --- Globals --- //
 
-var colourToNodeGrid = {}; // define outside make chart as d3 element update will only fill this once as joing lives on even beyond redraw.
+var colourToNodeGrid = {}; // define outside make chart as d3 element update will only fill this once as join lives on even beyond redraw.
 
 
 // --- Main function --- //
@@ -104,48 +104,7 @@ function makeGrid() {
 		}); // produce legendData array of object holding info on colour and range for each bin.
 
 
-
-
-var shmoemp = [
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'Germany' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'Austria' },
-	{ medals: 40, gold: 4, silver: 2, bronze: 1, name: 'Suisse' },
-	{ medals: 40, gold: 3, silver: 2, bronze: 1, name: 'UK' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 15, name: 'US' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'Libya' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'P' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'A' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'B' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'C' },
-	{ medals: 20, gold: 4, silver: 2, bronze: 1, name: 'D' }
-]
-
-
-
-		var test = data.sort(function(a, b) {
-
-			if (a.medals < b.medals) return -1;
-			if (a.medals > b.medals) return 1;
-			if (a.gold < b.gold) return -1;
-			if (a.gold > b.gold) return 1;
-			if (a.silver < b.silver) return -1;
-			if (a.silver > b.silver) return 1;
-			if (a.bronze < b.bronze) return -1;
-			if (a.bronze > b.bronze) return 1;
-
-		});
-
-		log('test', test);
-
-
-
-
-
-
-
-
-
-
+		
 		// --- Bind --- //
 
 		var join = custom.selectAll('custom.rect')
@@ -354,9 +313,12 @@ var shmoemp = [
 	// === Listeners / Handlers === //
 
 
-	// --- Updating the grid when chapter changes (as in 'chamonix_1924' to 'stmoritz_1928' --- //
+	// --- Updating the grid when chapter changes (as in 'chamonix_1924' to 'stmoritz_1928'. --- //
+	// --- Note this is a global function to be accessed from anywhere (as in mainly from the text.js script)
 
 	updateGrid = function(chapter) {
+
+		log(data.nations_grid[chapter]);
 
 		databind(data.nations_grid[chapter]); // ...then update the databind function
 		
@@ -372,7 +334,6 @@ var shmoemp = [
 
 	// --- Tooltip --- //
 
-	
 	d3.select('.main-canvas').on('mousemove', function() {
 
 		draw(hiddenCanvas, true); // we only need to draw the hidden canvas when mousing

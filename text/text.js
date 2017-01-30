@@ -44,7 +44,10 @@ function makeText() {
 
 	 	  var chapterName = chapterNames[i];
 
+
 	    if (isElementOnScreen(chapterName)) {
+
+        log(chapterName);
 
         setActiveChapter(chapterName);
         break;
@@ -80,11 +83,24 @@ function makeText() {
 
     var country = d3.select('#' + chapterName).node().dataset.country.split(',');
 
-    updateGrid(chapterName);
+    log('from set...', chapterName);
 
-    updateForce(chapterName);
+    
+    var t = d3.timer(function(elapsed) {
 
-    updateTreemap(chapterName);
+      if (elapsed > 500) {
+
+        updateGrid(chapterName);
+
+        updateForce(chapterName);
+
+        updateTreemap(chapterName);
+
+        t.stop();
+
+      }
+
+    }); // some build-in latency without which the transitions don't work
 
     changeCircleSize(chapterName); // turns the respective circles on / off
 
@@ -168,7 +184,7 @@ function makeText() {
     // turn background of selected country on
 
     country.forEach(function(el) {
-    	log(el);
+
       map.setPaintProperty(el, 'fill-opacity', 0.1);
 
     }); // loop for sarajevo_1984
@@ -178,8 +194,8 @@ function makeText() {
 
   map.on('moveend', function() {
 
-    log('center', map.getCenter());
-    log('zoom', map.getZoom());
+    // log('center', map.getCenter());
+    // log('zoom', map.getZoom());
 
   });
 

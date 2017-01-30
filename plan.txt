@@ -1,0 +1,15 @@
+Plan
+
+Story - Work in text
+Story - Text layout and design
+Story - Build in curtain
+
+Map - Location circle design
+Map - Show more village names
+
+New - Build event chooser
+
+Overall - organise code
+Overall - On modal click: remove all modals
+
+
