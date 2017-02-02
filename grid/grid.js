@@ -253,8 +253,7 @@ function makeGrid() {
 
 		// clear canvas
 
-		context.fillStyle = '#fff';
-		context.fillRect(0, 0, width, height);
+		context.clearRect(0, 0, width, height);
 
 
 		// draw each individual custom element with their properties
@@ -318,7 +317,7 @@ function makeGrid() {
 
 	updateGrid = function(chapter) {
 
-		log(data.nations_grid[chapter]);
+		// log(data.nations_grid[chapter]);
 
 		databind(data.nations_grid[chapter]); // ...then update the databind function
 		

@@ -1,4 +1,4 @@
-
+  
 
 /* === Grid CSS === */
 
@@ -17,6 +17,8 @@
   color: #eee;
   background: #000428;
   background: radial-gradient(circle, #004e92, #000428); /* Standard syntax */
+  box-shadow: 5px 10px 10px rgba(0,0,20,0.25);
+
   pointer-events: none;
   opacity: 0;
   z-index: 3;
@@ -82,7 +84,7 @@
 #modal div.grid {
   padding: 0.5em;
   margin: 0.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075), 0 2px 5px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
 }
 
 

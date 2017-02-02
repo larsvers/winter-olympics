@@ -19,6 +19,8 @@ function makeText() {
 		.html(function(d) { return d.text; });
 
 
+  d3.select('section#' + activeChapterName).classed('active', true);
+
 
   var t = d3.timer(function(elapsed){
     if (elapsed > 3500) {
@@ -52,17 +54,17 @@ function makeText() {
         setActiveChapter(chapterName);
         break;
 
-	    }
+	    } // condition
 
-	  }
+	  } // for loop
 
 	}); // scroll listener
 
 
+  // note: global as used by the buttons in text.js
+	isElementOnScreen = function(id) {
 
-	function isElementOnScreen(id) {
-
-    var element = document.getElementById(id);
+    var element = d3.select('section#' + id).node();
     var bounds = element.getBoundingClientRect();
 
     // log(id, 'bounds.top', Math.round(bounds.top), 'bounds.bottom', Math.round(bounds.bottom), 'test', bounds.top < containerDim.height && bounds.bottom > 0);
@@ -72,18 +74,20 @@ function makeText() {
 	} // isElementOnScreen()
 
 
-	var activeChapterName = startChapter;
+	activeChapterName = startChapter;
 
-	function setActiveChapter(chapterName) {
+  // note: global as used by the buttons in text.js
+	setActiveChapter = function(chapterName) {
 
     if (chapterName === activeChapterName) return;
 
-    d3.select('#' + chapterName).classed('active', true);
-    d3.select('#' + activeChapterName).classed('active', false);
+    changeActiveStatus(chapterName); // function sets menu and section items on active - lives in main.js
 
-    var country = d3.select('#' + chapterName).node().dataset.country.split(',');
+    activeChapterName = chapterName;
 
-    log('from set...', chapterName);
+    var country = d3.select('section#' + chapterName).node().dataset.country.split(',');
+
+    log('from setActiveChapter', chapterName);
 
     
     var t = d3.timer(function(elapsed) {
@@ -98,7 +102,7 @@ function makeText() {
 
         t.stop();
 
-      }
+      } // timer conditional
 
     }); // some build-in latency without which the transitions don't work
 
@@ -108,8 +112,6 @@ function makeText() {
 
     changeCountryBackground(country);
 
-
-    activeChapterName = chapterName;
 
 	} // setActiveChapter()
 
@@ -198,7 +200,5 @@ function makeText() {
     // log('zoom', map.getZoom());
 
   });
-
-
 
 } // makeText()

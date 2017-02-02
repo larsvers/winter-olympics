@@ -21,7 +21,7 @@ function makeForce() {
 
 	// === Set up canvas === //
 
-	var canvas = d3.select('#force').append('canvas').attr('width', width).attr('height', height);
+	var canvas = d3.select('#force').append('canvas').attr('class', 'main-canvas force').attr('width', width).attr('height', height);
 	var context = canvas.node().getContext('2d');
 
 

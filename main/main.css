@@ -8,7 +8,7 @@ html, body {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-family: Arial;
+	font-family: Avenir, Arial;
 	font-size: 100%;
 	vertical-align: baseline;
 	height: 100%;
@@ -24,6 +24,10 @@ a:link, a:visited, a:hover, a:active {
 }
 
 /* --- Canvas --- */
+
+.main-canvas, .hidden-canvas {
+	/* width: 98%; */
+}
 
 .hidden-canvas {
 	display: none;
@@ -56,6 +60,8 @@ div.tooltip {
   color: #eee;
   background: #000428;
 	background: radial-gradient(circle, #004e92, #000428);
+
+	box-shadow: 5px 10px 10px rgba(0,0,20,0.25);
 
   pointer-events: none;
 	z-index: 3;
@@ -129,7 +135,7 @@ button.multiple-button  {
 	align-items: center;
 	
 	width: 90vw;
-	background-color: rgba(255, 255, 252, 1);
+	background-color: rgba(255, 250, 255, 1);
 	margin: 0;
 	border-bottom: 2px solid #fff;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -149,11 +155,11 @@ button.multiple-button  {
 	right: 0.1em;
 	color: #999;
 	font-size: 1.1em;
-	background-color: rgba(255, 255, 252, 1);
+	background-color: rgba(255, 250, 255, 1);
 }
 
 #modal-header button:hover {
-	background-color: rgba(255, 255, 252, 1);
+	background-color: rgba(255, 250, 255, 1);
 	color: #000;
 }
 
@@ -167,7 +173,7 @@ button.multiple-button  {
 
 	width: 90vw;
 	height: 85vh;
-	background-color: rgba(255, 255, 252, 1);
+	background-color: rgba(255, 250, 255, 1);
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 	margin: 0;
 

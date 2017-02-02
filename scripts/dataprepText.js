@@ -30,4 +30,6 @@ function dataprepText() {
 
   makeText();
 
+  makeMenu();
+
 }

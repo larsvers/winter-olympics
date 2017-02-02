@@ -77,9 +77,10 @@ function makeMap() {
 
   var satDesat = 'mapbox://styles/larsvers/civ2lcn1i000h2jjuo2iq8ykm';
   var sat = 'mapbox://styles/larsvers/civ2tags1000k2iodkxhum370';
-  var ski = 'mapbox://styles/larsvers/civfpazh700302kl8diskf9vr';
-
+  var ski = 'mapbox://styles/larsvers/civfpazh700302kl8diskf9vr'
+  
   mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw';
+
   map = new mapboxgl.Map({
 
       container: 'map',
@@ -120,7 +121,8 @@ function makeMap() {
       // var colours = ['#3afa5d', '#07dec5', '#053e90']; // neon green to blue
       // var colours = ['#00C200', '#0EE0BD', '#053e90']; // green to blue
       // var colours = ['#606060', '#533a8d', '#0000b8']; // grey to blue
-      var colours = ['#32c900', '#008edc', '#0000b8']; // neon green to blue
+      // var colours = ['#32c900', '#008edc', '#0000b8']; // neon green to blue
+      var colours = ['#639afb', '#3758a6', '#081D59']; // light to dark blue
       colourScale = d3.scaleLinear().domain([colExt[0], d3.quantile(colExt, 0.5), colExt[1]]).range(colours);
 
 
@@ -168,8 +170,6 @@ function makeMap() {
 
         // If there's no layer set yet, add a layer for each event. 
         // Filter the data so that only event-relevant data gets added to this layer.
-
-
 
         if (!map.getLayer(id)) {
 
@@ -219,8 +219,8 @@ function makeMap() {
                   'type': 'exponential',
                   'stops': [
                     [{ zoom: 3, value: capExt[1] }, 1 ],
-                    [{ zoom: 8, value: capExt[1] }, 4 ],
-                    [{ zoom: 12, value: capExt[1] }, 6 ],
+                    [{ zoom: 8, value: capExt[1] }, 2 ],
+                    [{ zoom: 12, value: capExt[1] }, 3 ],
                   ]
                 }
               },

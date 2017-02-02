@@ -49,6 +49,7 @@ var wWidth = window.innerWidth;
 var wHeight = window.innerHeight;
 
 var startChapter = 'chamonix_1924'; // this is the global holding the current place_id
+var activeChapterName = startChapter;
 
 var updateGrid, updateForce, updateTreemap; // functions to update visuals
 
@@ -57,6 +58,8 @@ var modal = false;
 var forceNodes = false; // are the force node positions calculated already?
 
 var forceNodesProgress = 0;
+
+var menuLock = false; // locking (true) and unlicking (false) the menu on double-click
 
 
 
@@ -152,6 +155,7 @@ d3.selectAll('.multiple-button').on('mousedown', function() {
 
     var vis = d3.select(this).attr('id');
 
+    removeModal();
     showModal();
 
     if (vis === 'grid-multiple') {
@@ -188,6 +192,8 @@ function showModal() {
   d3.selectAll('#map').classed('blurred', true);
   d3.selectAll('#force-info').classed('blurred', true);
 
+  d3.selectAll('.multiple-button').classed('blurred', true);
+
   d3.select('#modal-container').classed('showFlex', true);
   d3.select('#modal-container').classed('hide', false);
 
@@ -201,6 +207,8 @@ function removeModal() {
   d3.selectAll('#map').classed('blurred', false);
   d3.selectAll('#force-info').classed('blurred', false);
 
+  d3.selectAll('.multiple-button').classed('blurred', false);
+
   d3.select('#modal-container').classed('show', false);
   d3.select('#modal-container').classed('hide', true);
 
@@ -211,5 +219,53 @@ function removeModal() {
 // star dots HTML-code: &#4968;
 // four dots in square - proportion: HTML-code: &#8759;
 // braille pattern six full dots: HTML-code: &#10495;
+
+
+// setting active menu items and text sections in text.js and menu.js
+
+
+
+function changeActiveStatus(id) {
+
+    d3.selectAll('section').classed('active', false);
+    d3.select('section#' + id).classed('active', true);
+
+    d3.selectAll('li').classed('active', false);
+    d3.select('li#button-' + id).classed('active', true);
+
+} // changeActiveStatus()
+
+
+// --- Handling single vs double-click --- //
+
+function singleDouble(el, onsingle, ondouble) {
+
+  if (el.getAttribute('data-dblclick') == null) {
+
+    el.setAttribute('data-dblclick', 1);
+
+    d3.timeout(function () {
+
+      if (el.getAttribute('data-dblclick') == 1) {
+
+        onsingle();
+
+      }
+
+      el.removeAttribute('data-dblclick');
+
+    }, 250);
+
+  } else {
+
+    el.removeAttribute('data-dblclick');
+
+    ondouble();
+
+  }
+
+} // singleDouble()
+
+
 
 

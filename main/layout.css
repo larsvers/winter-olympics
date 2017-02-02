@@ -2,25 +2,25 @@
 /* === Layout CSS - for desktops and labtops === */
 
 div {
-	margin: 0.1em;
+	margin: 0em;
 }
 
 div#map {
 	position: absolute;
-	height: 70%;
+	height: 100%;
 	width: 100%;
-	border: 3px solid green;
+	/* border: 3px solid green; */
 } /* map behind everything, equals height of top row */
 
 div#main {
 	width: 100vw;
 	height: 100vh;
-	border: 1px dotted blue;
+	/* border: 1px dotted blue; */
 } /* main wrapper fills full page */
 
 div.flex-grid {
 	display: flex;
-	border: 1px solid black;
+	/* border: 1px solid black; */
 } /* the rows */
 
 div.flex-grid#top {
@@ -30,39 +30,36 @@ div.flex-grid#top {
 div.flex-grid#bottom {
 	height: 30%;
 	justify-content: space-between;
+	background-color: rgba(255,255,255,0.95);
 } /* bottom row gets the rest of the height and is aligned along the main axis */
 
+
+div.flex-grid#bottom * {
+	position: relative; /* otherwise #map is above flex-grid. Not entirely sure why, but I #map is absolute positioned and as such potentially on a higher level */
+} 
+
+
 div.col {
-	border: 1px solid grey;
+	/* border: 1px solid grey; */
 	flex: 1;
 } /* all columns get same space */
 
 div.col#text-help {
 	flex: 2;
+	pointer-events: none;
 } /* special column space distribution of 2/3 */
+
+/* Indiviudal specs */
 
 div.col#text {
 	z-index: 1;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
 } /* special column space distribution of 2/3 */
 
-
-
-
-
-
-/* div#main > .col {
-	height: 70%;
-	border: 1px solid green;
+canvas.grid {
+	border-right: 1px solid #eee;
 }
 
-div.col#map{
-	position: relative;
-}
 
-div.col#text {
-	width: 33%;
-	position: absolute;
-	top: 0;
-	left: 66.7%;
-} */
 
