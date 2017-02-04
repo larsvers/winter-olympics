@@ -1,10 +1,22 @@
-
 // === Curtain removal === //
 // the intro screen will be the curtain and upon scroll we also want to trigger zoom-in from finished scroll //
 
+
+function unwrap(selector) {
+
+	var el = document.querySelector(selector); // select element to unwrap (the container element)
+
+	var parent = el.parentNode; // get the element's parent node
+
+	while (el.firstChild) parent.insertBefore(el.firstChild, el); // move all children out of the element
+
+	parent.removeChild(el); // remove the empty element
+
+} // unwrap()
+
+
 function removeCurtain() {
 
-	log('removing?');
 	d3.select('div#container').style('position', 'relative');
 	d3.select('div#curtain').remove();
 
@@ -12,7 +24,6 @@ function removeCurtain() {
 
 function dimCurtain(percent) {
 
-	log('scroll')
 	d3.select('div#curtain').style('opacity', percent);
 
 }
@@ -31,6 +42,7 @@ function scrollHandler() {
 	if (bodyHeight*0.99 < scrollTop + winHeight) {
 
 		removeCurtain();
+		unwrap('#container'); // remove #container as it's unneccessary markup and doesn't allow operation of its children for reasons I am to tired to explore
 		document.removeEventListener('scroll', scrollHandler);
 
 	}
