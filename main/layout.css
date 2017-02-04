@@ -34,8 +34,8 @@ div.flex-grid#bottom {
 } /* bottom row gets the rest of the height and is aligned along the main axis */
 
 
-div.flex-grid#bottom * {
-	position: relative; /* otherwise #map is above flex-grid. Not entirely sure why, but I #map is absolute positioned and as such potentially on a higher level */
+div.flex-grid#bottom {
+	position: relative; /* otherwise #map is above flex-grid. Not entirely sure why, but #map is absolute positioned and as such potentially on a higher level */
 } 
 
 
