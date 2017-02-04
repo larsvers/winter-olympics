@@ -15,6 +15,7 @@
 	<link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
 	<link rel="stylesheet" href="main.css"> 
 	<link rel="stylesheet" href="layout.css"> 
+	<!-- <link rel="stylesheet" href="../curtain/curtain.css">  -->
 	<link rel="stylesheet" href="../map/map.css"> 
 	<link rel="stylesheet" href="../text/text.css"> 
 	<link rel="stylesheet" href="../menu/menu.css"> 
@@ -25,77 +26,105 @@
 </head>
 <body>
 
-	<!-- map -->
-	<div id="map"></div>
 
-	<!-- menu -->
-	<div id="menu">
-		<button id="menu-button">&#9660;</button> <!-- down triangle -->
-		<div id="dropdown"></div>
-	</div>
-	
-	<!-- main -->
-	<div id="main">
+	<!-- Curtain -->
+<!-- 	<div id="curtain">
 
-		<!-- top row -->
-		<div class="flex-grid" id="top">
-			<div class="col" id="text-help"></div>
-			<div class="col" id="text"></div>
+		<div class="top">
+				<div id="text-wrap">
+					<h1 id="title">Winter Olympics</h1>
+					<p id="text">A history of the white games in words and data</p>
+				</div>
 		</div>
 
-		<!-- bottom row -->
-		<div class="flex-grid" id="bottom">
-			<div class="col" id="grid"></div>
-			<div class="col" id="force"></div>
-			<div class="col" id="treemap"></div>
-		</div>
-
-	</div>
-
-
-	<!-- other -->
-
-	<div class="tooltip"></div>
-
-	<div class="tooltip-center"></div>
-	<div class="tooltip-left"></div>
-	<div class="tooltip-low"></div>
-
-
-	<div class="vis-header" id="grid"></div>
-	<div class="vis-header" id="force"></div>
-	<div class="vis-header" id="treemap"></div>
-
-
-	<div id="force-info">
+		<div class="bottom"></div>
 		
-		<div class="force-text" id="left"></div>
-		<div class="force-text" id="right"></div>
-		<div class="force-text non-visible" id="center"></div>
-
-		<button class="force" id="split">split</button>
-
 	</div>
+ -->
 
-	<button class="multiple-button" id="grid-multiple">&#10495;</button>
-	<button class="multiple-button" id="force-multiple">&#10495;</button>
-	<button class="multiple-button" id="treemap-multiple">&#10495;</button>
+	<!-- <div id="container"> -->
+		
 
-	<!-- Modal -->
 
-	<div class="hide" id="modal-container">
-		<div id="modal-header">
-			<h3></h3>
-			<button>&times;</button>
-		</div>
-		<div id="modal">
-		</div>
-	</div>
+				<!-- map -->
+				<div id="map"></div>
+
+				<!-- menu -->
+				<div id="menu">
+					<button id="menu-button">&#9660;</button> <!-- down triangle -->
+					<div id="dropdown"></div>
+				</div>
+				
+				<!-- main -->
+				<div id="main">
+
+					<!-- top row -->
+					<div class="flex-grid" id="top">
+						<div class="col" id="text-help"></div>
+						<div class="col" id="text"></div>
+					</div>
+
+					<!-- bottom row -->
+					<div class="flex-grid" id="bottom">
+						<div class="col" id="grid"></div>
+						<div class="col" id="force"></div>
+						<div class="col" id="treemap"></div>
+					</div>
+
+				</div>
+
+
+
+				<!-- other -->
+
+				<div class="tooltip"></div>
+
+				<div class="tooltip-center"></div>
+				<div class="tooltip-left"></div>
+				<div class="tooltip-low"></div>
+
+
+				<div class="vis-header" id="grid"></div>
+				<div class="vis-header" id="force"></div>
+				<div class="vis-header" id="treemap"></div>
+
+
+				<div id="force-info">
+					
+					<div class="force-text" id="left"></div>
+					<div class="force-text" id="right"></div>
+					<div class="force-text non-visible" id="center"></div>
+
+					<button class="force" id="split">split</button>
+
+				</div>
+
+				<button class="multiple-button" id="grid-multiple">&#10495;</button>
+				<button class="multiple-button" id="force-multiple">&#10495;</button>
+				<button class="multiple-button" id="treemap-multiple">&#10495;</button>
+
+				<!-- Modal -->
+
+				<div class="hide" id="modal-container">
+					<div id="modal-header">
+						<h3></h3>
+						<button>&times;</button>
+					</div>
+					<div id="modal">
+					</div>
+				</div>
+
+
+	<!-- </div> -->
+
+
 
 
 	<!-- Scripts -->
 	
 	<script src="main.js"></script>
+	<!-- <script src="../curtain/curtain.js"></script> -->
+
 	<script src="../force/force-calc.js"></script>
 	<script src="../scripts/dataprep.js"></script>
 

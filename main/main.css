@@ -23,6 +23,18 @@ a:link, a:visited, a:hover, a:active {
 	color: #000;
 }
 
+
+/* --- Container --- */
+
+
+div#container {
+
+	pointer-events: none;
+
+}
+
+
+
 /* --- Canvas --- */
 
 .main-canvas, .hidden-canvas {

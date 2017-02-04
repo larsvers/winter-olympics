@@ -1,0 +1,67 @@
+	div#container {
+		position: fixed;
+		pointer-events: none;
+	}
+
+
+		div#curtain {
+			
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 200vh;
+			opacity: 1;
+			z-index: 1;
+
+		}
+
+		div#curtain .top {
+
+			height: 100vh;
+
+			background-image: url('http://bit.ly/2jOHOXY');
+	    background-size: cover;
+	    background-position: center top;
+
+		}
+
+		div#curtain .bottom {
+
+			background: transparent;
+			height: 100vh;
+
+		}
+
+
+		#text-wrap {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			position: absolute;
+
+			width: 100%;
+			height: 50%; /* percent relative to next parent positioned relative or absolute (#curtain in this case) */
+			color: #fff;
+		}
+		
+		/* Font styling */
+
+		#text-wrap h1 {
+			font-size: 4em;
+			margin-bottom: 0em;
+			/* text-shadow: 1px 1px 10px #ddf; */	
+		}
+
+
+		canvas {
+/* 			position: absolute;
+		 	z-index: 1; to be in front of the text, we need to position both elements absolute and put a z-index on the canvas
+ */		}
+
+		h3 {
+			font-family: 'Open Sans';
+			margin-left: 50px;			
+		}
