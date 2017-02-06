@@ -20,7 +20,8 @@
 
 			height: 100vh;
 
-			background-image: url('http://bit.ly/2jOHOXY');
+			/* background-image: url('http://bit.ly/2jOHOXY'); */
+			background-image: url('../images/other/intro_m.png');
 	    background-size: cover;
 	    background-position: center top;
 
