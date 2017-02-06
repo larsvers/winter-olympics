@@ -252,10 +252,6 @@ log(data);
 
 
 
-
-
-
-
 				// --- Handlers --- //
 
 				function split() {

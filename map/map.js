@@ -83,11 +83,11 @@ function makeMap() {
 
   map = new mapboxgl.Map({
 
-      container: 'map',
-      style: ski,
-     	center: [6.874011, 45.926747],
-      zoom: 2,
-      pitch: 0
+    container: 'map',
+    style: ski,
+   	center: [6.874011, 45.926747],
+    zoom: 2,
+    pitch: 0
 
   }); // add map
 
@@ -103,7 +103,6 @@ function makeMap() {
 
     map.on('load', function() {
 
-
       // --- Scales --- //
 
       // Circle radius scale to calculate based on capacity (minus the maximum outlier)
@@ -112,16 +111,6 @@ function makeMap() {
 
       // Colour scale based on 
       colExt = d3.extent(data.locations, function(d) { return d.event_id; });
-      // var colours = ['#639afb', '#1367f9', '#0723e8'];
-      // var colours = ['#5454FF', '#3229b7', '#007'];
-      // var colours = ['#c1e9cd', '#49848c', '#08253e'] // green to blue
-      // var colours = ['#538d95', '#425576', '#07253f']; // green to blue
-      // var colours = ['#5454FF', '#3229b7', '#07253f']; // blue blue
-      // var colours = ['#6f6ffe', '#074e9e', '#07253f']; // blue blue
-      // var colours = ['#3afa5d', '#07dec5', '#053e90']; // neon green to blue
-      // var colours = ['#00C200', '#0EE0BD', '#053e90']; // green to blue
-      // var colours = ['#606060', '#533a8d', '#0000b8']; // grey to blue
-      // var colours = ['#32c900', '#008edc', '#0000b8']; // neon green to blue
       var colours = ['#639afb', '#3758a6', '#081D59']; // light to dark blue
       colourScale = d3.scaleLinear().domain([colExt[0], d3.quantile(colExt, 0.5), colExt[1]]).range(colours);
 

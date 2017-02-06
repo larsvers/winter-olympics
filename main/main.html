@@ -24,7 +24,7 @@
 	<link rel="stylesheet" href="../treemap/treemap.css"> 
 
 </head>
-<body>
+<body class="no-scroll"> <!-- during loading -->
 
 
 	<!-- Curtain -->
@@ -34,6 +34,14 @@
 				<div id="text-wrap">
 					<h1 id="title">Winter Olympics</h1>
 					<p id="text">A history of the white games in words and data</p>
+					<div class="scroll">
+						<img src="../images/other/scroll.png">
+					</div>
+					<div class="spinner hide">
+					  <div class="bounce1"></div>
+					  <div class="bounce2"></div>
+					  <div class="bounce3"></div>
+					</div>
 				</div>
 		</div>
 
@@ -42,9 +50,9 @@
 	</div>
 
 
+	<!-- Container holding all else fixed only until Curtain leaves - then gets removed -->
 	<div id="container">
 		
-
 
 				<!-- map -->
 				<div id="map"></div>

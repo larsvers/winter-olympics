@@ -1,3 +1,5 @@
+
+
 // === Curtain removal === //
 // the intro screen will be the curtain and upon scroll we also want to trigger zoom-in from finished scroll //
 
@@ -15,18 +17,33 @@ function unwrap(selector) {
 } // unwrap()
 
 
+function manageInitialFlight() {
+
+  map.flyTo(data.segments[startChapter]); // initial flight path
+
+	map.scrollZoom.disable(); // disallow zoom as otherwise the flight would be disrupted to soon
+
+	d3.timeout(function() { map.scrollZoom.enable(); }, 3000); // allow again after token 3000ms
+
+} // manageInitialFlight()
+
+
 function removeCurtain() {
 
 	d3.select('div#container').style('position', 'relative');
 	d3.select('div#curtain').remove();
 
+	manageInitialFlight()
+
 } // set the container to fixed
+
 
 function dimCurtain(percent) {
 
 	d3.select('div#curtain').style('opacity', percent);
 
 } // dim the curtain while scrolling
+
 
 function scrollHandler() {
 
@@ -47,20 +64,29 @@ function scrollHandler() {
 
 	}
 
-
 } // scrollHandler()
 
-
+// scroll listener
 document.addEventListener('scroll', scrollHandler);
 
 
 
 // === Globals === //
 
-
 var data, nodes = {};
 var width = window.innerWidth, height = window.innerHeight;
 var simulation;
+
+// === Set up canvas and elements === //
+
+var canvas = d3.select('#curtain .top').append('canvas').attr('id', 'curtain').attr('width', width).attr('height', height);
+
+var context = canvas.node().getContext('2d');
+
+var customBase = document.createElement('custom');
+
+var custom = d3.select(customBase);
+
 
 
 // === Olympic ring position calculations === //
@@ -95,7 +121,7 @@ var ringCalculations = function() {
 	var margin = 20;
 
 	result.clusterN = 5;
-	result.n = 200;
+	result.n = 300;
 
 
 	// Ring area
@@ -147,16 +173,6 @@ var ringCalculations = function() {
 }; // ringCalculations()
 
 
-// === Set up canvas and elements === //
-
-var canvas = d3.select('#curtain .top').append('canvas').attr('id', 'curtain').attr('width', width).attr('height', height);
-
-var context = canvas.node().getContext('2d');
-
-var customBase = document.createElement('custom');
-
-var custom = d3.select(customBase);
-
 
 // === Get simulation data === //
 
@@ -187,7 +203,7 @@ function getData(clusterNumber, nodeNumber, clusterCenter, circleRadius) {
 
 
 
-// === databind options === //
+// === Databind and draw === //
 
 function databind(data) {
 
@@ -211,7 +227,7 @@ function databind(data) {
 
 	var exitSel = join.exit()
 		.transition().duration(5000)
-		.delay(function(d,i) { return (Math.random()*i) / n * 1000; })
+		.delay(function(d,i) { return (Math.random()*i) / nodes.pos.n * 1000; })
 		.attr('cy', height + 10)
 		.remove();
 
@@ -239,7 +255,69 @@ function draw() {
 } // draw()
 
 
+function remove() {
 
+	databind([]);
+
+	var t = d3.timer(function(elapsed) {
+		draw(); 
+		if (elapsed > 10000) t.stop();
+	}); // timer()
+
+} // remove() - yet unused
+
+
+
+// === Calls === //
+
+nodes.pos = ringCalculations(); // get object holding all ring position relevant data
+
+nodes.center = getData(nodes.pos.clusterN, nodes.pos.n, nodes.pos.olympic, nodes.pos.radius); // format the data for the databind
+
+databind(nodes.center); // bind the data 
+
+// draw the rings
+var t = d3.timer(function(elapsed) {
+	draw(); 
+	if (elapsed > 10000) t.stop();
+}); // timer()
+
+// remove the rings 
+d3.timeout(function() {
+
+	remove();
+
+}, 12000);
+
+
+
+// === Time schedule handling
+
+// Schedule:
+// disallow scrolling on body (set in html)
+// let it snow (set above)
+// after snow show spinner (set in dataprep.js together with data load)
+// hide spinner while rings snow off (set here)
+// show scroll (set here)
+// allow scrolling (set here)
+// disallow map-zooming for a couple of seconds to allow uninterrupted zoom in
+
+d3.timeout(function() {
+
+	d3.select('.spinner').classed('hide', true); // hide the spinner
+	d3.select('.scroll').transition().duration(1000).style('opacity', 1); // show the scroll image
+	d3.select('body').classed('no-scroll', false); // allow scrolling on body
+
+}, 16000);
+
+
+
+
+
+
+
+
+// === Unused force options === //
 
 function initSimulation(nodes) {
 
@@ -296,32 +374,3 @@ function drawNode(d) {
 } // drawNode()
 
 
-
-
-// === Calls === //
-
-nodes.pos = ringCalculations();
-
-nodes.center = getData(nodes.pos.clusterN, nodes.pos.n, nodes.pos.olympic, nodes.pos.radius);
-
-databind(nodes.center);
-
-var t = d3.timer(function(elapsed) {
-	draw(); 
-	if (elapsed > 15000) t.stop();
-}); // timer()
-
-
-
-
-function remove() {
-
-	databind([]);
-
-	var t = d3.timer(function(elapsed) {
-		draw(); 
-		if (elapsed > 15000) t.stop();
-	}); // timer()
-
-
-} // remove() - yet unused

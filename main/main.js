@@ -170,7 +170,7 @@ d3.selectAll('.multiple-button').on('mousedown', function() {
       } else { // if the forceNodes still need calculation (the rest is handled in force-calc.js)
         removeModal();
         d3.select('.force-text#center').classed('non-visible', false);
-        // console.log('Just some calculations away - at', formatPerc(forceNodesProgress)); // debug
+        calculateForceNodes();
       }
     }
 

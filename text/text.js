@@ -22,12 +22,12 @@ function makeText() {
   d3.select('section#' + activeChapterName).classed('active', true);
 
 
-  var t = d3.timer(function(elapsed){
-    if (elapsed > 3500) {
-      map.flyTo(data.segments[startChapter]); // initial flight path
-      t.stop();
-    }
-  });
+  // var t = d3.timer(function(elapsed){
+  //   if (elapsed > 3500) {
+  //     map.flyTo(data.segments[startChapter]); // initial flight path
+  //     t.stop();
+  //   }
+  // });
   
 
 

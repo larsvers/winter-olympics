@@ -72,7 +72,8 @@ function calculateForceNodes() {
 
 		// log('data', data, 'event', event, 'index', index);
 
-		var worker = new Worker('/force/force-worker.js'); // the worker file should always be referenced relative to the root directory (/) not relative to the current directory of this file.
+		// var worker = new Worker('/force/force-worker.js'); // the worker file should always be referenced relative to the root directory (/) not relative to the current directory of this file.
+		var worker = new Worker('../force/force-worker.js'); // the worker file should always be referenced relative to the root directory (/) not relative to the current directory of this file.
 
 		worker.postMessage({ 
 			nodes: data,

@@ -1,6 +1,10 @@
 Plan
 
 Story - Work in text
-Story - Build in curtain
 
 Overall - organise code
+
+
+
+
+	
