@@ -192,6 +192,7 @@ function showModal() {
   d3.selectAll('#map').classed('blurred', true);
   d3.selectAll('#force-info').classed('blurred', true);
 
+  d3.selectAll('.vis-header').classed('blurred', true);
   d3.selectAll('.multiple-button').classed('blurred', true);
 
   d3.select('#modal-container').classed('showFlex', true);
@@ -207,6 +208,7 @@ function removeModal() {
   d3.selectAll('#map').classed('blurred', false);
   d3.selectAll('#force-info').classed('blurred', false);
 
+  d3.selectAll('.vis-header').classed('blurred', false);
   d3.selectAll('.multiple-button').classed('blurred', false);
 
   d3.select('#modal-container').classed('show', false);

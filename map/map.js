@@ -242,7 +242,8 @@ function makeMap() {
 
       var prop = feature.properties;
 
-      var sports = prop.sports_short.replace(',', ' &middot; ').replace(/[\[\]"]/g, '');
+      var sports = prop.sports_short.replace(/,/g, ' &middot; ').replace(/[\[\]"]/g, '');
+
 
       var html =            
         '<div id="tip-header-map">' +
