@@ -447,7 +447,7 @@ function makeTreemapMultiple(container) {
 						} else {
 
 							tip = d3.select('.tooltip')
-								.style('top', mousePos[1] + canvasPos.top + 5 + 'px') // mouse + canvas position - tip height - padding
+								.style('top', mousePos[1] + canvasPos.top + 5 + 'px') // mouse + canvas position + padding
 								.style('left', mousePos[0] + canvasPos.left - tipDim.width/2 + 'px') // mouse + canvas position - half the tip width
 								.style('opacity', 0.99);
 

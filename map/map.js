@@ -91,13 +91,14 @@ function makeMap() {
 
   }); // add map
 
+  // move mapbox attribution from bottom- to top-right. Didn't waork with AttributionControl() as suggested by mapbox
+  moveElement('.mapboxgl-ctrl-bottom-right', '.mapboxgl-ctrl-top-right'); 
 
 
   mapIt();
 
 
   function mapIt() {
-
 
     // === Add entire map === //
 

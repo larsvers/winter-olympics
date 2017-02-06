@@ -269,3 +269,11 @@ function singleDouble(el, onsingle, ondouble) {
 
 
 
+function moveElement(oldSelector, newSelector) {
+
+  var oldParent = d3.select(oldSelector).node();
+  var child = oldParent.childNodes[0];
+  var newParent = d3.select(newSelector).node();
+  newParent.appendChild(child);
+
+} // moveElement() from one parent to another parent
