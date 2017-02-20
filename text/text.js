@@ -18,6 +18,7 @@ function makeText() {
 		.attr('data-country', function(d) { return d.country_lookup; })
 		.html(function(d) { return d.text; });
 
+  timeGreeting(); // time dependent greeting (lives in main.js)
 
   d3.select('section#' + activeChapterName).classed('active', true);
 
@@ -37,23 +38,18 @@ function makeText() {
 	var containerDim = d3.select('div.col#text').node().getBoundingClientRect();
 
 	// On every scroll event, check which element is on screen
-	
+
 	d3.select('div.col#text').on('scroll', function() {
 
 	  var chapterNames = Object.keys(data.segments);
-
 	  for (var i = 0; i < chapterNames.length; i++) {
 
 	 	  var chapterName = chapterNames[i];
 
-
 	    if (isElementOnScreen(chapterName)) {
-
         log(chapterName);
-
         setActiveChapter(chapterName);
         break;
-
 	    } // condition
 
 	  } // for loop
@@ -89,17 +85,14 @@ function makeText() {
 
     log('from setActiveChapter', chapterName);
 
-    
+
     var t = d3.timer(function(elapsed) {
 
       if (elapsed > 500) {
 
         updateGrid(chapterName);
-
         updateForce(chapterName);
-
         updateTreemap(chapterName);
-
         t.stop();
 
       } // timer conditional

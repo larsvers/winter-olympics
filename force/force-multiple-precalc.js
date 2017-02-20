@@ -105,7 +105,7 @@ function makeForceMultiple(container) {
 
 					// --- Add button --- //
 
-					var button = d3.select('div#' + event).append('button').attr('class', 'force-multiple').attr('id', event).html('&#9901;');
+					var button = d3.select('div#' + event).append('button').attr('class', 'force-multiple').attr('id', event).html('&#9903;');
 
 
 					// --- Position text and buttons (after waiting for canvases to be built) --- //
@@ -146,7 +146,7 @@ function makeForceMultiple(container) {
 
 							// --- Register button listener --- //
 
-							var toggle = false;
+							var toggle = true;
 
 							button.on('mousedown', function() {
 

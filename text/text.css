@@ -1,13 +1,77 @@
 
 /* === Text CSS === */
 
+button.info {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
 div.col#text {
 	overflow: auto;	
-	background: rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.95);
 }
 
 section {
 	padding: 7em 1em 5em 1em;
 	border-bottom: 1px dotted #adceff;
+	position: relative;
 }
 
+section > h3 {
+	margin: 2em 0;
+  letter-spacing: 0.2em;
+  font-weight: normal;
+}
+
+section a, section a:link {
+	color: #000;
+  text-decoration: none;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: #C7DDFF;
+
+  transition: all 0.5s ease;
+}
+section a:hover {
+ border-bottom-width: 7px;
+  border-bottom-style: solid;
+  border-bottom-color: #FBC463;
+  cursor: pointer;
+}
+
+.pic {
+	text-align: center;
+}
+
+.pic > img {
+  max-width: 50%;
+  display: block;
+  margin: 0 auto;	
+}
+
+.small {
+	font-size: 0.5em;
+}
+
+.medium {
+	font-size: 0.7em;
+	margin-bottom: 0.5em;
+}
+
+.small a, .small a:link {
+	border: none;
+  color: #777;
+}
+.small a:hover {
+	border: none;
+  color: #bbb;
+  cursor: pointer;
+}
+
+span.center {
+  display: block;
+  width: 100%;
+  text-align: center;
+ }

@@ -279,3 +279,16 @@ function moveElement(oldSelector, newSelector) {
   newParent.appendChild(child);
 
 } // moveElement() from one parent to another parent
+
+
+function timeGreeting() {
+  var t = new Date();
+  var hour = t.getHours();
+
+  if (hour< 5) d3.select('#time-greeting').html('Good, well, evening');
+  if (hour>= 5 && hour< 12) d3.select('#time-greeting').html('Good morning');
+  if (hour>= 12 && hour< 17) d3.select('#time-greeting').html('Good afternoon');
+  if (hour>= 17 && hour<= 23) d3.select('#time-greeting').html('Good evening');
+
+}
+

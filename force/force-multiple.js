@@ -5,17 +5,12 @@ function makeForceMultiple(container) {
 log(data);
 
 	var formatPerc = d3.format('.0%');
-
 	var chartIndex = {}; 
 
 	data.events.forEach(function(d, i) {
-
 		container.append('div').attr('class', 'force container' + i).attr('id', d.place_id);
-
 		chartIndex[i] = chart().event(d.place_id);
-
 		d3.select('.container' + i).datum(data).call(chartIndex[i]);
-
 	}); // create html structure
 
 
@@ -58,7 +53,6 @@ log(data);
 				function getSimulationData(event) {
 
 					var simulationData = data.events_force[event][0]; // get data, taken from the global data object
-
 					var nodes = [];
 
 					d3.range(simulationData.comp_men).forEach(function(el, i) {
@@ -213,6 +207,8 @@ log(data);
 							// --- Register button listener --- //
 
 							var toggle = true;
+
+							log(toggle);
 
 							button.on('mousedown', function() {
 
