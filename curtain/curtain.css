@@ -77,7 +77,7 @@
 
 		.scroll {
 			position: absolute;
-    	bottom: 0;
+    	bottom: 100px;
     	opacity: 0;
 		}
 
@@ -88,7 +88,7 @@
 		.spinner {
 
 			position: absolute;
-	    bottom: 20px;
+	    bottom: 120px;
 
 		  width: 90px;
 		  text-align: center;

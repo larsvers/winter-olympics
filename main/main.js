@@ -285,10 +285,10 @@ function timeGreeting() {
   var t = new Date();
   var hour = t.getHours();
 
-  if (hour< 5) d3.select('#time-greeting').html('Good, well, evening');
-  if (hour>= 5 && hour< 12) d3.select('#time-greeting').html('Good morning');
-  if (hour>= 12 && hour< 17) d3.select('#time-greeting').html('Good afternoon');
-  if (hour>= 17 && hour<= 23) d3.select('#time-greeting').html('Good evening');
+  if (hour< 5) d3.select('#time-greeting').html('Good, well, evening and welcome to a little data <span class="strike-bg"><span class="strike-fg">hi</span></span>story of the Winter Olympics.');
+  if (hour>= 5 && hour< 12) d3.select('#time-greeting').html('Good morning and welcome to a little data <span class="strike-bg"><span class="strike-fg">hi</span></span>story of the Winter Olympics.');
+  if (hour>= 12 && hour< 17) d3.select('#time-greeting').html('Good afternoon and welcome to a little data <span class="strike-bg"><span class="strike-fg">hi</span></span>story of the Winter Olympics.');
+  if (hour>= 17 && hour<= 23) d3.select('#time-greeting').html('Good evening and welcome to a little data <span class="strike-bg"><span class="strike-fg">hi</span></span>story of the Winter Olympics.');
 
 }
 

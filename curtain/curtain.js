@@ -279,7 +279,7 @@ databind(nodes.center); // bind the data
 // draw the rings
 var t = d3.timer(function(elapsed) {
 	draw(); 
-	if (elapsed > 10000) t.stop();
+	if (elapsed > 10500) t.stop();
 }); // timer()
 
 // remove the rings 
@@ -287,7 +287,7 @@ d3.timeout(function() {
 
 	remove();
 
-}, 12000);
+}, 10000);
 
 
 
@@ -308,69 +308,10 @@ d3.timeout(function() {
 	d3.select('.scroll').transition().duration(1000).style('opacity', 1); // show the scroll image
 	d3.select('body').classed('no-scroll', false); // allow scrolling on body
 
-}, 16000);
+}, 12000);
 
 
 
 
-
-
-
-
-// === Unused force options === //
-
-function initSimulation(nodes) {
-
-	simulation = d3.forceSimulation(nodes)
-		.force('charge', d3.forceManyBody().strength(-0.04));
-		
-	simulation.on('tick', function() { ticked(nodes); });
-
-} // Set up the simulation 
-
-function contractSim(strength, alpha) {
-
-	simulation.stop();
-
-	simulation
-		.force('charge', d3.forceManyBody().strength(strength)) 
-		.force('collide', d3.forceCollide().strength(0));
-
-	simulation.alpha(alpha).restart();
-
-} // Set up the simulation 
-
-function expandSim(strength, alpha) {
-
-	simulation.stop();
-
-	simulation
-		.force('charge', d3.forceManyBody().strength(strength)) 
-		.force('collide', d3.forceCollide().strength(0));
-
-	simulation.alpha(alpha).restart();
-
-} // Set up the simulation 
-
-
-function ticked(nodes) {
-
-	context.clearRect(0, 0, width, height);
-	context.save();
-	nodes.forEach(drawNode);
-	context.restore()
-
-} // ticked()
-
-
-function drawNode(d) {
-
-	context.beginPath();
-	context.moveTo(d.x + d.radius, d.y);
-	context.arc(d.x, d.y, d.radius, 0, 2 * Math.PI);
-	context.fillStyle = d.colour;
-	context.fill();
-
-} // drawNode()
 
 

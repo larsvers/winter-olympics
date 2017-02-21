@@ -8,6 +8,7 @@ d3.timeout(function(){
     .defer(d3.tsv, '../data/locations.tsv')
     .defer(d3.tsv, '../data/nations.tsv')
     .defer(d3.tsv, '../data/sports.tsv')
+    .defer(d3.html, '../data/info.html')
     .defer(d3.json, '../data/ne_10m_admin_0_countries.json')
     .await(dataprep);
 
@@ -18,7 +19,7 @@ d3.timeout(function(){
 
 // === Data preperation === //
 
-function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataWorld) {
+function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataInfo, dataWorld) {
   
 
   // --- Reformat the type --- //
@@ -125,6 +126,10 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataW
     };
 
   });
+
+  data.info = dataInfo;
+
+  console.log(data);
 
   // --- Converting the topjson to geojson and only keep the props we need ---//
 

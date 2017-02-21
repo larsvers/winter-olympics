@@ -7,9 +7,7 @@ function scrollTo(chapter) {
 
 	cont.scrollTop = elem.offsetTop; // the top position of the scroll shall equal the document offset position of the chosen element
 
-} // makeMenu()
-
-// makeMenu();
+} // scrollTo()
 
 
 function makeMenu() {
@@ -74,6 +72,17 @@ function makeMenu() {
 
 	} // what happens on double-click
 
+
+	function makeExplanation(container) {
+
+		showModal();
+    d3.select('#modal-container h3').html('How to use (this actually quite simple interface)');
+		document.querySelector(container).appendChild(data.info.cloneNode(true)); // data,info is the info text in a document fragment (< google) which is a bunch of html without a parent node. We append the doc fragement to the #modal. But in doing so we would empty the fragment (dat.info). So we clone it before we append it. Easy.
+
+	}
+
+
+
 	d3.select('button#menu-button').on('click', function() {
 
 		singleDouble(this, single, double);
@@ -81,8 +90,6 @@ function makeMenu() {
 	}); // listener triggering hanlder singleDouble() (lives in main.js)
 
 
-
-	// scroll to event //
 
 	d3.selectAll('li.menu').on('mousedown', function() {
 
@@ -111,6 +118,14 @@ function makeMenu() {
     } // condition
 
 	}); // li.menu mousedown event
+
+
+	d3.select('button#info').on('click', function() {
+
+		makeExplanation('#modal');
+
+	}); // info-button event
+
 
 
 } // makeMenu()
