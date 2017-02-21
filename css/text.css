@@ -59,6 +59,12 @@ section a:hover {
 	font-size: 0.5em;
 }
 
+.small-info {
+  font-size: 0.7em;
+  text-align: right;
+  color: #999;
+}
+
 .medium {
 	font-size: 0.7em;
 	margin-bottom: 0.5em;
