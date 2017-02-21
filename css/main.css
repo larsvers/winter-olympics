@@ -1,0 +1,296 @@
+
+/* === Main CSS === */
+
+
+/* --- Meyer Reset & border box (in moderation) --- */
+
+html, body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: Avenir, Arial;
+	font-size: 100%;
+	vertical-align: baseline;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;	
+}
+
+a:link, a:visited, a:hover, a:active {
+	color: #000;
+}
+
+
+/* --- Container --- */
+
+
+div#container {
+	pointer-events: none;
+}
+
+
+
+/* --- Canvas --- */
+
+.main-canvas, .hidden-canvas {
+	/* width: 98%; */
+}
+
+.hidden-canvas {
+	display: none;
+}
+
+
+
+/* --- Headlines --- */
+
+.vis-header {
+
+	position: absolute;
+	max-width: 25vw;
+	color: #555;
+	font-size: 0.8em;
+	/* background-color: rgba(250, 250, 255, .7); */
+
+}
+
+.vis-header#treemap {
+	color: #eee;
+}
+
+
+
+/* --- Tooltip --- */
+
+div.tooltip {
+  position: absolute;
+	display: inline-block;
+  max-width: 250px;
+
+  text-align: center;
+  color: #eee;
+  background: #000428;
+	background: radial-gradient(circle, #004e92, #000428);
+
+	box-shadow: 5px 10px 10px rgba(0,0,20,0.25);
+
+  pointer-events: none;
+	z-index: 3;
+}
+
+span.small {
+	font-size: 0.65em;
+}
+
+/* tooltip children (header, body, ...) styled in individual style sheets */
+
+
+/* --- Buttons --- */
+
+button {
+	display: inline-block;
+	margin: 0;
+	padding: .5em;
+	outline: none;
+	font-size: .6em;
+	color: #555;
+	background-color: rgba(250, 250, 255, .7);
+	border: none;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
+
+button:hover {
+	background-color: rgba(173, 206, 255, .7);
+}
+
+
+
+/* --- Multiple buttons --- */
+
+button.multiple-button  {
+	font-size: 1em;
+	padding: 0.2em;
+	position: absolute;
+}
+
+
+
+/* --- Modal --- */
+
+
+#modal-container {
+
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	/* display sorted by .show .hide classes */
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	width: 100vw;
+	height: 100vh;
+
+	z-index: 2;
+	pointer-events: none;
+}
+
+
+#modal-header {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	width: 90vw;
+	background-color: rgba(255, 250, 255, 1);
+	margin: 0;
+	border-bottom: 2px solid #fff;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+	pointer-events: all; 
+}
+
+#modal-header h3 {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	color: #999;
+	font-weight: lighter;
+  letter-spacing: 2px;
+}
+
+#modal-header button {
+	position: absolute;
+	top: 0.1em;
+	right: 0.1em;
+	color: #999;
+	font-size: 1.1em;
+	background-color: rgba(255, 250, 255, 1);
+}
+
+#modal-header button:hover {
+	background-color: rgba(255, 250, 255, 1);
+	color: #000;
+}
+
+
+#modal {
+	position: relative; /* so that the children base their position and dimensions on this element */
+	
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+
+	width: 90vw;
+	height: 85vh;
+	background-color: rgba(255, 250, 255, 1);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	margin: 0;
+
+
+	pointer-events: all; 
+	overflow: auto;
+}
+
+
+
+.multiple {
+	position: absolute;
+	padding: 0.1em;
+	font-family: 'Open Sans';
+	font-size:  0.65em;
+  color: #999;
+} /* the headline or subline text */
+
+
+/* --- Info modal styles --- */
+
+
+div.info-wrap {
+	position: relative;
+	width: 100%;
+	text-align: center;
+	padding: 4em 0;
+	border-top: 1px solid #ccc;
+}
+
+div.info-wrap img {
+	width: 60%;
+}
+
+img#wide {
+	width: 90%;
+}
+
+p.p-info {
+	max-width: 45%;
+	font-size: 0.9em;
+	margin: 0 auto;
+}
+
+p.general {
+	text-align: center;
+	padding: 3em 0;
+	letter-spacing: 2px;
+}
+
+span.strike-bg {
+	color: #0066F5;
+	text-decoration: line-through;
+}
+
+span.strike-fg {
+	color: #000;
+}
+
+span.info {
+	display: inline-block;
+  padding: 0 0.25em;
+}
+
+span.salient {
+  border-top: 1px solid #C7DDFF;
+  background: rgba(199, 221, 255, 0.25);
+}
+
+span.blue-bg {
+  border-top: 1px solid #5D97F7;
+  background: rgba(93,151,247,0.25);
+}
+
+span.orange-bg {
+  border-top: 1px solid #F2BB62;
+  background: rgba(242,187,98,0.25);
+}
+
+/* --- helpers ---- */
+
+
+.blurred {
+	filter: blur(16px);
+}
+
+.showFlex {
+	display: flex;
+}
+
+.non-visible {
+	visibility: hidden;
+}
+
+.hide {
+	display: none;
+}
+
+.no-scroll {
+
+	overflow: hidden;
+	height: 100vh;
+
+}
