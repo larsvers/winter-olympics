@@ -104,6 +104,11 @@ function makeMap() {
 
     map.on('load', function() {
 
+      remove();
+      d3.timeout(allowScroll, 2000);
+
+      // allowScroll();
+
       // --- Scales --- //
 
       // Circle radius scale to calculate based on capacity (minus the maximum outlier)

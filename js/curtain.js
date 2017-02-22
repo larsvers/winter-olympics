@@ -267,6 +267,12 @@ function remove() {
 } // remove() - yet unused
 
 
+function allowScroll() {
+	d3.select('.spinner').classed('hide', true); // hide the spinner
+	d3.select('.browser-support').transition().duration(1000).style('opacity', 1); // show the browser comment
+	d3.select('.scroll').transition().duration(1000).style('opacity', 1); // show the scroll image
+	d3.select('body').classed('no-scroll', false); // allow scrolling on body
+}
 
 // === Calls === //
 
@@ -282,23 +288,9 @@ var t = d3.timer(function(elapsed) {
 	if (elapsed > 10500) t.stop();
 }); // timer()
 
-// remove the rings 
-d3.timeout(function() {
+// 'removing the rings' is triggered on map load (in map.js)
 
-	remove();
-
-}, 12000);
-
-// allow scroll
-d3.timeout(function() {
-
-	d3.select('.spinner').classed('hide', true); // hide the spinner
-	d3.select('.browser-support').transition().duration(1000).style('opacity', 1); // show the browser comment
-	d3.select('.scroll').transition().duration(1000).style('opacity', 1); // show the scroll image
-	d3.select('body').classed('no-scroll', false); // allow scrolling on body
-
-}, 10000);
-
+// 'allow scroll'  is triggered on map load (in map.js)
 
 // ---- Time schedule handling --- //
 
