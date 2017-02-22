@@ -5,7 +5,10 @@ function scrollTo(chapter) {
 
 	var cont = d3.select('div#text').node(); // get the scroll container
 
-	cont.scrollTop = elem.offsetTop; // the top position of the scroll shall equal the document offset position of the chosen element
+	// console.log('cont.scrollTop', cont.scrollTop);
+	// console.log('elem.offsetTop', elem.offsetTop);
+
+	cont.scrollTop = elem.offsetTop + 10; // the top position of the scroll shall equal the document offset position of the chosen element + 10 pixel to nudge it over
 
 } // scrollTo()
 
@@ -89,7 +92,6 @@ function makeMenu() {
 	}); // listener triggering hanlder singleDouble() (lives in main.js)
 
 
-
 	d3.selectAll('li.menu').on('mousedown', function() {
 
 		// remove menu only if user double-clicked the select button
@@ -108,9 +110,9 @@ function makeMenu() {
 
     if (isElementOnScreen(id)) {
 
-      // console.log('from menu.js', id);
+      console.log('from menu.js', id);
 
-	    changeActiveStatus(id); // function sets menu and section items on active - lives in main.js
+	    // changeActiveStatus(id); // function sets menu and section items on active - lives in main.js
 
       setActiveChapter(id);
 
