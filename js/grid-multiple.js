@@ -393,7 +393,7 @@ function makeGridMultiple(container) {
 					  selection.append('div').attr('id', 'tip-visual-grid');
 					  selection.append('div').attr('id', 'tip-body-grid');
 
-						var image = '/images/flags/4x3/' + node_data.image_name;
+						var image = 'images/flags/4x3/' + node_data.image_name;
 
 					  // ! change image source when wiring this up !
 
