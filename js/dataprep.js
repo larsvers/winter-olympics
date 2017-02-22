@@ -136,7 +136,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataI
 
   data.world.features.map(function(el) {
       el.properties.ADM0_A3_IS = el.properties.ADM0_A3_IS;
-      el.properties.ADMIN = replace(el.properties.ADMIN).toLowerCase();
+      el.properties.ADMIN = slugify(el.properties.ADMIN).toLowerCase();
   
     for(var key in el.properties){
       if (key !== 'ADM0_A3_IS' && key !== 'ADMIN'){

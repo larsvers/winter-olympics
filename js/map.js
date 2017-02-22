@@ -133,7 +133,7 @@ function makeMap() {
 
       data.world.features.forEach(function(el) {
 
-        var country = replace(el.properties.ADMIN).toLowerCase();
+        var country = slugify(el.properties.ADMIN).toLowerCase();
 
         // console.log(country);
 

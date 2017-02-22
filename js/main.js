@@ -6,7 +6,7 @@
 
 var formatPerc = d3.format('.0%');
 
-var replace = function(string) { return string.replace(/[^a-z0-9]/gi,"").toLowerCase(); };
+var slugify = function(string) { return string.replace(/[^a-z0-9]/gi,"").toLowerCase(); };
 
 var getAxisLabel = function(name) { return d3.selectAll('.tick > text').filter(function(d) { return d === name; }); }; // takes a string and returns a selection of the text element of the same string
 
