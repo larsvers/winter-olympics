@@ -4,12 +4,12 @@ window.data = window.data || {}; // make the data global
 d3.timeout(function(){
 
   d3.queue()
-    .defer(d3.tsv, '/data/events.tsv')
-    .defer(d3.tsv, '/data/locations.tsv')
-    .defer(d3.tsv, '/data/nations.tsv')
-    .defer(d3.tsv, '/data/sports.tsv')
-    .defer(d3.html, '/data/info.html')
-    .defer(d3.json, '/data/ne_10m_admin_0_countries.json')
+    .defer(d3.tsv, 'data/events.tsv')
+    .defer(d3.tsv, 'data/locations.tsv')
+    .defer(d3.tsv, 'data/nations.tsv')
+    .defer(d3.tsv, 'data/sports.tsv')
+    .defer(d3.html, 'data/info.html')
+    .defer(d3.json, 'data/ne_10m_admin_0_countries.json')
     .await(dataprep);
 
   d3.select('.spinner').classed('hide', false); // show the loading spinner
