@@ -53,8 +53,8 @@ div.col#text-help {
 
 div.col#text {
 	z-index: 1;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
+	/* margin-top: 0.3em; */
+	/* margin-bottom: 0.3em; */
 } /* special column space distribution of 2/3 */
 
 canvas.grid {
