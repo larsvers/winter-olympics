@@ -210,12 +210,14 @@ function makeForce() {
 
 
 	// --- Initial animation --- //
+	// switched off due to perf reasons mainly.
+	// switch on if you want the force to split on init. 
 
 	var t = d3.timer(function(elapsed) {
 		
-		if (elapsed > 2000) split();
-		if (elapsed > 4000) unite();
-		if (elapsed > 4500) t.stop();
+		// if (elapsed > 2000) split();
+		// if (elapsed > 4000) unite();
+		// if (elapsed > 4500) t.stop();
 
 	}); // timer
 

@@ -55,7 +55,7 @@ function scrollHandler() {
   if (progress > 1) progress = 1; // start dimming after 25% page-scroll
 
   dimCurtain(progress);
-
+	
 	if (bodyHeight*0.99 < scrollTop + winHeight) {
 
 		removeCurtain();
@@ -287,11 +287,19 @@ d3.timeout(function() {
 
 	remove();
 
+}, 12000);
+
+// allow scroll
+d3.timeout(function() {
+
+	d3.select('.spinner').classed('hide', true); // hide the spinner
+	d3.select('.scroll').transition().duration(1000).style('opacity', 1); // show the scroll image
+	d3.select('body').classed('no-scroll', false); // allow scrolling on body
+
 }, 10000);
 
 
-
-// === Time schedule handling
+// ---- Time schedule handling --- //
 
 // Schedule:
 // disallow scrolling on body (set in html)
@@ -301,16 +309,6 @@ d3.timeout(function() {
 // show scroll (set here)
 // allow scrolling (set here)
 // disallow map-zooming for a couple of seconds to allow uninterrupted zoom in
-
-d3.timeout(function() {
-
-	d3.select('.spinner').classed('hide', true); // hide the spinner
-	d3.select('.scroll').transition().duration(1000).style('opacity', 1); // show the scroll image
-	d3.select('body').classed('no-scroll', false); // allow scrolling on body
-
-}, 12000);
-
-
 
 
 
