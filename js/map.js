@@ -251,7 +251,7 @@ function makeMap() {
           '<span class="small">' + prop.place + ' ' + prop.year +
         '</div>' +
         '<div id="tip-body-map">' +
-          '<img src="../images/locations/' + prop.picture_id + '.jpg"><br>' +
+          '<img src="/images/locations/' + prop.picture_id + '.jpg"><br>' +
           '<span class="small">Events: ' + sports + '</span>' +
           (isNaN(prop.capacity_orig) ? '' : '<br><span class="small">Capacity: ' + d3.format(',')(prop.capacity) + '</span>') +
         '</div>';
