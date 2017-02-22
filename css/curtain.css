@@ -69,6 +69,13 @@ h3 {
 	margin-left: 50px;			
 }
 
+.browser-support {
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	opacity: 0;
+}
+
 
 /* Scroll image and Spinner - from http://tobiasahlin.com/spinkit/ */
 

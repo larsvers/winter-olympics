@@ -262,6 +262,12 @@ p.general {
 	letter-spacing: 2px;
 }
 
+p.note {
+	max-width: 80%;
+	font-size: 0.75em;
+	color: #666;
+}
+
 span.strike-bg {
 	color: #0066F5;
 	text-decoration: line-through;
