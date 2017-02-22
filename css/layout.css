@@ -19,6 +19,8 @@ div#main {
 } /* main wrapper fills full page */
 
 div.flex-grid {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	/* border: 1px solid black; */
 } /* the rows */
@@ -29,7 +31,9 @@ div.flex-grid#top {
 
 div.flex-grid#bottom {
 	height: 30%;
-	justify-content: space-between;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
 	background-color: rgba(255,255,255,0.95);
 } /* bottom row gets the rest of the height and is aligned along the main axis */
 
@@ -41,11 +45,15 @@ div.flex-grid#bottom {
 
 div.col {
 	/* border: 1px solid grey; */
-	flex: 1;
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
 } /* all columns get same space */
 
 div.col#text-help {
-	flex: 2;
+	-webkit-box-flex: 2;
+	    -ms-flex: 2;
+	        flex: 2;
 	pointer-events: none;
 } /* special column space distribution of 2/3 */
 
@@ -84,6 +92,8 @@ div#main {
 } /* main wrapper fills full page */
 
 div.flex-grid {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	/* border: 1px solid black; */
 } /* the rows */
@@ -94,7 +104,9 @@ div.flex-grid#top {
 
 div.flex-grid#bottom {
 	height: 30%;
-	justify-content: space-between;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
 	background-color: rgba(255,255,255,0.95);
 } /* bottom row gets the rest of the height and is aligned along the main axis */
 
@@ -106,11 +118,15 @@ div.flex-grid#bottom {
 
 div.col {
 	/* border: 1px solid grey; */
-	flex: 1;
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
 } /* all columns get same space */
 
 div.col#text-help {
-	flex: 2;
+	-webkit-box-flex: 2;
+	    -ms-flex: 2;
+	        flex: 2;
 	pointer-events: none;
 } /* special column space distribution of 2/3 */
 

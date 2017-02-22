@@ -133,6 +133,18 @@ h3 {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* === Force CSS === */
 
 .force-text {
@@ -179,6 +191,20 @@ button.force-multiple:hover {
 
 
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* === Grid CSS === */
 
@@ -272,6 +298,172 @@ button.force-multiple:hover {
   margin: 0.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === Layout CSS - for desktops and labtops === */
+
+div {
+	margin: 0em;
+}
+
+div#map {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	/* border: 3px solid green; */
+} /* map behind everything, equals height of top row */
+
+div#main {
+	width: 100vw;
+	height: 100vh;
+	/* border: 1px dotted blue; */
+} /* main wrapper fills full page */
+
+div.flex-grid {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	/* border: 1px solid black; */
+} /* the rows */
+
+div.flex-grid#top {
+	height: 70%;
+} /* top row gets 70% height */
+
+div.flex-grid#bottom {
+	height: 30%;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	background-color: rgba(255,255,255,0.95);
+} /* bottom row gets the rest of the height and is aligned along the main axis */
+
+
+div.flex-grid#bottom {
+	position: relative; /* otherwise #map is above flex-grid. Not entirely sure why, but #map is absolute positioned and as such potentially on a higher level */
+} 
+
+
+div.col {
+	/* border: 1px solid grey; */
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+} /* all columns get same space */
+
+div.col#text-help {
+	-webkit-box-flex: 2;
+	    -ms-flex: 2;
+	        flex: 2;
+	pointer-events: none;
+} /* special column space distribution of 2/3 */
+
+/* Indiviudal specs */
+
+div.col#text {
+	z-index: 1;
+	/* margin-top: 0.3em; */
+	/* margin-bottom: 0.3em; */
+} /* special column space distribution of 2/3 */
+
+canvas.grid {
+	border-right: 1px solid #eee;
+}
+
+
+
+
+/* === Layout CSS - for desktops and labtops === */
+
+div {
+	margin: 0em;
+}
+
+div#map {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	/* border: 3px solid green; */
+} /* map behind everything, equals height of top row */
+
+div#main {
+	width: 100vw;
+	height: 100vh;
+	/* border: 1px dotted blue; */
+} /* main wrapper fills full page */
+
+div.flex-grid {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	/* border: 1px solid black; */
+} /* the rows */
+
+div.flex-grid#top {
+	height: 70%;
+} /* top row gets 70% height */
+
+div.flex-grid#bottom {
+	height: 30%;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	background-color: rgba(255,255,255,0.95);
+} /* bottom row gets the rest of the height and is aligned along the main axis */
+
+
+div.flex-grid#bottom {
+	position: relative; /* otherwise #map is above flex-grid. Not entirely sure why, but #map is absolute positioned and as such potentially on a higher level */
+} 
+
+
+div.col {
+	/* border: 1px solid grey; */
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+} /* all columns get same space */
+
+div.col#text-help {
+	-webkit-box-flex: 2;
+	    -ms-flex: 2;
+	        flex: 2;
+	pointer-events: none;
+} /* special column space distribution of 2/3 */
+
+/* Indiviudal specs */
+
+div.col#text {
+	z-index: 1;
+	/* margin-top: 0.3em; */
+	/* margin-bottom: 0.3em; */
+} /* special column space distribution of 2/3 */
+
+canvas.grid {
+	border-right: 1px solid #eee;
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -602,6 +794,23 @@ span.orange-bg {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* === Menu.css ===  */
 
 
@@ -726,6 +935,18 @@ div#menu li.active {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* === Text CSS === */
 
 button.info {
@@ -814,6 +1035,17 @@ span.center {
   width: 100%;
   text-align: center;
  }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
