@@ -251,7 +251,7 @@ function makeTreemap() {
 	 			// Base settings and variables
 
 				context.fillStyle = '#444';
-				context.font = '10px Open Sans';
+				context.font = '10px Avenir';
 
 				var rect = {
 					w: d.x1 - d.x0,

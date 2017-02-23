@@ -294,6 +294,7 @@ function makeGrid() {
 			// draw legend text
 
 			var legendText = custom.selectAll('custom.legend-text');
+			context.font = '10px Avenir';
 
 			legendText.each(function(d, i) {
 

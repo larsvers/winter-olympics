@@ -110,7 +110,7 @@ function makeMenu() {
 
     if (isElementOnScreen(id)) {
 
-      console.log('from menu.js', id);
+      // console.log('from menu.js', id);
 
 	    // changeActiveStatus(id); // function sets menu and section items on active - lives in main.js
 
