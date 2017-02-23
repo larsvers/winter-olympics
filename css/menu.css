@@ -12,10 +12,6 @@ div#menu {
 	pointer-events: none; /* otherwise no map control in the menu area */
 }
 
-#menu-button, #info {
-	pointer-events: all; /* switch on for the button */
-}
-
 
 div#dropdown {
 
@@ -60,6 +56,16 @@ div#menu li:hover {
 
 div#menu li.active {
 	background-color: rgba(245,143,0,0.2);
+}
+
+div#menu button {
+	pointer-events: all; /* switch on for the button */
+	width: 2em;
+	height: 2em;
+}
+
+div#menu img{
+	width: 1em;
 }
 
 

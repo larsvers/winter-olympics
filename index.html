@@ -1,9 +1,25 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
-	<meta charset="utf-8">
-	<title>Winter Olympics in data and words</title>
+	<meta charset="utf-8" />
+	<title>Winter Olympics interactive</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- open graph settings -->
+	<meta property="og:title" content="Winter Olympics" />
+	<meta property="og:type" content="article" />
+	<meta property="og:url"	content="https://larsvers.github.io/winter-olympics/" />
+	<meta property="og:site-name"	content="http://www.datamake.io/" />
+	<meta property="og:description"	content="Winter Olympics - A visual data journey through all Winter Olympics" />
+	<meta property="og:image"	content="http://bit.ly/2ly9Qtg" />
+
+
+	<!-- SEO -->
+	<meta name="author" content="Lars Verspohl" />
+	<meta name="description" content="Winter Olympics - A visual data journey through all Winter Olympics" />
+	<meta name="keywords" content="data, visualization, visualisation, data visualization, data visualisation, information visualization, information visualisation, dataviz, datavis, infoviz, infovis, interactive, olympics, winter olympics, sport" />
+
+
 
 	<!-- Libraries -->
  	<script src="https://d3js.org/d3.v4.js"></script>
@@ -29,7 +45,6 @@
 </head>
 <body class="no-scroll"> <!-- during loading -->
 
-
 	<!-- Curtain -->
 	<div id="curtain">
 
@@ -46,7 +61,7 @@
 					  <div class="bounce3"></div>
 					</div>
 					<div class="browser-support">
-						<p>Optimised for Chrome 55+ and might not work elsewhere. sorry...</p>
+						<p>Optimised for Chrome 55+. It might not work elsewhere, apologies...</p>
 					</div>
 				</div>
 		</div>
@@ -65,6 +80,12 @@
 
 				<!-- menu -->
 				<div id="menu">
+					
+					<button id="retweet">
+						<a href="https://twitter.com/intent/tweet?url=https://larsvers.github.io/winter-olympics/&via=lars_vers" target="_blank">
+							<img src="images/other/twitter.png">
+						</a>
+					</button>
 					<button id="info">&#x25C9;</button>
 					<button id="menu-button">&#9660;</button> <!-- down triangle -->
 					<div id="dropdown"></div>
@@ -165,6 +186,7 @@
 	<script src="js/treemap.js"></script>
 	<script src="js/treemap-multiple.js"></script>
 
+  
 </body>
 </html>
 
