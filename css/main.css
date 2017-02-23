@@ -294,6 +294,22 @@ span.orange-bg {
 
 /* --- helpers ---- */
 
+div.bottom.logo {
+	position: absolute;
+	bottom: 10px;
+	bottom: 1rem;
+	left: 10px;
+	left: 1rem;
+}
+
+div.bottom.logo a {
+	border: none;
+}
+
+div.bottom.logo img {
+	width: 3rem;
+}
+
 
 .blurred {
 	-webkit-filter: blur(16px);
@@ -315,8 +331,6 @@ span.orange-bg {
 }
 
 .no-scroll {
-
 	overflow: hidden;
 	height: 100vh;
-
 }

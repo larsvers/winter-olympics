@@ -55,6 +55,17 @@ section a:hover {
   margin: 0 auto;	
 }
 
+
+.pic.logo a {
+  border: none;  
+}
+
+
+.pic.logo img {
+  max-width: 30%;
+}
+
+
 .small {
 	font-size: 0.5em;
 }
