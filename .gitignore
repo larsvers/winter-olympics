@@ -1,5 +1,6 @@
 .DS_store
-colours.txt
+/colours.txt
+/tweets.txt
 data/~$olympics.xlsx
 data/prep/
 images/prep/
