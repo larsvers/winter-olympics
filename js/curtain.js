@@ -24,9 +24,12 @@ function manageInitialFlight() {
 	map.scrollZoom.disable(); // disallow zoom as otherwise the flight would be disrupted to soon. Re-allowed in text.js
 	d3.select('div.col#text').style('overflow', 'hidden');
 
-	// d3.timeout(function() { map.scrollZoom.enable(); }, 3000); // allow again after token 3000ms 
-	// !! move this to when scrolling on text div starts
 
+	d3.timeout(function() { 	
+    d3.select('div.col#text').style('overflow', 'auto'); // allow scrolling of story
+    d3.select('div.scroll-afford').transition().duration(3000).style('opacity', 1); // show triangle
+	}, 2000); // allow scroll on text after token 3000ms 
+	
 } // manageInitialFlight()
 
 
@@ -39,6 +42,10 @@ function removeCurtain() {
 
 } // set the container to fixed
 
+function fadeInElements() {
+	d3.select('.text-section-intro').transition().duration(500).style('opacity', 1);
+	d3.select('div#menu').transition().duration(250).style('opacity', 1);
+}
 
 function dimCurtain(percent) {
 
@@ -62,6 +69,7 @@ function scrollHandler() {
 
 		removeCurtain();
 		unwrap('#container'); // remove #container as it's unneccessary markup and doesn't allow operation of its children for reasons I am to tired to explore
+		fadeInElements();
 		document.removeEventListener('scroll', scrollHandler);
 
 	}

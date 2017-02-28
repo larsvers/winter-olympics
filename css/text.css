@@ -9,8 +9,8 @@ button.info {
 
 
 div.col#text {
-	overflow: auto;	
-	background: rgba(255,255,255,0.95);
+  overflow: auto; 
+  background: rgba(255,255,255,0.95);
 }
 
 
@@ -32,7 +32,7 @@ div.col#text {
   height: 0;
   width: 0;
   margin: 0 auto;
-  color: #C7DDFF;
+  color: #649AFB;
 
   opacity: 0.4;
   border-color: transparent;
@@ -52,27 +52,35 @@ div.col#text {
 
 
 section {
-	padding: 7em 1em 5em 1em;
-	border-bottom: 1px dotted #adceff;
-	position: relative;
+  padding: 7em 1em 5em 1em;
+  border-bottom: 1px dotted #adceff;
+  position: relative;
 }
+
+section.text-section-intro {
+  padding-bottom: 25em;
+  opacity: 0; /* set to 0 at start as it would otherwise show before curtain image loads. Set to 1 upon curtain removal */
+}
+
 
 section:first-child {
   padding-top: 2em;
 }
 
 section > h3 {
-	margin: 2em 0;
+  margin: 2em 0;
   letter-spacing: 0.2em;
   font-weight: normal;
 }
 
 section a, section a:link {
-	color: #000;
+  color: #000;
   text-decoration: none;
   border-bottom-width: 2px;
   border-bottom-style: solid;
   border-bottom-color: #C7DDFF;
+
+  -webkit-transition: all 0.5s ease;
 
   transition: all 0.5s ease;
 }
@@ -84,13 +92,13 @@ section a:hover {
 }
 
 .pic {
-	text-align: center;
+  text-align: center;
 }
 
 .pic > img {
   max-width: 50%;
   display: block;
-  margin: 0 auto;	
+  margin: 0 auto; 
 }
 
 
@@ -105,7 +113,7 @@ section a:hover {
 
 
 .small {
-	font-size: 0.5em;
+  font-size: 0.5em;
 }
 
 .small-info {
@@ -115,16 +123,16 @@ section a:hover {
 }
 
 .medium {
-	font-size: 0.7em;
-	margin-bottom: 0.5em;
+  font-size: 0.7em;
+  margin-bottom: 0.5em;
 }
 
 .small a, .small a:link {
-	border: none;
+  border: none;
   color: #777;
 }
 .small a:hover {
-	border: none;
+  border: none;
   color: #bbb;
   cursor: pointer;
 }

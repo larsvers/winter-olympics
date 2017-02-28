@@ -8,6 +8,7 @@ div#menu {
 	left: 0;
 	margin-left: 1em;
 	margin-top: 1em;
+  opacity: 0; /* set to 0 at start as it would otherwise show before curtain image loads. Set to 1 upon curtain removal */
 
 	pointer-events: none; /* otherwise no map control in the menu area */
 }

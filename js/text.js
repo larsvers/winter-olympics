@@ -6,8 +6,8 @@
 // curtain.js 24   disallow map zoom
 // curtain.js 24   disallow scroll on text
 // curtain.js 22   once curtain is removed start zoom
-// text.js 192     once zoomed allow scroll on text
-// text.js 192     once zoomed in show zoom triangle
+// text.js 192     after 2sec's allow scroll on text
+// text.js 192     after 2 sec's show zoom triangle
 // text.js 37      once scrolled allow map zoom
 // text.js 39      once scrolled a while remove triangle 
 
@@ -42,9 +42,9 @@ function makeText() {
 	d3.select('div.col#text').on('scroll', function() {
 
     // allow zooming of map
-    var startChapterTop = d3.select('.text-section#' + startChapter).node().getBoundingClientRect().top; // get first section element
-    if (startChapterTop < 0) map.scrollZoom.enable(); // allow map zoom/pan after firsttext scroll
-    if (startChapterTop < -500) d3.select('.scroll-afford').transition().style('opacity', 0).remove(); // remove scroll call to action after some scrolling
+    var introTop = d3.select('.text-section-intro').node().getBoundingClientRect().top; // get first section element
+    if (introTop < 0) map.scrollZoom.enable(); // allow map zoom/pan after first text scroll
+    if (introTop < -500) d3.select('.scroll-afford').transition().style('opacity', 0).remove(); // remove scroll call to action after some scrolling
 
     
 	  var chapterNames = Object.keys(data.segments);
@@ -193,9 +193,6 @@ function makeText() {
 
 
   map.on('moveend', function() {
-
-    d3.select('div.col#text').style('overflow', 'auto'); // allow scrolling of story
-    if (d3.select('div.scroll-afford')) d3.select('div.scroll-afford').transition().style('opacity', 1); // show triangle
 
   });
 
