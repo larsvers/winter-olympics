@@ -127,6 +127,4 @@ function makeMenu() {
 
 	}); // info-button event
 
-
-
 } // makeMenu()

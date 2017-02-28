@@ -41,12 +41,10 @@ function makeText() {
 
 	d3.select('div.col#text').on('scroll', function() {
 
-    // !!! allow zooming of map
-
-    var startChapterTop = d3.select('.text-section#' + startChapter).node().getBoundingClientRect().top;
-    if (startChapterTop < 0) map.scrollZoom.enable(); 
-    // if (startChapterTop < -100) d3.select('.scroll-arrow').classed('non-visible', true); 
-    if (startChapterTop < -500) d3.select('.scroll-afford').transition().style('opacity', 0).remove();
+    // allow zooming of map
+    var startChapterTop = d3.select('.text-section#' + startChapter).node().getBoundingClientRect().top; // get first section element
+    if (startChapterTop < 0) map.scrollZoom.enable(); // allow map zoom/pan after firsttext scroll
+    if (startChapterTop < -500) d3.select('.scroll-afford').transition().style('opacity', 0).remove(); // remove scroll call to action after some scrolling
 
     
 	  var chapterNames = Object.keys(data.segments);
@@ -55,7 +53,6 @@ function makeText() {
 	 	  var chapterName = chapterNames[i];
 
 	    if (isElementOnScreen(chapterName)) {
-        // console.log(chapterName);
         setActiveChapter(chapterName);
         break;
 	    } // condition
