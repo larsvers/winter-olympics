@@ -45,14 +45,14 @@ function makeMenu() {
 
 		if (d3.select('div#dropdown').style('opacity') == 0) {
 
-			d3.select('#menu-button').html('&#9650;'); // up-triangle
+			d3.select('#menu-button').html('&#9650; menu'); // up-triangle
 
 			d3.select('div#dropdown').classed('slider-show', true);
 			d3.select('div#dropdown').classed('slider-hide', false);
 
 		} else {
 
-			d3.select('#menu-button').html('&#9660;'); // down-triangle
+			d3.select('#menu-button').html('&#9660; menu'); // down-triangle
 
 			d3.select('div#dropdown').classed('slider-show', false);
 			d3.select('div#dropdown').classed('slider-hide', true);
@@ -97,7 +97,7 @@ function makeMenu() {
 		// remove menu only if user double-clicked the select button
 		if (!menuLock) {
 
-			d3.select('#menu-button').html('&#9660;'); // down-triangle
+			d3.select('#menu-button').html('&#9660; menu'); // down-triangle
 
 			d3.select('div#dropdown').classed('slider-show', false);
 			d3.select('div#dropdown').classed('slider-hide', true);

@@ -21,9 +21,11 @@ function manageInitialFlight() {
 
   map.flyTo(data.segments[startChapter]); // initial flight path
 
-	map.scrollZoom.disable(); // disallow zoom as otherwise the flight would be disrupted to soon
+	map.scrollZoom.disable(); // disallow zoom as otherwise the flight would be disrupted to soon. Re-allowed in text.js
+	d3.select('div.col#text').style('overflow', 'hidden');
 
-	d3.timeout(function() { map.scrollZoom.enable(); }, 3000); // allow again after token 3000ms
+	// d3.timeout(function() { map.scrollZoom.enable(); }, 3000); // allow again after token 3000ms 
+	// !! move this to when scrolling on text div starts
 
 } // manageInitialFlight()
 

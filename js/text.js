@@ -1,7 +1,15 @@
 
 // === The Text and narrative === //
 
-
+// initial sequence of events (approximate code-line numbers)
+// map.js  108     curtain allowed to be removed
+// curtain.js 24   disallow map zoom
+// curtain.js 24   disallow scroll on text
+// curtain.js 22   once curtain is removed start zoom
+// text.js 192     once zoomed allow scroll on text
+// text.js 192     once zoomed in show zoom triangle
+// text.js 37      once scrolled allow map zoom
+// text.js 39      once scrolled a while remove triangle 
 
 // --- Main function --- //
 
@@ -23,14 +31,6 @@ function makeText() {
   d3.select('section#' + activeChapterName).classed('active', true);
 
 
-  // var t = d3.timer(function(elapsed){
-  //   if (elapsed > 3500) {
-  //     map.flyTo(data.segments[startChapter]); // initial flight path
-  //     t.stop();
-  //   }
-  // });
-  
-
 
 	// emit data upon scroll
 
@@ -41,6 +41,14 @@ function makeText() {
 
 	d3.select('div.col#text').on('scroll', function() {
 
+    // !!! allow zooming of map
+
+    var startChapterTop = d3.select('.text-section#' + startChapter).node().getBoundingClientRect().top;
+    if (startChapterTop < 0) map.scrollZoom.enable(); 
+    // if (startChapterTop < -100) d3.select('.scroll-arrow').classed('non-visible', true); 
+    if (startChapterTop < -500) d3.select('.scroll-afford').transition().style('opacity', 0).remove();
+
+    
 	  var chapterNames = Object.keys(data.segments);
 	  for (var i = 0; i < chapterNames.length; i++) {
 
@@ -189,8 +197,8 @@ function makeText() {
 
   map.on('moveend', function() {
 
-    // console.log('center', map.getCenter());
-    // console.log('zoom', map.getZoom());
+    d3.select('div.col#text').style('overflow', 'auto'); // allow scrolling of story
+    if (d3.select('div.scroll-afford')) d3.select('div.scroll-afford').transition().style('opacity', 1); // show triangle
 
   });
 

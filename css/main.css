@@ -332,5 +332,5 @@ div.bottom.logo img {
 
 .no-scroll {
 	overflow: hidden;
-	height: 100vh;
+	/* height: 100vh; */
 }

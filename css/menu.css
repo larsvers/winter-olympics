@@ -60,7 +60,6 @@ div#menu li.active {
 
 div#menu button {
 	pointer-events: all; /* switch on for the button */
-	width: 2em;
 	height: 2em;
 }
 

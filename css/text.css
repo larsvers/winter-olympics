@@ -13,6 +13,44 @@ div.col#text {
 	background: rgba(255,255,255,0.95);
 }
 
+
+
+/* --- scroll arrow --- */
+
+.scroll-afford {
+  text-align: center;
+  opacity: 0;
+}
+
+@-webkit-keyframes downarrow {
+  0% { -webkit-transform: translateY(0); opacity: 0.4 }
+  100% { -webkit-transform: translateY(0.4em); opacity: 0.9 }
+}
+
+.scroll-arrow {
+  display: block;
+  height: 0;
+  width: 0;
+  margin: 0 auto;
+  color: #C7DDFF;
+
+  opacity: 0.4;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 0 2em;
+  /* transform-origin: 50% 50%; */
+  /* text-indent: 1em; */
+
+  -webkit-animation: downarrow 1.2s infinite alternate ease-in-out;
+  border-top: 2em solid #C7DDFF;
+}
+
+/* --- --- */
+
+
+
+
+
 section {
 	padding: 7em 1em 5em 1em;
 	border-bottom: 1px dotted #adceff;

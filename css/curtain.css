@@ -81,7 +81,7 @@ h3 {
 
 .scroll {
 	position: absolute;
-	bottom: 100px;
+	bottom: 220px;
 	opacity: 0;
 }
 
@@ -92,7 +92,7 @@ h3 {
 .spinner {
 
 	position: absolute;
-  bottom: 120px;
+  bottom: 270px;
 
   width: 90px;
   text-align: center;
