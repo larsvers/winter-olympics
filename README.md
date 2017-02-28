@@ -1,10 +1,10 @@
 ### Winter Olympics
 
-*Winter Olympics* is an interactive data history of the — well — Winter Olympics. It guides the reader through all the 24 Winter Games that happened since 1924. While passing through, it highlights a few so far maybe under-highlighted bits of Olympic history in a story as well as in data.
+*Winter Olympics* is an interactive data history of the — well — Winter Olympics. It guides the reader through all the 22 Winter Games that happened since 1922. While passing through, it highlights a few so far maybe under-highlighted bits of Olympic history in a story as well as in data.
 
 I mainly blame my honest feelings for map design, white sports and visual storytelling for this interactive. And while there might be more pressing topics to attend to at the minute (Brexit/Trump, dear friend from the future) this might offer a brief moment of tranquility.
 
-It has 5 moving parts all tightly coupled. The main focus is on the story evolving from the 1924 Games in Chamonix to the 2014 Olympics in Sochi. All other pieces are at the story's service as they update accordingly. The map is gratuitiously flying you to each destination as you scroll along. Showing you all event locations of the respective Olympics. At the bottom are three visual representations of Olympic data:
+It has 5 moving parts all tightly coupled. The main focus is on the story evolving from the 1922 Games in Chamonix to the 2014 Olympics in Sochi. All other pieces are at the story's service as they update accordingly. The map is gratuitiously flying you to each destination as you scroll along. Showing you all event locations of the respective Olympics. At the bottom are three visual representations of Olympic data:
 
 *   The conventional medal count wrapped up in a maybe slightly unconvetional grid-graph.
 *   A force-directed ball of athletes giving you an idea of the number of athletes and their gender,
