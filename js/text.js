@@ -31,7 +31,6 @@ function makeText() {
   d3.select('section#' + activeChapterName).classed('active', true);
 
 
-
 	// emit data upon scroll
 
 	var containerPos = getWindowOffset(d3.select('div.col#text').node());
@@ -74,7 +73,6 @@ function makeText() {
 
 	}; // isElementOnScreen()
 
-
 	activeChapterName = startChapter;
 
   // note: global as used by the buttons in text.js
@@ -87,9 +85,6 @@ function makeText() {
     activeChapterName = chapterName;
 
     var country = d3.select('section#' + chapterName).node().dataset.country.split(',');
-
-    // console.log('from setActiveChapter', chapterName);
-
 
     var t = d3.timer(function(elapsed) {
 
@@ -110,13 +105,13 @@ function makeText() {
 
     changeCountryBackground(country);
 
-
 	}; // setActiveChapter()
 
 
-  function changeCircleSize(event) {
 
-    // --- Turn the respective circles on and off --- //
+  function removeAllCircles() {
+
+    // --- Turn all circles off --- //
 
     // Set all circle-radii to 0
 
@@ -147,7 +142,68 @@ function makeText() {
         ]
       });
 
-    });
+    }); // loop to turn off
+
+  } // removeAllCircles()
+
+  function mapZoomOutFull() {
+    
+    var config = {
+      bearing: 0,
+      center: [90, 0],
+      duration: 10000,
+      pitch: 0,
+      zoom: 0.9
+    };
+
+    map.flyTo(config);
+
+  } // mapZoomOutFull()
+
+  function showAllCircles() {
+
+    // Turn on all circles (first the blue then the white circles)
+
+    data.locations.forEach(function(event) {
+      
+      var eventId = event.place_id;
+
+      map.setPaintProperty(eventId, 'circle-radius', {
+        'property': 'capacity', 
+        'type': 'exponential', 
+        'stops': createRadiusStops(capExt, radiusScale, false)
+      });
+
+      map.setPaintProperty(eventId + 'glow', 'circle-radius', {
+        'property': 'capacity', 
+        'type': 'exponential', 
+        'stops': [
+          [{ zoom: 3, value: capExt[1] }, 0 ],
+          [{ zoom: 8, value: capExt[1] }, 2 ],
+          [{ zoom: 12, value: capExt[1] }, 3 ],
+        ]
+      });    
+
+    }); // loop through all events
+
+  } // showAllCircles()
+
+
+
+  // note: global as used by the buttons in menu.js
+  showFullMap = function() {
+    
+    mapZoomOutFull(); // zoom out map 
+    removeCountryBackground(); // turn off all countr backgrounds
+    removeAllCircles(); // turn all circles off
+    showAllCircles(); // turn all circles on
+
+  } // showFullMap()
+
+
+  function changeCircleSize(event) {
+
+    removeAllCircles(); // turn all circles off
 
     // Set the circle-radii of the visited location to the appropriate values (first the blue then the white circles)
 
@@ -170,16 +226,19 @@ function makeText() {
   } // changeCircleSize()
 
 
-  function changeCountryBackground(country) {
-
-    // --- Turn the respective country background on and off --- //
-
+  function removeCountryBackground() {
+        
+    // --- Turn the respective country background off --- //
     data.world.features.forEach(function(el) {
-
       map.setPaintProperty(el.properties.ADMIN, 'fill-opacity', 0);
-
     });  // set all backgrounds to see-through
 
+  } // removeCountryBackground()
+
+
+  function changeCountryBackground(country) {
+
+    removeCountryBackground();
 
     // turn background of selected country on
 

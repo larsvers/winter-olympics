@@ -107,8 +107,6 @@ function makeMap() {
       remove();
       d3.timeout(allowScroll, 2000);
 
-      // allowScroll();
-
       // --- Scales --- //
 
       // Circle radius scale to calculate based on capacity (minus the maximum outlier)
@@ -236,10 +234,8 @@ function makeMap() {
 
   // === Tooltip === //
 
-  map.on('mousemove', function(e) {
 
-    var features = map.queryRenderedFeatures(e.point);
-    var feature = features[0];
+  function showLocationTip(e, feature) {
 
     map.getCanvas().style.cursor = feature && feature.layer.source === 'places' ? 'default' : '';
 
@@ -248,7 +244,6 @@ function makeMap() {
       var prop = feature.properties;
 
       var sports = prop.sports_short.replace(/,/g, ' &middot; ').replace(/[\[\]"]/g, '');
-
 
       var html =            
         '<div id="tip-header-map">' +
@@ -273,7 +268,69 @@ function makeMap() {
         .transition().duration(50)
         .style('opacity', 0);
 
-    }
+    } // conditional based on found vs not found location 
+
+  } // showLocationTip()
+
+
+  function allowEventSelection(e, feature) {
+
+    map.getCanvas().style.cursor = feature && feature.layer.source === 'places' ? 'pointer' : '';
+
+    if (feature && feature.layer.source === 'places') {
+
+      var prop = feature.properties;
+
+      var html =            
+        '<div id="tip-header-map">' +
+          prop.place + ' ' + prop.year +
+        '</div>' +
+        '<div id="tip-body-map">' +
+          '<span class="small">' + prop.country + '</span>' +
+        '</div>';
+
+      d3.select('.tooltip')
+        .style('opacity', 0.99)
+        .style('top', e.point.y + 'px')
+        .style('left', e.point.x + 'px')
+        .html(html);
+
+      map.on('click', function(evt) {
+
+        var features = map.queryRenderedFeatures(evt.point),
+            feature = features[0]; // find the feature under the clicked point
+
+        if (feature && feature.layer.source === 'places') {
+          var prop = feature.properties;
+          scrollTo(prop.place_id);
+        }
+  
+        d3.select('.tooltip')
+          .transition().duration(50)
+          .style('opacity', 0);    
+
+      });
+
+    } else {
+
+      d3.select('.tooltip')
+        .transition().duration(50)
+        .style('opacity', 0);
+
+    } // conditional based on found vs not found location 
+
+  } // allowEventSelection()
+
+
+
+  map.on('mousemove', function(e) {
+
+    var features = map.queryRenderedFeatures(e.point);
+    var feature = features[0];
+
+    // show normal tooltip when close up - allow event pick when zoomed out
+    map.getZoom() > 1.5 ? showLocationTip(e, feature) : allowEventSelection(e, feature);
+
 
   }); // mousemove listener
 

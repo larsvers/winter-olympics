@@ -1,5 +1,6 @@
 
-function scrollTo(chapter) {
+// global as used in map.js
+scrollTo = function(chapter) {
 
 	var elem = d3.select('section#' + chapter).node(); // get the scroll position of the chapter relative to the document top 
 
@@ -45,14 +46,14 @@ function makeMenu() {
 
 		if (d3.select('div#dropdown').style('opacity') == 0) {
 
-			d3.select('#menu-button').html('&#9650; menu'); // up-triangle
+			d3.select('#menu-button').html('&#9650; menu pick'); // up-triangle
 
 			d3.select('div#dropdown').classed('slider-show', true);
 			d3.select('div#dropdown').classed('slider-hide', false);
 
 		} else {
 
-			d3.select('#menu-button').html('&#9660; menu'); // down-triangle
+			d3.select('#menu-button').html('&#9660; menu pick'); // down-triangle
 
 			d3.select('div#dropdown').classed('slider-show', false);
 			d3.select('div#dropdown').classed('slider-hide', true);
@@ -96,26 +97,16 @@ function makeMenu() {
 
 		// remove menu only if user double-clicked the select button
 		if (!menuLock) {
-
-			d3.select('#menu-button').html('&#9660; menu'); // down-triangle
-
+			d3.select('#menu-button').html('&#9660; menu pick'); // down-triangle
 			d3.select('div#dropdown').classed('slider-show', false);
 			d3.select('div#dropdown').classed('slider-hide', true);
-
 		} 
 
 		var id = d3.select(this).attr('id').replace('button-','');
-
 		scrollTo(id);
 
     if (isElementOnScreen(id)) {
-
-      // console.log('from menu.js', id);
-
-	    // changeActiveStatus(id); // function sets menu and section items on active - lives in main.js
-
       setActiveChapter(id);
-
     } // condition
 
 	}); // li.menu mousedown event
@@ -126,5 +117,13 @@ function makeMenu() {
 		makeExplanation('#modal');
 
 	}); // info-button event
+
+
+	d3.select('button#globe-button').on('click', function() {
+		
+		showFullMap();
+
+	}); // globe-button event
+
 
 } // makeMenu()

@@ -77,6 +77,7 @@ function dataprep(err, dataEvents, dataLocations, dataNations, dataSports, dataI
       long: parseFloat(el.long),
       picture_id: parseInt(el.picture_id),
 
+      country: el.country,
       place_id: el.place_id,
       place: el.place,
       venue: el.venue,

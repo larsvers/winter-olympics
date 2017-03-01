@@ -62,10 +62,12 @@ div#menu li.active {
 div#menu button {
 	pointer-events: all; /* switch on for the button */
 	height: 2em;
+	vertical-align: middle;
 }
 
 div#menu img{
 	width: 1em;
+	vertical-align: middle;
 }
 
 

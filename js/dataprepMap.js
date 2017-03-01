@@ -25,6 +25,7 @@ function dataprepMap() {
         "event_id": el.event_id,
         "place_id": el.place_id,
         "place": el.place,
+        "country": el.country,
         "year": el.year,
         "venue": el.venue,
         "sports_short": el.sports_short,
