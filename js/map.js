@@ -1,6 +1,4 @@
-
 // === The Map === //
-
 
 // --- Globals --- //
 
@@ -8,37 +6,31 @@ var map;
 
 var capExt, radiusScale, colExt, colourScale;
 
-var createColourStops = function(extent, scale) {
-
+var createColourStops = function (extent, scale) {
   var delta = extent[1] - extent[0];
   var outer = [];
 
-  d3.range(delta + extent[0]).forEach(function(el, i) {
-
+  d3.range(delta + extent[0]).forEach(function (el, i) {
     if (i % 4 === 0) {
       var inner = [i, scale(i)];
       outer.push(inner);
     }
-
   });
 
   return outer;
-
 }; // createColourStops()
 
-var createRadiusStops = function(extent, scale, setToZero) {
-
+var createRadiusStops = function (extent, scale, setToZero) {
   // Boolean setToZero sets all radii created to 0 for switching them off when moving from place to place
 
   var delta = extent[1] - extent[0];
 
   var outer = [];
 
-  d3.range(delta + extent[0]).forEach(function(el, i) {
-
+  d3.range(delta + extent[0]).forEach(function (el, i) {
     if (i % 1000 === 0) {
-
-      d3.range(3).forEach(function(elt) { // number in d3.range() defines how many zoom levels we include
+      d3.range(3).forEach(function (elt) {
+        // number in d3.range() defines how many zoom levels we include
 
         var zoom = elt === 0 ? 3 : elt === 1 ? 8 : 12; // define zoom levels
 
@@ -56,118 +48,126 @@ var createRadiusStops = function(extent, scale, setToZero) {
         inner = [obj, radius];
 
         outer.push(inner);
-
       }); // loop to guarantee different values for different zoom levels
-
     } // only trigger every 1000 steps
-
   }); // loop through all capacity values
 
   return outer;
-
 }; // createRadiusStops()
-
 
 // --- Main function --- //
 
 function makeMap() {
-
-
   // === Initialise map === //
 
-  var satDesat = 'mapbox://styles/larsvers/civ2lcn1i000h2jjuo2iq8ykm';
-  var sat = 'mapbox://styles/larsvers/civ2tags1000k2iodkxhum370';
-  var ski = 'mapbox://styles/larsvers/civfpazh700302kl8diskf9vr';
-  
-  mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw';
+  var satDesat = "mapbox://styles/larsvers/civ2lcn1i000h2jjuo2iq8ykm";
+  var sat = "mapbox://styles/larsvers/civ2tags1000k2iodkxhum370";
+  var ski = "mapbox://styles/larsvers/civfpazh700302kl8diskf9vr";
+
+  // mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw';
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY203Y2didjVkMDZ6cDJqcjF2cGd3aWh2eSJ9.hpbnyYwgJQqgWysAqGMXag";
 
   map = new mapboxgl.Map({
-
-    container: 'map',
+    container: "map",
     style: ski,
-   	center: [6.874011, 45.926747],
+    center: [6.874011, 45.926747],
     zoom: 2,
-    pitch: 0
-
+    pitch: 0,
   }); // add map
 
   // move mapbox attribution from bottom- to top-right. Didn't waork with AttributionControl() as suggested by mapbox
-  moveElement('.mapboxgl-ctrl-bottom-right', '.mapboxgl-ctrl-top-right'); 
-
+  moveElement(".mapboxgl-ctrl-bottom-right", ".mapboxgl-ctrl-top-right");
 
   mapIt();
 
-
   function mapIt() {
-
     // === Add entire map === //
 
-    map.on('load', function() {
-
+    map.on("load", function () {
       remove();
       d3.timeout(allowScroll, 2000);
 
       // --- Scales --- //
 
       // Circle radius scale to calculate based on capacity (minus the maximum outlier)
-      capExt = d3.extent(data.locations.filter(function(d) { return d.capacity < d3.max(data.locations, function(dd) { return dd.capacity; }); }), function(d) { return d.capacity; });
-      radiusScale = d3.scaleSqrt().domain(d3.extent(data.locations, function(d) { return d.capacity; })).range([3,20]);
+      capExt = d3.extent(
+        data.locations.filter(function (d) {
+          return (
+            d.capacity <
+            d3.max(data.locations, function (dd) {
+              return dd.capacity;
+            })
+          );
+        }),
+        function (d) {
+          return d.capacity;
+        }
+      );
+      radiusScale = d3
+        .scaleSqrt()
+        .domain(
+          d3.extent(data.locations, function (d) {
+            return d.capacity;
+          })
+        )
+        .range([3, 20]);
 
-      // Colour scale based on 
-      colExt = d3.extent(data.locations, function(d) { return d.event_id; });
-      var colours = ['#639afb', '#3758a6', '#081D59']; // light to dark blue
-      colourScale = d3.scaleLinear().domain([colExt[0], d3.quantile(colExt, 0.5), colExt[1]]).range(colours);
-
+      // Colour scale based on
+      colExt = d3.extent(data.locations, function (d) {
+        return d.event_id;
+      });
+      var colours = ["#639afb", "#3758a6", "#081D59"]; // light to dark blue
+      colourScale = d3
+        .scaleLinear()
+        .domain([colExt[0], d3.quantile(colExt, 0.5), colExt[1]])
+        .range(colours);
 
       // --- Add sources --- //
 
-      map.addSource('places', {
-        'type': 'geojson',
-        'data': data.geo_locations
-      }); // add the location data 
+      map.addSource("places", {
+        type: "geojson",
+        data: data.geo_locations,
+      }); // add the location data
 
-      map.addSource('world', {
-        'type': 'geojson',
-        'data': data.world
+      map.addSource("world", {
+        type: "geojson",
+        data: data.world,
       }); // add the world data
-
 
       // --- Add layers --- //
 
-      data.world.features.forEach(function(el) {
-
+      data.world.features.forEach(function (el) {
         var country = slugify(el.properties.ADMIN).toLowerCase();
 
         // console.log(country);
 
         if (!map.getLayer(country)) {
-
-          map.addLayer({
-            'id': country,
-            'type': 'fill',
-            'source': 'world',
-            'paint': {
-              'fill-color': '#adceff',
-              'fill-opacity': 0
+          map.addLayer(
+            {
+              id: country,
+              type: "fill",
+              source: "world",
+              paint: {
+                "fill-color": "#adceff",
+                "fill-opacity": 0,
+              },
+              filter: ["==", "ADMIN", country],
             },
-            'filter': ['==', 'ADMIN', country]
-          }, 'country borders');
-
+            "country borders"
+          );
         }
-
       }); // add countries as fill-layer (as in polygons) in order to individually show them as background
 
-      data.geo_locations.features.forEach(function(el) {
-
+      data.geo_locations.features.forEach(function (el) {
         var id = el.properties.place_id;
 
-        // If there's no layer set yet, add a layer for each event. 
+        // If there's no layer set yet, add a layer for each event.
         // Filter the data so that only event-relevant data gets added to this layer.
 
         if (!map.getLayer(id)) {
-
           // circle-radius: capacity
-          // circle-radius zoom-levels: 
+          // circle-radius zoom-levels:
           // zoom level 0: fully zoomed out to world
           // zoom level 6: full view of a medium-sized country
           // zoom level 11: metropolitan-region-sized area
@@ -176,162 +176,145 @@ function makeMap() {
 
           // add coloured circles
           map.addLayer({
-            'id': id,
-            'type': 'circle',
-            'source': 'places',
-            'paint': {
-                'circle-color': {
-                  'property': 'event_id',
-                  'type': 'exponential',
-                  'stops': createColourStops(colExt, colourScale)
-                },
-                'circle-blur': 0.8,
-                'circle-radius': {
-                  'property': 'capacity',
-                  'type': 'exponential',
-                  'stops': createRadiusStops(capExt, radiusScale, false)
-                }
+            id: id,
+            type: "circle",
+            source: "places",
+            paint: {
+              "circle-color": {
+                property: "event_id",
+                type: "exponential",
+                stops: createColourStops(colExt, colourScale),
               },
-              'filter': ["==", "place_id", id]
+              "circle-blur": 0.8,
+              "circle-radius": {
+                property: "capacity",
+                type: "exponential",
+                stops: createRadiusStops(capExt, radiusScale, false),
+              },
+            },
+            filter: ["==", "place_id", id],
           });
-
-
-
 
           // add white center
           map.addLayer({
-            'id': id + 'glow',
-            'type': 'circle',
-            'source': 'places',
-            'paint': {
-                'circle-color': '#fff',
-                'circle-blur': 0.75,
-                'circle-opacity': 0.75,
-                'circle-radius': {
-                  'property': 'capacity',
-                  'type': 'exponential',
-                  'stops': [
-                    [{ zoom: 3, value: capExt[1] }, 1 ],
-                    [{ zoom: 8, value: capExt[1] }, 2 ],
-                    [{ zoom: 12, value: capExt[1] }, 3 ],
-                  ]
-                }
+            id: id + "glow",
+            type: "circle",
+            source: "places",
+            paint: {
+              "circle-color": "#fff",
+              "circle-blur": 0.75,
+              "circle-opacity": 0.75,
+              "circle-radius": {
+                property: "capacity",
+                type: "exponential",
+                stops: [
+                  [{ zoom: 3, value: capExt[1] }, 1],
+                  [{ zoom: 8, value: capExt[1] }, 2],
+                  [{ zoom: 12, value: capExt[1] }, 3],
+                ],
               },
-              'filter': ["==", "place_id", id]
+            },
+            filter: ["==", "place_id", id],
           });
-
         } // if layer doesn't exist yet, add it
-
       }); // add the event-locations as circle-layers
-
-    }); // map.on('load') 
-
+    }); // map.on('load')
   } // mapIt()
-
-
-
-
 
   // === Tooltip === //
 
-
   function showLocationTip(e, feature) {
+    map.getCanvas().style.cursor =
+      feature && feature.layer.source === "places" ? "default" : "";
 
-    map.getCanvas().style.cursor = feature && feature.layer.source === 'places' ? 'default' : '';
-
-    if (feature && feature.layer.source === 'places') {
-
+    if (feature && feature.layer.source === "places") {
       var prop = feature.properties;
 
-      var sports = prop.sports_short.replace(/,/g, ' &middot; ').replace(/[\[\]"]/g, '');
+      var sports = prop.sports_short
+        .replace(/,/g, " &middot; ")
+        .replace(/[\[\]"]/g, "");
 
-      var html =            
+      var html =
         '<div id="tip-header-map">' +
-          prop.venue + '<br>' +
-          '<span class="small">' + prop.place + ' ' + prop.year +
-        '</div>' +
+        prop.venue +
+        "<br>" +
+        '<span class="small">' +
+        prop.place +
+        " " +
+        prop.year +
+        "</div>" +
         '<div id="tip-body-map">' +
-          '<img src="images/locations/' + prop.picture_id + '.jpg"><br>' +
-          '<span class="small">Events: ' + sports + '</span>' +
-          (isNaN(prop.capacity_orig) ? '' : '<br><span class="small">Capacity: ' + d3.format(',')(prop.capacity) + '</span>') +
-        '</div>';
+        '<img src="images/locations/' +
+        prop.picture_id +
+        '.jpg"><br>' +
+        '<span class="small">Events: ' +
+        sports +
+        "</span>" +
+        (isNaN(prop.capacity_orig)
+          ? ""
+          : '<br><span class="small">Capacity: ' +
+            d3.format(",")(prop.capacity) +
+            "</span>") +
+        "</div>";
 
-      d3.select('.tooltip')
-        .style('opacity', 0.99)
-        .style('top', e.point.y + 'px')
-        .style('left', e.point.x + 'px')
+      d3.select(".tooltip")
+        .style("opacity", 0.99)
+        .style("top", e.point.y + "px")
+        .style("left", e.point.x + "px")
         .html(html);
-
     } else {
-
-      d3.select('.tooltip')
-        .transition().duration(50)
-        .style('opacity', 0);
-
-    } // conditional based on found vs not found location 
-
+      d3.select(".tooltip").transition().duration(50).style("opacity", 0);
+    } // conditional based on found vs not found location
   } // showLocationTip()
 
-
   function allowEventSelection(e, feature) {
+    map.getCanvas().style.cursor =
+      feature && feature.layer.source === "places" ? "pointer" : "";
 
-    map.getCanvas().style.cursor = feature && feature.layer.source === 'places' ? 'pointer' : '';
-
-    if (feature && feature.layer.source === 'places') {
-
+    if (feature && feature.layer.source === "places") {
       var prop = feature.properties;
 
-      var html =            
+      var html =
         '<div id="tip-header-map">' +
-          prop.place + ' ' + prop.year +
-        '</div>' +
+        prop.place +
+        " " +
+        prop.year +
+        "</div>" +
         '<div id="tip-body-map">' +
-          '<span class="small">' + prop.country + '</span>' +
-        '</div>';
+        '<span class="small">' +
+        prop.country +
+        "</span>" +
+        "</div>";
 
-      d3.select('.tooltip')
-        .style('opacity', 0.99)
-        .style('top', e.point.y + 'px')
-        .style('left', e.point.x + 'px')
+      d3.select(".tooltip")
+        .style("opacity", 0.99)
+        .style("top", e.point.y + "px")
+        .style("left", e.point.x + "px")
         .html(html);
 
-      map.on('click', function(evt) {
-
+      map.on("click", function (evt) {
         var features = map.queryRenderedFeatures(evt.point),
-            feature = features[0]; // find the feature under the clicked point
+          feature = features[0]; // find the feature under the clicked point
 
-        if (feature && feature.layer.source === 'places') {
+        if (feature && feature.layer.source === "places") {
           var prop = feature.properties;
           scrollTo(prop.place_id);
         }
-  
-        d3.select('.tooltip')
-          .transition().duration(50)
-          .style('opacity', 0);    
 
+        d3.select(".tooltip").transition().duration(50).style("opacity", 0);
       });
-
     } else {
-
-      d3.select('.tooltip')
-        .transition().duration(50)
-        .style('opacity', 0);
-
-    } // conditional based on found vs not found location 
-
+      d3.select(".tooltip").transition().duration(50).style("opacity", 0);
+    } // conditional based on found vs not found location
   } // allowEventSelection()
 
-
-
-  map.on('mousemove', function(e) {
-
+  map.on("mousemove", function (e) {
     var features = map.queryRenderedFeatures(e.point);
     var feature = features[0];
 
     // show normal tooltip when close up - allow event pick when zoomed out
-    map.getZoom() > 1.5 ? showLocationTip(e, feature) : allowEventSelection(e, feature);
-
-
+    map.getZoom() > 1.5
+      ? showLocationTip(e, feature)
+      : allowEventSelection(e, feature);
   }); // mousemove listener
-
- } // makeMap()
+} // makeMap()
