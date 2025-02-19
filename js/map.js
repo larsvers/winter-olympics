@@ -64,9 +64,10 @@ function makeMap() {
   var sat = "mapbox://styles/larsvers/civ2tags1000k2iodkxhum370";
   var ski = "mapbox://styles/larsvers/civfpazh700302kl8diskf9vr";
 
-  // mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw';
+  // mapboxgl.accessToken = 'pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY2l2MTAxY2pjMDA0aTJ6dDVudXIyeTBrayJ9.-zz4eMd83tjFyz4OITkZFw'; // original default public
+  // mapboxgl.accessToken = "pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY203Y2didjVkMDZ6cDJqcjF2cGd3aWh2eSJ9.hpbnyYwgJQqgWysAqGMXag"; // URL restircted (not working  )
   mapboxgl.accessToken =
-    "pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY203Y2didjVkMDZ6cDJqcjF2cGd3aWh2eSJ9.hpbnyYwgJQqgWysAqGMXag";
+    "pk.eyJ1IjoibGFyc3ZlcnMiLCJhIjoiY203Y2hmN3AyMGtpdjJxc2RneTd6NXQzayJ9.2KWhT9yybI4G5EoOO-Qz2w"; // rotated default public
 
   map = new mapboxgl.Map({
     container: "map",
